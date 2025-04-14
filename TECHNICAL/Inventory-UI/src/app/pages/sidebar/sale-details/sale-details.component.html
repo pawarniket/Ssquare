@@ -1,0 +1,359 @@
+
+
+<div class="page-wrapper">
+    <div class="content">
+        <div class="page-header">
+            <div class="add-item d-flex">
+                <div class="page-title">
+                    <h4 class="fw-bold">Product List</h4>
+                    <h6>Manage your products</h6>
+                </div>
+            </div>
+
+            <div class="page-btn">
+                <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal"><i
+                        class="ti ti-circle-plus me-1"></i>Add Product</a>
+            </div>
+
+        </div>
+
+<!--        
+        <div class="card">
+            <div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                <div class="search-set">
+                    <form class="flex items-center gap-2 px-3 py-1 text-sm font-medium text-gray-500 border-2 border-solid border-zinc-100 rounded-full w-full max-w-[300px] md:max-w-none"
+                    role="search">
+                
+                   
+                    <input type="text" id="searchBox" class="bg-transparent border-none outline-none flex-1 w-full"
+                      placeholder="Search here" aria-label="Search bookings" (keyup)="onSearch($event)" autocomplete="off" />
+                  </form>
+                </div>
+               
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table datatable">
+                        <thead class="thead-light">
+                            <tr class="text-center">
+                                <th>Product Name</th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="text-center" *ngFor="let product of getPaginatedData()">
+
+                                <td>
+                                    {{ product.ProductName }}
+                                </td>
+                               
+
+                                <td class="d-flex gap-2 align-items-center justify-content-center">
+                                   
+                                    <button class="btn btn-danger btn-sm" (click)="addproduct(product)">
+                                        <i class="fas fa-trash"></i> Add
+                                    </button>
+                                </td>
+
+
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                      
+                       <div class="d-flex justify-content-end align-items-center gap-2 mt-3">
+  
+                       
+                        <button (click)="prevPage()" [disabled]="currentPage === 1"
+                          class="btn   btn-sm" aria-label="Previous">
+                          <i class="fas fa-chevron-left"></i> Previous
+                        </button>
+                      
+                     
+                        <span class="fw-semibold text-muted">Page {{ currentPage }} of {{ totalPages }}</span>
+                      
+                      
+                        <button (click)="nextPage()" [disabled]="currentPage === totalPages"
+                          class="btn  btn-sm" aria-label="Next">
+                          Next <i class="fas fa-chevron-right"></i>
+                        </button>
+                      
+                      </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="right-sidebar" [class.show]="isSidebarVisible">
+            <div class="sidebar-header d-flex justify-content-between align-items-center">
+                <h5>Selected Products</h5>
+                <button class="btn-close" (click)="toggleSidebar()"></button>
+            </div>
+        
+            <div class="sidebar-body">
+                <div *ngIf="selectedProducts.length === 0" class="text-center text-muted">
+                    No products added.
+                </div>
+                <div *ngFor="let product of selectedProducts; let i = index" class="d-flex align-items-center justify-content-between border-bottom py-2">
+                    <div>
+                        <h6 class="mb-0">{{ product.ProductName }}</h6>
+                        <small>Quantity: {{ product.Quantity }}</small>
+                    </div>
+                    <button class="btn btn-danger btn-sm" (click)="removeProduct(i)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="container-flex">
+            <!-- Main Card -->
+            <div class="card product-list">
+                <div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                    <div class="search-set">
+                        <form class="flex items-center gap-2 px-3 py-1 text-sm font-medium text-gray-500 border-2 border-solid border-zinc-100 rounded-full w-full max-w-[300px] md:max-w-none" role="search">
+                            <input type="text" id="searchBox" class="bg-transparent border-none outline-none flex-1 w-full"
+                                placeholder="Search here" aria-label="Search bookings" (keyup)="onSearch($event)" autocomplete="off" />
+                        </form>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table datatable">
+                            <thead class="thead-light">
+                                <tr class="text-center">
+                                    <th>Product Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center" *ngFor="let product of getPaginatedData()">
+                                    <td>{{ product.ProductName }}</td>
+                                    <td class="d-flex gap-2 align-items-center justify-content-center">
+                                        <button class="btn  btn-sm"   [ngClass]="isProductSelected(product) ? 'btn-secondary' : 'btn-success'"
+                                        [disabled]="isProductSelected(product)" 
+                                        (click)="addproduct(product)">
+                                        {{ isProductSelected(product) ? 'Added' : 'Add to Cart' }} >
+                                            <!-- <i class="fas fa-plus"></i> Add -->
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+        
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-end align-items-center gap-2 mt-3">
+                            <button (click)="prevPage()" [disabled]="currentPage === 1" class="btn btn-sm" aria-label="Previous">
+                                <i class="fas fa-chevron-left"></i> Previous
+                            </button>
+                            <span class="fw-semibold text-muted">Page {{ currentPage }} of {{ totalPages }}</span>
+                            <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="btn btn-sm" aria-label="Next">
+                                Next <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Right Sidebar -->
+<!-- Right Sidebar (Visible Only When isSidebarVisible is True) -->
+<div *ngIf="isSidebarVisible" class="right-sidebar position-relative">
+    <div class="sidebar-header d-flex justify-content-between align-items-center">
+        <h5>Selected Products</h5>
+        <button class="btn-close" (click)="toggleSidebar()"></button>
+    </div>
+
+    <!-- Sidebar Body -->
+    <div class="sidebar-body">
+        <div *ngFor="let product of selectedProducts; let i = index" class="d-flex align-items-center justify-content-between border-bottom py-2">
+            <div>
+                <h6 class="mb-0">{{ product.ProductName }}</h6>
+                <div class="d-flex align-items-center gap-2">
+                    <p class="mb-0">Quantity:</p>
+                    <button class="btn btn-sm btn-outline-secondary" (click)="decreaseQuantity(product.ProductID)">-</button>
+                    <small>{{ product.Quantity }}</small>
+                    <button class="btn btn-sm btn-outline-secondary" (click)="increaseQuantity(product.ProductID)">+</button>
+                </div>
+            </div>
+            <button class="btn btn-danger btn-sm" (click)="removeProduct(i)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+        <button class="btn btn-primary w-100" (click)="logProducts()">save</button>
+    </div>
+</div>
+
+
+            
+        
+        <!-- /product list -->
+    </div>
+    <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
+        <p class="mb-0 text-gray-9">2014 - 2025 &copy; DreamsPOS. All Right Reserved</p>
+        <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
+    </div>
+</div>
+
+
+
+
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true"
+    data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Add Product</h5>
+                <button type="button" id="closebtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Add your form or content here -->
+                <form [formGroup]="productform" class="add-product-form">
+                    <div class="add-product">
+                        <div class="accordions-items-seperate" id="accordionSpacingExample">
+                            <div class="accordion-item  mb-4">
+                                <h2 class="accordion-header" id="headingSpacingOne">
+                                    <div class="accordion-button collapsed bg-white" data-bs-toggle="collapse"
+                                        data-bs-target="#SpacingOne" aria-expanded="true" aria-controls="SpacingOne">
+                                        <div class="d-flex align-items-center justify-content-between flex-fill">
+                                            <h5 class="d-flex align-items-center"><i data-feather="info"
+                                                    class="text-primary me-2"></i><span>Product Information</span></h5>
+                                        </div>
+                                    </div>
+                                </h2>
+                                <div id="SpacingOne" class="accordion-collapse collapse show"
+                                    aria-labelledby="headingSpacingOne">
+                                    <div class="accordion-body border-top">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Product Name<span
+                                                            class="text-danger ms-1">*</span></label>
+                                                    <input type="text" class="form-control"
+                                                        formControlName="ProductName">
+                                                </div>
+
+                                                <div *ngIf="
+                                                  productform.get('ProductName')?.invalid &&
+                                                  productform.get('ProductName')?.touched
+                                                " class="text-danger text-sm">
+                                                    Product Name is required.
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 col-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Product Description<span
+                                                            class="text-danger ms-1">*</span></label>
+                                                    <input type="text" class="form-control"
+                                                        formControlName="ProductDescription">
+                                                </div>
+                                                <div *ngIf="
+                                                  productform.get('ProductDescription')?.invalid &&
+                                                  productform.get('ProductDescription')?.touched
+                                                " class="text-danger text-sm">
+                                                    Product Description is required.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6 col-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Product Category<span
+                                                            class="text-danger ms-1">*</span></label>
+                                                    <select class="form-select" formControlName="ProductCategory">
+                                                        <option value="">Select Category</option>
+                                                        <option *ngFor="let category of ProductCategoryList"
+                                                            [value]="category.CategoryID">{{ category.CategoryName }}
+                                                        </option>
+                                                    </select>
+
+                                                </div>
+                                                <div *ngIf="
+                                                  productform.get('ProductCategory')?.invalid &&
+                                                  productform.get('ProductCategory')?.touched
+                                                " class="text-danger text-sm">
+                                                    Product Category is required.
+                                                </div>
+
+                                            </div>
+                                            <div class="col-sm-6 col-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Price<span
+                                                            class="text-danger ms-1">*</span></label>
+                                                    <input type="text" class="form-control" formControlName="Price">
+                                                </div>
+                                                <div *ngIf="
+                                                  productform.get('Price')?.invalid &&
+                                                  productform.get('Price')?.touched
+                                                " class="text-danger text-sm">
+                                                    Product Price is required.
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-6 col-12">
+                                                <div class="mb-3 list position-relative">
+                                                    <label class="form-label">Quantity<span
+                                                            class="text-danger ms-1">*</span></label>
+                                                    <input type="number" class="form-control list"
+                                                        formControlName="Quantity">
+
+                                                </div>
+                                                <div *ngIf="
+                                                  productform.get('Quantity')?.invalid &&
+                                                  productform.get('Quantity')?.touched
+                                                " class="text-danger text-sm">
+                                                    Product Quantity is required.
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 col-12">
+                                                <div class="mb-3 list position-relative">
+                                                    <label class="form-label">Rack Number<span
+                                                            class="text-danger ms-1">*</span></label>
+                                                    <input type="number" class="form-control list"
+                                                        formControlName="RackNumber">
+
+                                                </div>
+                                                <div *ngIf="
+                                                  productform.get('RackNumber')?.invalid &&
+                                                  productform.get('RackNumber')?.touched
+                                                " class="text-danger text-sm">
+                                                    Product RackNumber is required.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" formControlName="ISActive"
+                                                id="isActive">
+                                            <label class="form-check-label" for="isActive">ISActive</label>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="d-flex align-items-center justify-content-end mb-4">
+                            <button type="button" data-bs-dismiss="modal" class="btn btn-secondary me-2"
+                                (click)="Resetform()">Cancel</button>
+                            <button type="submit" class="btn btn-primary" (click)="Product()">Add Product</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <!-- Custom Right Sidebar -->
+
+
+</div>

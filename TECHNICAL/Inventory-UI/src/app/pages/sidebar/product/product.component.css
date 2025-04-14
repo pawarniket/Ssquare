@@ -1,0 +1,99 @@
+/* Remove any border-radius from table and cells */
+table, th, td {
+    border-radius: 0 !important;
+  }
+  .custom-table-wrapper .no-inner-border {
+    border: 2px solid #dee2e6;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 2px !important;
+  }
+
+  
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+  }
+  
+  .pagination {
+    margin-top: 10px;
+  }
+  
+  .pagination button {
+    padding: 8px 12px;
+    margin: 5px;
+    border: none;
+    background-color:transparent;
+    color: #000000;
+    cursor: pointer;
+  }
+  .pagination button:hover {
+    background-color: rgb(180, 180, 180);
+    border-radius: 5px;
+  }
+  .pagination button:disabled {
+    background-color: #fff;
+    cursor: not-allowed;
+  }
+  .loaderback {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.5);
+  
+  }
+  ::ng-deep .p-datepicker {
+    top: 448.8px !important;
+    left: 718.8px !important;
+    transform: none !important;
+  }
+
+
+
+
+/* PopUpModel */
+
+  .modal-content {
+    border-radius: 12px;
+    animation: fadeInUp 0.4s ease;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  input.form-control,
+  select.form-select {
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 0 0.05rem rgba(0, 0, 0, 0.05);
+  }
+  
+  input.form-control:focus,
+  select.form-select:focus {
+    border-color: #000;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  }
+  .form-switch .form-check-input:checked{
+    background-color: #8c1818 !important;
+  }

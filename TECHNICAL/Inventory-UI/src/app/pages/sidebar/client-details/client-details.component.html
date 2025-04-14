@@ -1,0 +1,476 @@
+<div class="page-wrapper">
+  <div class="content">
+    <!-- Header -->
+    <div class="page-header mb-4">
+      <div class="d-flex justify-content-between align-items-center flex-wrap">
+        <div class="page-title">
+          <h4 class="fw-bold mb-1">Client/Vehicle Details</h4>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <!-- Tab Nav -->
+          <ul class="nav nav-pills" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+                type="button" role="tab" aria-controls="pills-home" aria-selected="true"
+                (click)="toggleclient()">Client</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
+                type="button" role="tab" aria-controls="pills-profile" aria-selected="false"
+                (click)="togglevehicle()">Vehicle</button>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+
+<div class="container bg-white rounded p-4 mt-4 shadow">
+  <!-- Client Section -->
+  <div *ngIf="!Vehicle" class="">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div>
+        <h5 class="fw-semibold mb-1">Client List</h5>
+        <small class="text-muted">Manage your Clients effectively</small>
+      </div>
+      <div>
+        <a class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addclientModal">
+          <i class="ti ti-circle-plus me-1"></i>Add Client
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vehicle Section -->
+  <div *ngIf="Vehicle">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div>
+        <h5 class="fw-semibold mb-1">Vehicle List</h5>
+        <small class="text-muted">Manage your Vehicles effectively</small>
+      </div>
+      <div>
+        <a class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#VehicleModal">
+          <i class="ti ti-circle-plus me-1"></i>Add Vehicle
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="row align-items-center justify-content-between mb-4">
+    <!-- Title and Search -->
+    <div class="col-md-6 d-flex align-items-center gap-3">
+      <!-- <h3 class="fw-bold mb-0">Booking List</h3> -->
+
+      <form class="input-group w-100" role="search">
+        <input type="search" class="form-control" placeholder="Search here" aria-label="Search bookings"
+          (keyup)="onSearch($event)" autocomplete="off" />
+        <span class="input-group-text">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/a2d24a7ceb684c1f468bdd9e1e90fbb04e0da74d9655bc2729b38bcacb6192d0"
+            alt="Search" style="width: 16px;" />
+        </span>
+      </form>
+    </div>
+
+    <!-- Print Button -->
+    <div class="col-md-3 text-end">
+      <button (click)="printTable()" class="btn btn-black">
+        <img
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/2c4cd31f4573b466716d0076623b4003b678b69f9e6f4b56e543f3956469a44c"
+          alt="Print" style="width: 16px;" />
+        Print
+      </button>
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <div *ngIf="!Vehicle" class="table-responsive">
+    <table class="table  text-left align-middle" id="bookinglisttable">
+      <thead class="bg-black text-white">
+        <tr>
+
+          <th (click)="sortTable('ClientName')" style="cursor:pointer">
+            Client Name <i [ngClass]="getSortIcon('ClientName')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('Email')" style="cursor:pointer">
+            Email <i [ngClass]="getSortIcon('Email')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('Phone')" style="cursor:pointer">
+            Phone <i [ngClass]="getSortIcon('Phone')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('Address')" style="cursor:pointer">
+            Address <i [ngClass]="getSortIcon('Address')" class="ms-1"></i>
+          </th>
+          <th class="text-center">Action
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="text-left" *ngFor="let Clientlist of getPaginatedData()">
+          <td>{{ Clientlist.ClientName }}</td>
+          <td>{{ Clientlist.Email }}</td>
+          <td>{{ Clientlist.Phone }}</td>
+
+          <td>{{ Clientlist.Address }}</td>
+
+          <td>
+            <div class="d-flex justify-content-center gap-2">
+              <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addclientModal"
+                (click)="editClient(Clientlist)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="!Vehicle" class="d-flex justify-content-end align-items-center gap-3 mt-3">
+    <button class="btn btn-secondary btn-sm" (click)="prevPage()" [disabled]="currentPage === 1">
+      Previous
+    </button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button class="btn btn-secondary btn-sm" (click)="nextPage()" [disabled]="currentPage === totalPages">
+      Next
+    </button>
+  </div>
+
+
+  <!-- Table  vehicle Section -->
+
+  <div *ngIf="Vehicle" class="table-responsive">
+    <table class="table  text-left align-middle" id="bookinglisttable">
+      <thead class="bg-black text-white">
+        <tr>
+          <th (click)="sortTable('ClientName')" style="cursor:pointer">
+            Client Name <i [ngClass]="getSortIcon('ClientName')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('Email')" style="cursor:pointer">
+            Email <i [ngClass]="getSortIcon('Email')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('Phone')" style="cursor:pointer">
+            Phone <i [ngClass]="getSortIcon('Phone')" class="ms-1"></i>
+          </th>
+
+          <th (click)="sortTable('VehicleNumber')" style="cursor:pointer">
+            Vehicle Number <i [ngClass]="getSortIcon('VehicleNumber')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('VehicleType')" style="cursor:pointer">
+            Vehicle Type <i [ngClass]="getSortIcon('VehicleType')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('Brand')" style="cursor:pointer">
+            Brand <i [ngClass]="getSortIcon('Brand')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('Model')" style="cursor:pointer">
+            Model <i [ngClass]="getSortIcon('Model')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('Color')" style="cursor:pointer">
+            Color <i [ngClass]="getSortIcon('Color')" class="ms-1"></i>
+          </th>
+          <th class="text-center">Action
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="text-left" *ngFor="let vehiclelist of getvehiclePaginatedData()">
+          <td>{{ vehiclelist.ClientName }}</td>
+          <td>{{ vehiclelist.Email }}</td>
+          <td>{{ vehiclelist.Phone }}</td>
+
+
+          <td>{{ vehiclelist.VehicleNumber }}</td>
+          <td>{{ vehiclelist.VehicleType }}</td>
+          <td>{{ vehiclelist.Brand }}</td>
+
+          <td>{{ vehiclelist.Model }}</td>
+          <td>{{ vehiclelist.Color }}</td>
+
+          <td>
+            <div class="d-flex justify-content-center gap-2">
+              <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#VehicleModal"
+                (click)="editVehicle(vehiclelist)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="Vehicle" class="d-flex justify-content-end align-items-center gap-3 mt-3">
+    <button class="btn btn-secondary btn-sm" (click)="prevPage()" [disabled]="currentPage === 1">
+      Previous
+    </button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button class="btn btn-secondary btn-sm" (click)="nextPage()" [disabled]="currentPage === totalPages">
+      Next
+    </button>
+  </div>
+</div>
+
+
+<!-- Modal Client-->
+<div class="modal fade" id="addclientModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true"
+  data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg">
+
+      <!-- Header -->
+      <div class="modal-header text-white rounded-top" style="background-color: #8c1818;">
+        <h5 class="modal-title d-flex align-items-center" id="modalLabel">
+          <i class="bi bi-box-seam me-2"></i>
+          {{ Clientform.value.ClientID ? 'Update' : 'Add' }} Client
+        </h5>
+        <button type="button" id="closebtn" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+          (click)="Resetform()"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form [formGroup]="Clientform" class="add-product-form">
+          <div class="add-product">
+            <div class="accordions-items-seperate" id="accordionSpacingExample">
+              <div class="accordion-item mb-4">
+                <h2 class="accordion-header" id="headingSpacingOne">
+                  <div class="accordion-button collapsed bg-white" data-bs-toggle="collapse"
+                    data-bs-target="#SpacingOne" aria-expanded="true" aria-controls="SpacingOne">
+                    <div class="d-flex align-items-center justify-content-between flex-fill">
+                      <h5 class="d-flex align-items-center">
+                        <i class="bi bi-info-circle-fill  me-2" style="color: #8c1818;"></i>
+                        <span>Client Information</span>
+                      </h5>
+                    </div>
+                  </div>
+                </h2>
+
+                <div id="SpacingOne" class="accordion-collapse collapse show" aria-labelledby="headingSpacingOne">
+                  <div class="accordion-body border-top">
+
+                    <!-- Row 1 -->
+                    <div class=" col-12 mb-3">
+                      <label class="form-label fw-semibold text-muted">Client Name <span
+                          class="text-danger">*</span></label>
+                      <input type="text" class="form-control" formControlName="ClientName"
+                        placeholder="Enter Client Name*">
+                      <div *ngIf="Clientform.get('ClientName')?.invalid && Clientform.get('ClientName')?.touched"
+                        class="text-danger text-sm mt-1">
+                        Client Name is required.
+                      </div>
+                    </div>
+                    <div class=" col-12 mb-3">
+                      <label class="form-label fw-semibold text-muted">Email <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" formControlName="Email" placeholder="Enter Email *">
+                      <div *ngIf="Clientform.get('Email')?.invalid && Clientform.get('Email')?.touched"
+                        class="text-danger text-sm mt-1">
+                        Email is required.
+                      </div>
+                    </div>
+                    <div class=" col-12 mb-3">
+                      <label class="form-label fw-semibold text-muted">Phone <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" inputmode="numeric" maxlength="10" formControlName="Phone"
+                        placeholder="Enter Phone *">
+                      <div *ngIf="Clientform.get('Phone')?.touched && Clientform.get('Phone')?.invalid">
+                        <div class="text-danger text-sm mt-1"
+                          *ngIf="Clientform.get('Phone')?.errors?.['required']; else checkPattern">
+                          Phone is required.
+                        </div>
+                        <ng-template #checkPattern>
+                          <div class="text-danger text-sm mt-1"
+                            *ngIf="Clientform.get('Phone')?.errors?.['pattern']; else checkMinLength">
+                            Only numbers are allowed.
+                          </div>
+                        </ng-template>
+                        <ng-template #checkMinLength>
+                          <div class="text-danger text-sm mt-1" *ngIf="Clientform.get('Phone')?.errors?.['minlength']">
+                            Minimum 10 digits required.
+                          </div>
+                        </ng-template>
+                      </div>
+
+                    </div>
+
+                    <div class="col-12 mb-3">
+                      <label class="form-label fw-semibold text-muted">Address <span
+                          class="text-danger">*</span></label>
+                      <textarea type="text" class="form-control" formControlName="Address"
+                        placeholder="Enter Address *"></textarea>
+                      <div *ngIf="Clientform.get('Address')?.invalid && Clientform.get('Address')?.touched"
+                        class="text-danger text-sm mt-1">
+                        Address is required.
+                      </div>
+                    </div>
+
+
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="col-lg-12">
+            <div class="d-flex align-items-center justify-content-end gap-2 mb-3">
+              <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal"
+                (click)="Resetform()">Cancel</button>
+              <button type="submit" class="btn btn-primary px-4" (click)="Client()">
+                {{ Clientform.value.ClientID ? 'Update' : 'Add' }} Client
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal VehicleModal-->
+<div class="modal fade" id="VehicleModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true"
+  data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg">
+
+      <!-- Header -->
+      <div class="modal-header text-white rounded-top" style="background-color: #8c1818;">
+        <h5 class="modal-title d-flex align-items-center" id="modalLabel">
+          <i class="bi bi-box-seam me-2"></i>
+          {{ Vehicleform.value.VehicleID ? 'Update' : 'Add' }} Vehicle
+        </h5>
+        <button type="button" id="closevehicleform" class="btn-close btn-close-white" data-bs-dismiss="modal"
+          aria-label="Close" (click)="Resetform()"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form [formGroup]="Vehicleform" class="add-product-form">
+          <div class="add-product">
+            <div class="accordions-items-seperate" id="accordionSpacingExample">
+              <div class="accordion-item mb-4">
+                <h2 class="accordion-header" id="headingSpacingOne">
+                  <div class="accordion-button collapsed bg-white" data-bs-toggle="collapse"
+                    data-bs-target="#SpacingOne" aria-expanded="true" aria-controls="SpacingOne">
+                    <div class="d-flex align-items-center justify-content-between flex-fill">
+                      <h5 class="d-flex align-items-center">
+                        <i class="bi bi-info-circle-fill  me-2" style="color: #8c1818;"></i>
+                        <span>Vehicle Information</span>
+                      </h5>
+                    </div>
+                  </div>
+                </h2>
+
+                <div id="SpacingOne" class="accordion-collapse collapse show" aria-labelledby="headingSpacingOne">
+                  <div class="accordion-body border-top">
+                    <!-- Row 1 -->
+                    <div class="row">
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">Client Name <span
+                            class="text-danger">*</span></label>
+                        <select class="form-control" formControlName="vehicleClientName" name="language">
+                          <option value="" disabled selected>Select Client</option>
+                          <option *ngFor="let item of ClientList" [value]="item.ClientID">
+                            {{ item.ClientName }}
+                          </option>
+                        </select>
+                        <div
+                          *ngIf="Vehicleform.get('vehicleClientName')?.invalid && Vehicleform.get('vehicleClientName')?.touched"
+                          class="text-danger text-sm mt-1">
+                          Client Name is required.
+                        </div>
+                      </div>
+                      <!-- Row 1 -->
+                      <div class=" col-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">Vehicle Number <span
+                            class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="VehicleNumber"
+                          placeholder="Enter Vehicle Number*">
+                        <div
+                          *ngIf="Vehicleform.get('VehicleNumber')?.invalid && Vehicleform.get('VehicleNumber')?.touched"
+                          class="text-danger text-sm mt-1">
+                          VehicleNumber is required.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class=" col-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">Vehicle Type <span
+                            class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="VehicleType"
+                          placeholder="Enter Vehicle Type*">
+                        <div *ngIf="Vehicleform.get('VehicleType')?.invalid && Vehicleform.get('VehicleType')?.touched"
+                          class="text-danger text-sm mt-1">
+                          VehicleType is required.
+                        </div>
+                      </div>
+                      <div class=" col-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">Brand <span
+                            class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="Brand" placeholder="Enter Brand *">
+                        <div *ngIf="Vehicleform.get('Brand')?.invalid && Vehicleform.get('Brand')?.touched"
+                          class="text-danger text-sm mt-1">
+                          Brand is required.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class=" col-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">Model <span
+                            class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="Model" placeholder="Enter Model *">
+                        <div *ngIf="Vehicleform.get('Model')?.invalid && Vehicleform.get('Model')?.touched"
+                          class="text-danger text-sm mt-1">
+                          Model is required.
+                        </div>
+                      </div>
+
+                      <div class="col-6 mb-3">
+                        <label class="form-label fw-semibold text-muted">Color <span
+                            class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="Color"
+                          placeholder="Enter Color (e.g. red or #ff0000)">
+                        <div *ngIf="Vehicleform.get('Color')?.invalid && Vehicleform.get('Color')?.touched"
+                          class="text-danger text-sm mt-1">
+                          Color is required.
+                        </div>
+                      </div>
+
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="col-lg-12">
+            <div class="d-flex align-items-center justify-content-end gap-2 mb-3">
+              <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal"
+                (click)="Resetform()">Cancel</button>
+              <button type="submit" class="btn btn-primary px-4" (click)="ADdVehicle()">
+                {{ Vehicleform.value.VehicleID ? 'Update' : 'Add' }} Vehicle
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,237 @@
+
+
+<div class="page-wrapper">
+    <div class="content ">
+        <div class="page-header">
+            <div class="d-flex justify-content-between  align-items-center">
+                <div class="page-title">
+                    <h4 class="fw-bold">Product List</h4>
+                    <h6>Manage your products</h6>
+                </div>
+                <div class="page-btn">
+                    <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal"><i
+                            class="ti ti-circle-plus me-1"></i>Add Product</a>
+                </div>
+            </div>
+
+    
+
+        </div>
+
+   
+      
+        </div>
+
+</div>
+
+
+
+
+  <div class="container bg-white rounded p-4 mt-4 shadow">
+    <div class="row align-items-center justify-content-between mb-4">
+      <!-- Title and Search -->
+      <div class="col-md-6 d-flex align-items-center gap-3">
+        <!-- <h3 class="fw-bold mb-0">Booking List</h3> -->
+  
+        <form class="input-group w-100" role="search">
+          <input type="search" class="form-control" placeholder="Search here" aria-label="Search bookings"
+            (keyup)="onSearch($event)" autocomplete="off" />
+          <span class="input-group-text">
+            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/a2d24a7ceb684c1f468bdd9e1e90fbb04e0da74d9655bc2729b38bcacb6192d0"
+              alt="Search" style="width: 16px;" />
+          </span>
+        </form>
+      </div>
+  
+      <!-- Print Button -->
+      <div class="col-md-3 text-end">
+        <button (click)="printTable()" class="btn btn-black">
+          <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/2c4cd31f4573b466716d0076623b4003b678b69f9e6f4b56e543f3956469a44c"
+            alt="Print" style="width: 16px;" />
+          Print
+        </button>
+      </div>
+    </div>
+  
+    <!-- Table Section -->
+    <div class="table-responsive">
+      <table class="table  text-center align-middle" id="bookinglisttable">
+        <thead class="bg-black text-white">
+            <tr>
+            <th (click)="sortTable('ProductName')" style="cursor:pointer">
+              Product Name <i [ngClass]="getSortIcon('ProductName')" class="ms-1"></i>
+            </th>
+            <th (click)="sortTable('CategoryName')" style="cursor:pointer">
+              Category Name <i [ngClass]="getSortIcon('CategoryName')" class="ms-1"></i>
+            </th>
+            <th (click)="sortTable('Price')" style="cursor:pointer">
+              Price <i [ngClass]="getSortIcon('Price')" class="ms-1"></i>
+            </th>
+            <th (click)="sortTable('StockQuantity')" style="cursor:pointer">
+              Qty <i [ngClass]="getSortIcon('StockQuantity')" class="ms-1"></i>
+            </th>
+            <th (click)="sortTable('RackNumber')" style="cursor:pointer">
+              Rack Number <i [ngClass]="getSortIcon('RackNumber')" class="ms-1"></i>
+            </th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of getPaginatedData()">
+            <td>{{ product.ProductName }}</td>
+            <td>{{ product.CategoryName }}</td>
+            <td>₹{{ product.Price }}</td>
+            <td>{{ product.StockQuantity }}</td>
+            <td>{{ product.RackNumber }}</td>
+            <td>
+              <div class="d-flex justify-content-center gap-2">
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addProductModal"
+                  (click)="editProduct(product)">
+                  <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="btn btn-danger btn-sm" (click)="deleteproduct(product)">
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Pagination -->
+    <div class="d-flex justify-content-end align-items-center gap-3 mt-3">
+      <button class="btn btn-secondary btn-sm" (click)="prevPage()" [disabled]="currentPage === 1">
+        Previous
+      </button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button class="btn btn-secondary btn-sm" (click)="nextPage()" [disabled]="currentPage === totalPages">
+        Next
+      </button>
+    </div>
+  </div>
+  
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg">
+      
+      <!-- Header -->
+      <div class="modal-header text-white rounded-top" style="background-color: #8c1818;">
+        <h5 class="modal-title d-flex align-items-center" id="modalLabel">
+          <i class="bi bi-box-seam me-2"></i>
+          {{ productform.value.ProductID ? 'Update' : 'Add' }} Product
+        </h5>
+        <button type="button" id="closebtn" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" (click)="Resetform()"></button>
+      </div>
+
+      
+      <!-- Body -->
+      <div class="modal-body">
+        <form [formGroup]="productform" class="add-product-form">
+          <div class="add-product">
+            <div class="accordions-items-seperate" id="accordionSpacingExample">
+              <div class="accordion-item mb-4">
+                <h2 class="accordion-header" id="headingSpacingOne">
+                  <div class="accordion-button collapsed bg-white" data-bs-toggle="collapse" data-bs-target="#SpacingOne" aria-expanded="true" aria-controls="SpacingOne">
+                    <div class="d-flex align-items-center justify-content-between flex-fill">
+                      <h5 class="d-flex align-items-center">
+                        <i class="bi bi-info-circle-fill  me-2" style="color: #8c1818;"></i>
+                        <span>Product Information</span>
+                      </h5>
+                    </div>
+                  </div>
+                </h2>
+
+                <div id="SpacingOne" class="accordion-collapse collapse show" aria-labelledby="headingSpacingOne">
+                  <div class="accordion-body border-top">
+                    
+                    <!-- Row 1 -->
+                    <div class="row">
+                      <div class="col-sm-6 col-12 mb-3">
+                        <label class="form-label fw-semibold text-muted">Product Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="ProductName" placeholder="Enter Product Name*">
+                        <div *ngIf="productform.get('ProductName')?.invalid && productform.get('ProductName')?.touched" class="text-danger text-sm mt-1">
+                          Product Name is required.
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-12 mb-3">
+                        <label class="form-label fw-semibold text-muted">Product Description <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="ProductDescription" placeholder="Enter Product Description*">
+                        <div *ngIf="productform.get('ProductDescription')?.invalid && productform.get('ProductDescription')?.touched" class="text-danger text-sm mt-1">
+                          Product Description is required.
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Row 2 -->
+                    <div class="row">
+                      <div class="col-sm-6 col-12 mb-3">
+                        <label class="form-label fw-semibold text-muted">Product Category <span class="text-danger">*</span></label>
+                        <select class="form-select" formControlName="ProductCategory">
+                          <option value="">Select Category</option>
+                          <option *ngFor="let category of ProductCategoryList" [value]="category.CategoryID">{{ category.CategoryName }}</option>
+                        </select>
+                        <div *ngIf="productform.get('ProductCategory')?.invalid && productform.get('ProductCategory')?.touched" class="text-danger text-sm mt-1">
+                          Product Category is required.
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-12 mb-3">
+                        <label class="form-label fw-semibold text-muted">Price <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="Price" placeholder="Enter price*">
+                        <div *ngIf="productform.get('Price')?.invalid && productform.get('Price')?.touched" class="text-danger text-sm mt-1">
+                          Product Price is required.
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Row 3 -->
+                    <div class="row">
+                      <div class="col-sm-6 col-12 mb-3">
+                        <label class="form-label fw-semibold text-muted">Quantity <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" formControlName="Quantity" placeholder="Enter Quantity*">
+                        <div *ngIf="productform.get('Quantity')?.invalid && productform.get('Quantity')?.touched" class="text-danger text-sm mt-1">
+                          Product Quantity is required.
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-12 mb-3">
+                        <label class="form-label fw-semibold text-muted">Rack Number <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" formControlName="RackNumber" placeholder="Enter Rack Number*">
+                        <div *ngIf="productform.get('RackNumber')?.invalid && productform.get('RackNumber')?.touched" class="text-danger text-sm mt-1">
+                          Product RackNumber is required.
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Active Status -->
+                    <div class="form-check form-switch mt-3">
+                      <input type="checkbox" class="form-check-input" formControlName="ISActive" id="isActive">
+                      <label class="form-check-label fw-semibold text-muted" for="isActive">Is Active</label>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="col-lg-12">
+            <div class="d-flex align-items-center justify-content-end gap-2 mb-3">
+              <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal" (click)="Resetform()">Cancel</button>
+              <button type="submit" class="btn btn-primary px-4" (click)="Product()">
+                {{ productform.value.ProductID ? 'Update' : 'Add' }} Product
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

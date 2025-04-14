@@ -1,0 +1,55 @@
+.search-bar {
+    max-width: 300px; /* Adjust width as needed */
+}
+
+.search-input {
+    border: 2px solid #ffcc80; /* Light orange border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px;
+}
+
+.search-input:focus {
+    border-color: #ff9800; /* Darker orange on focus */
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5); /* Soft glow effect */
+    outline: none;
+}
+
+
+.offcanvas {
+    width: 250px; /* Adjust width if needed */
+    background-color: #fff; /* Background color */
+    border-right: 1px solid #ddd; /* Light border on right */
+}
+
+.offcanvas-body ul {
+    padding-left: 0;
+}
+
+.offcanvas-body li a {
+    color: #333;
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+}
+
+.offcanvas-body li a:hover {
+    background-color: #ffcc80; /* Light orange on hover */
+    color: #fff;
+}
+
+
+.transparent-logo {
+    width: 120px;
+    background: transparent; /* Ensure no background */
+}
+
+.logo {
+    background: inherit; /* Matches the parent/header background */
+}
+/* .logo-small img {
+    width: 253px;
+    height: 82px;
+    margin-right: 399px;
+    mix-blend-mode: color-burn;
+} */

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" id="htmltag" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact layout-menu-fixed " dir="ltr" data-theme="theme-default" data-assets-path="assets/" data-template="vertical-menu-template">
+
+<head>
+  <script type="module" src="/@vite/client"></script>
+
+  <base href="/">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+  <title>SSquareAPI</title>
+  <meta name="description" content="Start your development with a Dashboard for Bootstrap 5"/>
+  <meta name="keywords" content="dashboard, material, material design, bootstrap 5 dashboard, bootstrap 5 design, bootstrap 5">
+  <link rel="canonical" href="https://themeselection.com/item/materio-bootstrap-html-admin-template/">
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'www.googletagmanager.com/gtm5445.html?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-5DDHKGP');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;ampdisplay=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/vendor/fonts/materialdesignicons.css"/>
+  <link rel="stylesheet" href="assets/vendor/fonts/flag-icons.css"/>
+  <link rel="stylesheet" href="assets/vendor/libs/node-waves/node-waves.css"/>
+  <link rel="stylesheet" href="assets/vendor/css/rtl/core.css" class="template-customizer-core-css"/>
+  <link rel="stylesheet" href="assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css"/>
+  <link rel="stylesheet" href="assets/css/demo.css"/>
+  <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css"/>
+  <link rel="stylesheet" href="assets/vendor/libs/typeahead-js/typeahead.css"/>
+  <link rel="stylesheet" href="assets/vendor/libs/apex-charts/apex-charts.css"/>
+  <link rel="stylesheet" href="assets/vendor/libs/select2/select2.css"/>
+  <link rel="stylesheet" href="assets/vendor/libs/%40form-validation/umd/styles/index.min.css">
+  <script src="assets/vendor/js/helpers.js"></script>
+  <script src="assets/vendor/js/template-customizer.js"></script>
+  <script src="assets/js/config.js"></script>
+  <link rel="stylesheet" href="assets/vendor/libs/toastr/toastr.css"/>
+  <link rel="stylesheet" href="assets/vendor/libs/animate-css/animate.css"/>
+  <link rel="stylesheet" href="assets/vendor/libs/spinkit/spinkit.css"/>
+  <link rel="stylesheet" href="assets/vendor/css/pages/page-auth.css">
+  <link rel="stylesheet" href="assets/vendor/libs/bs-stepper/bs-stepper.css"/>
+  <link rel="stylesheet" href="assets/vendor/libs/bootstrap-select/bootstrap-select.css"/>
+  <link rel="stylesheet" href="assets/vendor/libs/dropzone/dropzone.css"/>
+
+<link rel="stylesheet" href="styles.css"></head>
+
+<body>
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5DDHKGP" height="0" width="0"
+      style="display: none; visibility: hidden"></iframe></noscript>
+  <app-root></app-root>
+  <script src="assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="assets/vendor/libs/popper/popper.js"></script>
+  <script src="assets/vendor/js/bootstrap.js"></script>
+  <script src="assets/vendor/libs/node-waves/node-waves.js"></script>
+  <script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  <script src="assets/vendor/libs/hammer/hammer.js"></script>
+  <script src="assets/vendor/libs/i18n/i18n.js"></script>
+  <script src="assets/vendor/libs/typeahead-js/typeahead.js"></script>
+  <script src="assets/vendor/js/menu.js"></script>
+  <script src="assets/vendor/libs/apex-charts/apexcharts.js"></script>
+  <script src="assets/js/dashboards-analytics.js"></script>
+  <script src="assets/vendor/libs/moment/moment.js"></script>
+  <script src="assets/vendor/libs/select2/select2.js"></script>
+  <script src="assets/vendor/libs/%40form-validation/umd/bundle/popular.min.js"></script>
+  <script src="assets/vendor/libs/%40form-validation/umd/plugin-bootstrap5/index.min.js"></script>
+  <script src="assets/vendor/libs/%40form-validation/umd/plugin-auto-focus/index.min.js"></script>
+  <script src="assets/vendor/libs/cleavejs/cleave.js"></script>
+  <script src="assets/vendor/libs/cleavejs/cleave-phone.js"></script>
+  <script src="assets/vendor/libs/toastr/toastr.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/ui-toasts.js"></script>
+  <script src="assets/js/pages-auth.js"></script>
+  <script src="assets/vendor/libs/bs-stepper/bs-stepper.js"></script>
+  <script src="assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
+  <script src="assets/js/form-wizard-numbered.js"></script>
+  <script src="assets/js/form-wizard-validation.js"></script>
+  <script src="assets/vendor/libs/dropzone/dropzone.js"></script>
+
+  <script src="assets/js/forms-file-upload.js"></script>
+
+  <button id="showtoast" hidden="">toast</button>
+  <input id="toastTypeGroup" type="text" class="form-control" hidden=""/>
+  <input id="toasttitle" type="text" class="form-control" hidden=""/>
+  <input id="toastmessage" type="text" class="form-control" hidden=""/>
+
+
+  <script>
+    function Toastdisplay(type, title, message) {
+      document.getElementById('toastTypeGroup').value = type;
+      document.getElementById('toasttitle').value = title;
+      document.getElementById('toastmessage').value = message;
+      document.getElementById("showtoast").click();
+    }
+
+
+
+    // function showModal() {
+    //   $("#exLargeModal").modal('show');
+    // }
+
+    // function hideModal() {
+    //   $("#addquetions").modal('hide');
+    // }
+    function showModal(modalId) {
+      $(`#${modalId}`).modal('show');
+    }
+    function hideModal(modalId) {
+      $(`#${modalId}`).modal('hide');
+    }
+
+
+
+
+  </script>
+<script src="polyfills.js" type="module"></script><script src="scripts.js" defer></script><script src="main.js" type="module"></script></body>
+
+</html>

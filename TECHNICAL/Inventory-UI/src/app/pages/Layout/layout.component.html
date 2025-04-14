@@ -1,0 +1,310 @@
+<!-- loader Start -->
+<div class="spin-loader" *ngIf="loading | async">
+    <div class="inner-spin">
+      <div class="spinner-border" style="width: 3rem; height: 3rem" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+  </div>
+  <!-- loader END -->
+  <!-- Wrapper Start -->
+  <div class="wrapper">
+    <div class="iq-sidebar sidebar-default">
+      <div class="iq-sidebar-logo d-flex align-items-center justify-content-between" style="height: 60px;">
+        <a routerLink="/Home" class="header-logo">
+          <!-- <img src="assets/images/layouts/Fedha-Poa-V2-resize.svg" class="img-fluid rounded-normal light-logo logo-title "
+            alt="logo" /> -->
+            <img src="assets/images/ssquarelogo/namelogo.png" class="img-fluid" alt="image" >
+            <!-- <label style="color: #025AA2;font-weight: 900 !important;">IPay</label> -->
+            <!-- <h5 class="logo-title light-logo ml-3">SOS</h5> -->
+             
+          </a>
+        <div class="iq-menu-bt-sidebar left-aligned">
+          <i class="las la-bars wrapper-menu"></i>
+        </div>
+      </div>
+      <div class="data-scrollbar" data-scroll="1" data-scrollbar="true" tabindex="-1"
+        style="overflow:scroll; outline:none; height: calc(100vh - 60px) !important;">
+        <div class="scroll-content" style="transform: translate3d(0px, 0px, 0px);">
+          <!-- <div class="scroll-content"> -->
+          <nav class="iq-sidebar-menu">
+            <ul id="iq-sidebar-toggle" class="iq-menu">
+              <li class="nav-item " *ngFor="let m of userPermissions;">
+  
+                <a class="svg-icon" style="text-decoration: none" *ngIf="m.MenuHeaderURL"
+                  routerLink="{{m.MenuHeaderURL}}">
+                  <div [innerHTML]="getSanitizedSvgPath(m.MenuIconPath)"></div>
+                  <!-- <svg class="svg-icon" id="{{m.MenuIconPath}}" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path
+                      d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                    </path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                  </svg> -->
+                  <span class="ml-4" style="text-decoration: none">{{m.MenuHeaderURL? m.MenuHeaderCaption :
+                    m.MenuHeaderCaption
+                    +' ' + m.MenuSubHeaderCaption }}</span>
+                </a>
+  
+                <a class="svg-icon" style="text-decoration: none" *ngIf="!m.MenuHeaderURL" data-bs-toggle="collapse"
+                  href="#{{m.MenuHeaderCaption}}" (click)="changeSubMenus(m.MenuHeaderCaption)" [attr.aria-expanded]="m.MenuHeaderCaption==this.ActivatedTab?'true':'false'"  aria-controls="icons">
+                  <!-- <i class="{{m.MenuIconPath}}"></i>  -->
+                  <div [innerHTML]="getSanitizedSvgPath(m.MenuIconPath)"></div>  
+                  <span class="ml-4" style="text-decoration: none">{{m.MenuHeaderCaption}}</span>
+                  <svg class="svg-icon iq-arrow-right arrow-active" width="20" height="20"
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="10 15 15 20 20 15"></polyline>
+                    <path d="M4 4h7a4 4 0 0 1 4 4v12"></path>
+                  </svg>
+                </a>
+                <div class="{{m.MenuHeaderCaption==this.ActivatedTab?'iq-submenu collapse show':'iq-submenu collapse'}}" data-parent="#iq-sidebar-toggle" id="{{m.MenuHeaderCaption}}"
+                  *ngFor="let subMenu of m.MenuSubHeaderCaption">
+                  <ul class="nav flex-column sub-menu"
+                    >
+                    <li class="nav-item">
+                     
+                      <a class="svg-icon" routerLink="{{subMenu.MenuSubHeaderURL}}"
+                        style="text-decoration: none"> <i class="las la-minus"></i>{{subMenu.MenuSubHeaderCaption}}</a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+  
+  
+  
+              <!-- <li class="active" *ngIf="m.MenuHeaderURL" >
+              <a routerLink="{{m.MenuHeaderURL}}" class="svg-icon">                        
+                  <svg class="svg-icon" id="{{m.MenuIconPath}}" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line>
+                  </svg>
+                  <span class="ml-4">{{m.MenuHeaderURL? m.MenuHeaderCaption : m.MenuHeaderCaption
+                    +' ' + m.MenuSubHeaderCaption }}</span>
+              </a>
+          </li>
+  
+          <li class=" ">
+            <a href="#{{m.MenuHeaderCaption}}" *ngIf="!m.MenuHeaderURL" class="collapsed" data-toggle="collapse" aria-expanded="false">
+                <svg class="svg-icon" id="{{m.MenuIconPath}}" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span class="ml-4">{{m.MenuHeaderCaption}}</span>
+                <svg class="svg-icon iq-arrow-right arrow-active" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="10 15 15 20 20 15"></polyline><path d="M4 4h7a4 4 0 0 1 4 4v12"></path>
+                </svg>
+            </a>
+            <ul id="product" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle" id="{{m.MenuHeaderCaption}}" *ngFor="let subMenu of m.MenuSubHeaderCaption" >
+                <li class="">
+                    <a href="page-list-product.html" {{subMenu.MenuSubHeaderURL}}>
+                        <i class="las la-minus"></i><span>{{subMenu.MenuSubHeaderCaption}}</span>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="page-add-product.html">
+                        <i class="las la-minus"></i><span>Add Product</span>
+                    </a>
+                </li>
+            </ul>
+        </li> -->
+  
+  
+  
+  
+  
+            </ul>
+  
+          </nav>
+          <!-- </div> -->
+          <!-- <div id="sidebar-bottom" class="position-relative sidebar-bottom">
+          <div class="card border-none">
+            <div class="card-body p-0">
+              <div class="sidebarbottom-content">
+                <div class="image">
+                  <img src="assets/images/layouts/side-bkg.png" class="img-fluid" alt="side-bkg" />
+                </div>
+                <h6 class="mt-4 px-4 body-title">
+                  Get More Feature by Upgrading
+                </h6>
+                <button type="button" class="btn sidebar-bottom-btn mt-4">
+                  Go Premium
+                </button>
+              </div>
+            </div>
+          </div>
+        </div> -->
+          <!-- <div class="p-3" style="text-align: center;">Powerd By
+             <img src="assets/images/Automate_.png" class="img-fluid rounded-normal" alt="logo" style="padding: 0px 17px;margin-top: 10px;" />
+          </div> -->
+        </div>
+        
+      </div>
+  
+  
+      
+    </div>
+    <div class="iq-top-navbar">
+      <div class="iq-navbar-custom">
+        <nav class="navbar navbar-expand-lg navbar-light p-0">
+          <div
+            class="iq-navbar-logo d-flex align-items-center justify-content-between"
+          >
+            <i class="ri-menu-line wrapper-menu"></i>
+            <a href="/bo/Home" class="header-logo">
+              <img
+                src="assets/images/logo.png"
+                class="img-fluid rounded-normal"
+                alt="logo"
+              />
+              <h5 class="logo-title ml-3">SOS</h5>
+            </a>
+          </div>
+  
+          <div class="d-flex align-items-center">
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-label="Toggle navigation"
+            >
+              <i class="ri-menu-3-line"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto navbar-list align-items-center">
+                <li class="nav-item nav-icon dropdown caption-content" style="
+                height: 55px;
+            ">
+                  <a
+                    href="#"
+                    class="search-toggle dropdown-toggle"
+                    id="dropdownMenuButton4"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <img
+                      src="assets/images/user.png"
+                      class="img-fluid rounded"
+                      alt="user"
+                    />
+                  </a>
+                  <div
+                    class="iq-sub-dropdown dropdown-menu"
+                    aria-labelledby="dropdownMenuButton"
+                  >
+                    <div class="card shadow-none m-0">
+                      <div class="card-body p-0 text-center">
+                        <div class="media-body profile-detail text-center">
+                          <img
+                            src="assets/images/page-img/profile-bg.jpg"
+                            alt="profile-bg"
+                            class="rounded-top img-fluid mb-4"
+                          />
+                          <img
+                            src="assets/images/user.png"
+                            alt="profile-img"
+                            class="rounded profile-img img-fluid avatar-70"
+                          />
+                        </div>
+                        <div class="p-3">
+                          <h5 class="mb-1">{{ UserName }}</h5>
+                          <!-- <p class="mb-0">Since 10 march, 2020</p> -->
+                          <div
+                            class="d-flex align-items-center justify-content-center mt-3"
+                          >
+                            <a (click)="SignOut()" class="btn border">Sign Out</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="new-order"
+      tabindex="-1"
+      role="dialog"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="popup text-left">
+              <h4 class="mb-3">New Order</h4>
+              <div class="content create-workform bg-body">
+                <div class="pb-3">
+                  <label class="mb-2">Email</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter Name or Email"
+                  />
+                </div>
+                <div class="col-lg-12 mt-4">
+                  <div
+                    class="d-flex flex-wrap align-items-ceter justify-content-center"
+                  >
+                    <div class="btn btn-primary mr-4" data-dismiss="modal">
+                      Cancel
+                    </div>
+                    <div class="btn btn-outline-primary" data-dismiss="modal">
+                      Create
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content-page">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Wrapper End-->
+  <!-- <footer class="iq-footer">
+    <div class="container-fluid">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <ul class="list-inline mb-0">
+                <li class="list-inline-item">
+                  <a routerLink="/home">Privacy Policy</a>
+                </li>
+                <li class="list-inline-item">
+                  <a routerLink="/home">Terms of Use</a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-lg-6 text-right">
+              <span class="mr-1">
+                <script>
+                  document.write(new Date().getFullYear());
+                </script>
+                ©
+              </span>
+              <a routerLink="/Home" class="">SOS</a>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer> -->
+  

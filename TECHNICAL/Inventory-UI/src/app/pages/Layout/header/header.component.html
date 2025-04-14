@@ -1,0 +1,100 @@
+<!-- Responsive Header -->
+<header class="header d-flex align-items-center w-100 justify-content-between py-2 bg-light shadow-sm">
+    <!-- Logo -->
+    <a href="index.html">
+      <img src="assets/img/ssquarelogo.png" alt="Logo" style="height: 49px;">
+    </a>
+  
+    <!-- Right Side (Search + Notifications + Profile) -->
+    <div class="d-flex align-items-center ms-auto gap-3">
+  
+      <!-- Search Bar -->
+      <div class="search-bar d-none d-md-block">
+        <input type="text" class="form-control" placeholder="Search...">
+      </div>
+  
+      <!-- Notifications -->
+      <div class="nav-item dropdown position-relative">
+        <a href="#" class="nav-link" data-bs-toggle="dropdown">
+          <i class="ti ti-bell fs-4"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end p-3" style="width: 300px; max-height: 200px; overflow-y: auto;">
+          <h6 class="dropdown-header">Notifications</h6>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">New order placed</a>
+          <a class="dropdown-item" href="#">Payment received</a>
+          <a class="dropdown-item" href="#">Order shipped</a>
+          <a class="dropdown-item" href="#">New message received</a>
+          <a class="dropdown-item" href="#">Subscription renewed</a>
+          <a class="dropdown-item" href="#">Invoice generated</a>
+          <a class="dropdown-item" href="#">Password changed</a>
+          <a class="dropdown-item" href="#">New user registered</a>
+        </div>
+      </div>
+  
+      <!-- User Profile -->
+      <div class="nav-item dropdown">
+        <a href="#" class="nav-link d-flex align-items-center" data-bs-toggle="dropdown">
+          <img src="assets/img/avatar/avatar-1.jpg" alt="User" class="rounded-circle" style="width: 35px; height: 35px;">
+        </a>
+        <div class="dropdown-menu dropdown-menu-end">
+          <a class="dropdown-item" href="profile.html">My Profile</a>
+          <a class="dropdown-item" href="settings.html">Settings</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item text-danger" (click)="SignOut()">Logout</a>
+        </div>
+      </div>
+  
+      <!-- Mobile Toggle -->
+      <button class="btn btn-light d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+        <i class="ti ti-menu"></i>
+      </button>
+    </div>
+  </header>
+  
+<!-- Mobile Menu: Offcanvas (Left Side) -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Menu</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+  
+    <div class="offcanvas-body">
+      <ul class="list-unstyled">
+        <li>
+          <a routerLink="Product" routerLinkActive="active-link" class="d-flex align-items-center p-2"
+          data-bs-dismiss="offcanvas"  aria-label="Close"  >
+            <i class="ti ti-table-plus fs-16 me-2"></i><span>Create Product</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="Category" routerLinkActive="active-link" class="mt-2 d-flex align-items-center p-2"
+          data-bs-dismiss="offcanvas"  aria-label="Close"  >
+            <i class="ti ti-list-details fs-16 me-2"></i><span>Category</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="SaleDetails" routerLinkActive="active-link" class="mt-2 d-flex align-items-center p-2"
+          data-bs-dismiss="offcanvas"  aria-label="Close"  >
+            <i class="ti ti-list-details fs-16 me-2"></i><span>Sales</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="LowStock" routerLinkActive="active-link" class="mt-2 d-flex align-items-center p-2"
+          data-bs-dismiss="offcanvas"  aria-label="Close"  >
+            <i class="ti ti-trending-up-2 fs-16 me-2"></i><span>Low Stock</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  
+
+
+
+<!-- Bootstrap JS -->
+
+        
+
+    <!-- /Header -->

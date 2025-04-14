@@ -1,0 +1,24 @@
+/* You can add global styles to this file, and also import other style files */
+body{
+  primary:#8c1818 !important;
+
+}
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff !important;
+  background-color: #8c1818 !important;
+}
+.btn-primary{
+  color: #fff !important;
+  background-color: #8c1818 !important;
+  border: 0px !important;
+}
+
+table.dataTable {
+  width: 99%;
+
+}
+.table td {
+  padding: 7px 15px !important;
+}
+.table .ligth th {
+  padding: 15px 15px !important;}

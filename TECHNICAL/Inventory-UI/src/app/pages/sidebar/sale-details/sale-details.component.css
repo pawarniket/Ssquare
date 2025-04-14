@@ -1,0 +1,147 @@
+  
+  .pagination button {
+    padding: 8px 12px;
+    margin: 5px;
+    border: none;
+    background-color:transparent;
+    color: #000000;
+    cursor: pointer;
+  }
+  .pagination button:hover {
+    background-color: rgb(180, 180, 180);
+    border-radius: 5px;
+  }
+  .pagination button:disabled {
+    background-color: #fff;
+    cursor: not-allowed;
+  }
+  .search-bar {
+    max-width: 300px; /* Adjust width as needed */
+}
+
+.search-input {
+    border: 2px solid #ffcc80; /* Light orange border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px;
+}
+
+.search-input:focus {
+    border-color: #ff9800; /* Darker orange on focus */
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5); /* Soft glow effect */
+    outline: none;
+}
+
+
+.offcanvas {
+    width: 250px; /* Adjust width if needed */
+    background-color: #fff; /* Background color */
+    border-right: 1px solid #ddd; /* Light border on right */
+}
+
+.offcanvas-body ul {
+    padding-left: 0;
+}
+
+.offcanvas-body li a {
+    color: #333;
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+}
+
+.offcanvas-body li a:hover {
+    background-color: #ffcc80; /* Light orange on hover */
+    color: #fff;
+}
+
+
+.transparent-logo {
+    width: 120px;
+    background: transparent; /* Ensure no background */
+}
+
+.logo {
+    background: inherit; /* Matches the parent/header background */
+}
+
+/* Main container */
+.container-flex {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+/* Product list card */
+.product-list {
+    flex: 1; /* Take full available width */
+    min-width: 65%;
+}
+
+/* Right Sidebar */
+.right-sidebar {
+    width: 300px;
+    background: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    min-height: 400px;
+}
+
+/* Sidebar visibility */
+
+
+.right-sidebar {
+    display: none; /* Hide initially */
+}
+
+.right-sidebar.show {
+    display: flex; /* Ensure it becomes visible */
+}
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+/* Right Sidebar */
+.right-sidebar {
+    width: 300px;
+    background: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Make sidebar content scrollable */
+.sidebar-body {
+    flex: 1; /* Takes full height */
+    max-height: 300px; /* Adjust height as needed */
+    overflow-y: auto; /* Enables scrolling */
+    padding-right: 5px;
+}
+
+/* Custom scrollbar */
+.sidebar-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-body::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.sidebar-body::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+.sidebar-body .btn-outline-secondary {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 5px;
+}

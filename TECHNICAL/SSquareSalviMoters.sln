@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{EE2AB4E6-7564-400D-B8C5-444B07FD0455}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DAL", "DAL", "{59546DA0-45C5-477D-959D-64CEB39CB88D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SSquareAPI", "SapphireAPI\SSquareAPI.csproj", "{ECD3DFBB-6C6C-4C0E-A599-00A52A87F436}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAEConfiguration", "FRAMEWORK\DAEConfiguration.csproj", "{4D399B71-8621-44A5-9D5A-3603D4F736CF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{143298F9-F1D2-4526-AFBB-BC93840AD044}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SapphireUI", "SapphireUI\", "{1FE2996F-14F0-42A4-82FF-F970A7C82359}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_52230"
+		Debug.AspNetCompiler.PhysicalPath = "SapphireUI\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52230\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_52230"
+		Release.AspNetCompiler.PhysicalPath = "SapphireUI\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52230\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "52230"
+	EndProjectSection
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_52230"
+		Debug.AspNetCompiler.PhysicalPath = "SapphireUI\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52230\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_52230"
+		Release.AspNetCompiler.PhysicalPath = "SapphireUI\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52230\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "52230"
+		SlnRelativePath = "SapphireUI\"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ECD3DFBB-6C6C-4C0E-A599-00A52A87F436}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECD3DFBB-6C6C-4C0E-A599-00A52A87F436}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECD3DFBB-6C6C-4C0E-A599-00A52A87F436}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECD3DFBB-6C6C-4C0E-A599-00A52A87F436}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D399B71-8621-44A5-9D5A-3603D4F736CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D399B71-8621-44A5-9D5A-3603D4F736CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D399B71-8621-44A5-9D5A-3603D4F736CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D399B71-8621-44A5-9D5A-3603D4F736CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FE2996F-14F0-42A4-82FF-F970A7C82359}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FE2996F-14F0-42A4-82FF-F970A7C82359}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FE2996F-14F0-42A4-82FF-F970A7C82359}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FE2996F-14F0-42A4-82FF-F970A7C82359}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ECD3DFBB-6C6C-4C0E-A599-00A52A87F436} = {EE2AB4E6-7564-400D-B8C5-444B07FD0455}
+		{4D399B71-8621-44A5-9D5A-3603D4F736CF} = {59546DA0-45C5-477D-959D-64CEB39CB88D}
+		{1FE2996F-14F0-42A4-82FF-F970A7C82359} = {143298F9-F1D2-4526-AFBB-BC93840AD044}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2914B845-4FFA-4445-A73B-694D8CCE93FC}
+	EndGlobalSection
+EndGlobal

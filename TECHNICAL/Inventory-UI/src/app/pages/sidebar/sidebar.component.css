@@ -1,0 +1,75 @@
+.active-link {
+    background-color: #742324  !important; /* Bootstrap primary blue */
+    border-radius: 5px; /* Optional: rounded corners */
+    color: aliceblue;
+}
+.page-wrapper .content{
+    margin-left: -244px
+}
+.sidebar-menu ul li a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.sidebar-menu ul li a:hover {
+    background-color: #ce946f !important; /* Light Orange background */
+    color: #ffff !important;
+}
+
+.active-link {
+    background-color: #ce946f !important; /* Light Orange background */
+    color: #fff !important; /* White text color */
+    font-weight: bold;
+}
+
+.sidebar.collapsed {
+    width: 102px; /* Adjust width as needed */
+    transition: width 0.3s ease;
+}
+
+.sidebar.collapsed .sidebar-logo a.logo-normal,
+.sidebar.collapsed .sidebar-logo a.logo-white {
+    display: none;
+}
+
+.sidebar.collapsed .submenu-hdr {
+    display: none;
+}
+
+.sidebar.collapsed ul.list-unstyled li a span {
+    display: none;
+}
+
+.sidebar.collapsed ul.list-unstyled li a {
+    justify-content: center;
+    width: 65px;
+    height: 50px;
+    margin-left: -22px;
+}
+/* Adjust Content Layout */
+
+.sidebar.collapsed + .content {
+    margin-left: -152px;
+} 
+
+.adjusted {
+    margin-left: -152px;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    transition: all 0.3s ease-in-out;
+}
+#toggle_btn {
+    display: block; /* Ensure it's visible */
+    cursor: pointer;
+}

@@ -1,0 +1,78 @@
+# ASP.NET Core
+bin/
+obj/
+.vscode/
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET Core packages
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Logs
+*.log
+.bin
+.v2
+# User-specific files
+*.user
+*.dotsettings
+
+# Azure Functions local settings file
+local.settings.json
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Configuration files
+appsettings*.json
+
+# Angular
+node_modules/
+dist/
+tmp/
+temp/
+
+# Angular environment files
+src/environments/environment*.ts
+
+# IDEs and Editors
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# VS Code
+.vscode/
+.history/
+
+
+# Mac
+*.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+/TECHNICAL/CODE/Bclusive/APIError.txt
+/TECHNICAL/CODE/Bclusive/src/environments/environment.prod.ts
+/TECHNICAL/CODE/Bclusive/src/environments/environment.ts
+/TECHNICAL/CODE/Bclusive/src/env.js
+/TECHNICAL/CODE/.vs/Bclusive/DesignTimeBuild/.dtbcache.v2
+*.bin
+/TECHNICAL/CODE/.vs/Bclusive/v17/.futdcache.v2
+*.vsidx
+TECHNICAL/CODE/.vs/Bclusive/v17/DocumentLayout.json
+TECHNICAL/CODE/.vs/Bclusive/config/applicationhost.config
+TECHNICAL/CODE/.vs/Bclusive/config/applicationhost.config
+TECHNICAL/CODE/.vs/Bclusive/config/applicationhost.config
+/TECHNICAL/CODE/.vs/Bclusive/config/applicationhost.config
+/TECHNICAL/CODE/.vs/Bclusive/DesignTimeBuild/.dtbcache.v2
+*.config
+*.v2
+*.json
+/TECHNICAL/CODE/.vs/Bclusive/v17/.futdcache.v2
+/TECHNICAL/CODE/.vs/Bclusive/v17/DocumentLayout.json
