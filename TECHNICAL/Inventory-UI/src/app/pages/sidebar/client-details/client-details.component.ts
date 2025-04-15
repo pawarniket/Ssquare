@@ -370,26 +370,44 @@ this.getvehicle();
 
 
   }
-  JobCard(Client: any){
-    const val={
-      ClientID:Client.ClientID
-    }
-    this.VehicleService.Getvehicle(val).subscribe(
-      response => {
-        //console.log("response", response);
-        this.clientVehicleList = JSON.parse(response['message']);
-         //console.log("brijesh2",  this.clientVehicleList);
-       if( this.clientVehicleList.length >1){
-        this.openClientVehicleModal('clientVehical');
-        this.cilentName=this.clientVehicleList[0]?.ClientName 
-        console.log("brijesh2",  this.clientVehicleList);
-       }else{
-        console.log("brijesh1",  this.clientVehicleList);
-       }
-      });
+  // JobCard(Client: any){
+  //   const val={
+  //     ClientID:Client.ClientID
+  //   }
+  //   this.VehicleService.Getvehicle(val).subscribe(
+  //     response => {
+  //       //console.log("response", response);
+  //       this.clientVehicleList = JSON.parse(response['message']);
+  //        //console.log("brijesh2",  this.clientVehicleList);
+  //      if( this.clientVehicleList.length >1){
+  //       this.openClientVehicleModal('clientVehical');
+  //       this.cilentName=this.clientVehicleList[0]?.ClientName 
+  //       console.log("brijesh2",  this.clientVehicleList);
+  //      }else if( this.clientVehicleList.length===1){
+  //       if(this.clientVehicleList["Message"]=="Data not found"){
+  //         alert("add vehical")
+  //       }else{
+  //         this.router.navigate(['/StockManagement/JobCard'], {
+  //           queryParams:
+  //           {
+  //             VehicleID: this.clientVehicleList[0]?.VehicleID,
+  //             VehicleNumber: this.clientVehicleList[0]?.VehicleNumber,
+  //             Brand: this.clientVehicleList[0]?.Brand,
+  //             Model: this.clientVehicleList[0]?.Model,
+  //             Color: this.clientVehicleList[0]?.Color,
+  //             ClientID: this.clientVehicleList[0]?.ClientID,
+  //             ClientName: this.clientVehicleList[0]?.ClientName,
+  //             Phone: this.clientVehicleList[0]?.Phone,
+  //         }
+  //         });
+  //       }
+        
+       
+  //      }
+  //     });
 
    
-  }
+  // }
   // openClientVehicleModal() {
   //   const modalElement = document.getElementById('clientVehical');
   //   if (modalElement) {
@@ -399,6 +417,47 @@ this.getvehicle();
   //     console.warn('Modal element not found');
   //   }
   // }
+  JobCard(Client: any) {
+    const val = {
+      ClientID: Client.ClientID
+    };
+  
+    this.VehicleService.Getvehicle(val).subscribe(response => {
+      this.clientVehicleList = JSON.parse(response['message']);
+  
+      if (this.clientVehicleList.length > 1) {
+        // Open modal if multiple vehicles exist
+        this.openClientVehicleModal('clientVehical');
+        this.cilentName = this.clientVehicleList[0]?.ClientName;
+        console.log("Multiple vehicles:", this.clientVehicleList);
+      }
+      else if (this.clientVehicleList.length === 1) {
+        const vehicle = this.clientVehicleList[0];
+  
+        if (vehicle?.Message === "Data not found") {
+          alert("Please add vehicle");
+        } else {
+          // Navigate with full queryParams
+          this.router.navigate(['/StockManagement/JobCard'], {
+            queryParams: {
+              VehicleID: vehicle.VehicleID,
+              VehicleNumber: vehicle.VehicleNumber,
+              Brand: vehicle.Brand,
+              Model: vehicle.Model,
+              Color: vehicle.Color,
+              ClientID: vehicle.ClientID,
+              ClientName: vehicle.ClientName,
+              Phone: vehicle.Phone
+            }
+          });
+        }
+      }
+      else {
+        alert("No vehicles found for this client.");
+      }
+    });
+  }
+  
   openClientVehicleModal(ModalName:any) {
     const modalElement = document.getElementById(ModalName);
     if (modalElement) {
