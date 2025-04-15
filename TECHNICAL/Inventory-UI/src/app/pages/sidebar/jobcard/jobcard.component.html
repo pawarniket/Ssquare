@@ -1,0 +1,54 @@
+<div class="job-card" [formGroup]="jobCardForm">
+
+  
+    <!-- Customer Details -->
+    <div class="section" formGroupName="customer">
+      <h3>Customer Details</h3>
+      <label>Name:</label>
+      <input type="text" formControlName="name" placeholder="Enter customer's name">
+      <label>Phone:</label>
+      <input type="text" formControlName="phone" placeholder="Enter phone number">
+    </div>
+  
+    <!-- Vehicle Details -->
+    <div class="section" formGroupName="vehicle">
+      <h3>Vehicle Details</h3>
+      <label>Vehicle Number:</label>
+      <input type="text" formControlName="number" placeholder="Enter vehicle number">
+      <label>Model:</label>
+      <input type="text" formControlName="model" placeholder="Enter vehicle model">
+      <label>Color:</label>
+      <input type="text" formControlName="color" placeholder="Enter vehicle color">
+    </div>
+  
+    <!-- Service Details -->
+    <div class="section" formGroupName="service">
+      <h3>Service Details</h3>
+      <label>Work to be done:</label>
+      <textarea rows="4" formControlName="work" placeholder="Describe the required services"></textarea>
+    </div>
+  
+    <!-- Products/Parts Used -->
+    <div class="section">
+      <h3>Products/Parts Used</h3>
+      <div formArrayName="products" id="product-list" class="product-list">
+        <div *ngFor="let product of products.controls; let i = index" [formGroupName]="i" class="product-item">
+          <input type="text" formControlName="partName" placeholder="Part Name">
+          <input type="number" formControlName="quantity" placeholder="Quantity">
+        </div>
+      </div>
+      <button class="add-btn" (click)="addProduct()">+ Add More Product</button>
+    </div>
+  
+    <!-- Mechanic Remarks -->
+    <div class="section">
+      <h3>Mechanic Remarks</h3>
+      <textarea rows="3" formControlName="remarks" placeholder="Mechanic's observations"></textarea>
+    </div>
+  
+    <!-- Save Button -->
+    <div style="text-align: center;">
+      <button (click)="save()">Save Job Card</button>
+    </div>
+  </div>
+  

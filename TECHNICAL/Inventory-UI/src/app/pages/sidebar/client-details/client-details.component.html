@@ -125,7 +125,10 @@
                 (click)="editClient(Clientlist)">
                 <i class="fas fa-edit"></i> Edit
               </button>
-
+              <button class="btn btn-primary btn-sm" 
+              (click)="JobCard(Clientlist)">
+              <i class="fas fa-edit"></i> JOB Card
+            </button>
             </div>
           </td>
         </tr>
@@ -470,6 +473,69 @@
           </div>
 
         </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal clientVehical -->
+
+<div class="modal fade" id="clientVehical" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true"
+  data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content shadow-lg">
+
+      <!-- Header -->
+      <div class="modal-header text-white rounded-top" style="background-color: #8c1818;">
+        <h5 class="modal-title d-flex align-items-center" id="modalLabel">
+          <i class="bi bi-box-seam me-2"></i>
+          {{ cilentName }}
+        </h5>
+        <button type="button" id="closebtn" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+          (click)="Resetform()"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <div  class="table-responsive">
+          <table class="table  text-left align-middle" id="bookinglisttable">
+            <thead class="bg-black text-white">
+              <tr>
+                <th class="d-none">
+                  Client Name 
+                </th>
+                <th >
+                  Vehicle Number 
+                </th>
+                <th >
+                  Vehicle Type 
+                </th>
+                <th >
+                  Brand 
+                </th>
+                <th class="text-center">Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="text-left" *ngFor="let vehiclelist of clientVehicleList">
+                <td class="d-none">{{ vehiclelist.ClientName }}</td>
+                <td>{{ vehiclelist.VehicleNumber }}</td>
+                <td>{{ vehiclelist.VehicleType }}</td>
+                <td>{{ vehiclelist.Brand }}</td>
+                <td>
+                  <div class="d-flex justify-content-center gap-2">
+                    <button class="btn btn-primary btn-sm" 
+                      (click)="selectVehical(vehiclelist)">
+                      <i class="fas fa-edit"></i> Select
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

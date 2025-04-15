@@ -35,11 +35,14 @@ namespace MS.SSquare.API.Controllers
 
                 DBUtility oDBUtility = new DBUtility(_configurationIG);
                 {
-                    if (vehicle.VehicleID != 0 && vehicle.VehicleID != null)
+                    if (vehicle.VehicleID > 0)
                     {
                         oDBUtility.AddParameters("@VehicleID", DBUtilDBType.Integer, DBUtilDirection.In, 10, vehicle.VehicleID);
                     }
-
+                    if (vehicle.ClientID > 0 )
+                    {
+                        oDBUtility.AddParameters("@ClientID", DBUtilDBType.Integer, DBUtilDirection.In, 10, vehicle.ClientID);
+                    }
 
 
                     DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_GET_VEHICLE");
@@ -100,7 +103,7 @@ namespace MS.SSquare.API.Controllers
             {
                 DBUtility oDBUtility = new DBUtility(_configurationIG);
 
-                if (vehicle.VehicleID != 0 )
+                if (vehicle.VehicleID > 0 )
                 {
                     oDBUtility.AddParameters("@VehicleID", DBUtilDBType.Integer, DBUtilDirection.In, 10, vehicle.VehicleID);
                 }
@@ -108,7 +111,7 @@ namespace MS.SSquare.API.Controllers
                 {
                     oDBUtility.AddParameters("@VehicleNumber", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, vehicle.VehicleNumber);
                 }
-                if (vehicle.ClientID != 0)
+                if (vehicle.ClientID > 0)
                 {
                     oDBUtility.AddParameters("@ClientID", DBUtilDBType.Integer, DBUtilDirection.In, 100, vehicle.ClientID);
                 }

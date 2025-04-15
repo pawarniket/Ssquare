@@ -2,6 +2,8 @@ import { VehicleService } from './../../../core/service/vehicle/vehicle.service'
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClientService } from '../../../core/service/client/client.service';
+import { Modal } from 'bootstrap';
+import { ActivatedRoute, Router } from '@angular/router';
 declare function Popupdisplay(message: any): any;
 
 @Component({
@@ -11,14 +13,17 @@ declare function Popupdisplay(message: any): any;
 })
 export class ClientDetailsComponent {
   Vehicle =false
+  cilentName:any
   Clientform!: FormGroup;
   Vehicleform!: FormGroup;
-
+  clientVehicleList:any
   cards:any;
+  clientVehicleModal: any;
     constructor(
       private formBuilder: FormBuilder,
       private VehicleService:VehicleService,
-    private Clientservice:ClientService) {
+    private Clientservice:ClientService,
+    private router: Router) {
   
     }
   ngOnInit(): void {
@@ -365,6 +370,49 @@ this.getvehicle();
 
 
   }
+  JobCard(Client: any){
+    const val={
+      ClientID:Client.ClientID
+    }
+    this.VehicleService.Getvehicle(val).subscribe(
+      response => {
+        //console.log("response", response);
+        this.clientVehicleList = JSON.parse(response['message']);
+         //console.log("brijesh2",  this.clientVehicleList);
+       if( this.clientVehicleList.length >1){
+        this.openClientVehicleModal('clientVehical');
+        this.cilentName=this.clientVehicleList[0]?.ClientName 
+        console.log("brijesh2",  this.clientVehicleList);
+       }else{
+        console.log("brijesh1",  this.clientVehicleList);
+       }
+      });
+
+   
+  }
+  // openClientVehicleModal() {
+  //   const modalElement = document.getElementById('clientVehical');
+  //   if (modalElement) {
+  //     const modal = new Modal(modalElement);
+  //     modal.show();
+  //   } else {
+  //     console.warn('Modal element not found');
+  //   }
+  // }
+  openClientVehicleModal(ModalName:any) {
+    const modalElement = document.getElementById(ModalName);
+    if (modalElement) {
+      this.clientVehicleModal = new Modal(modalElement);
+      this.clientVehicleModal.show();
+    } else {
+      console.warn('Modal element not found');
+    }
+  }
+  closeClientVehicleModal() {
+    if (this.clientVehicleModal) {
+      this.clientVehicleModal.hide();
+    }
+  }
   editVehicle(Vehicle: any) {
     this.Vehicleform.patchValue({
       VehicleID:Vehicle.VehicleID,
@@ -380,7 +428,24 @@ this.getvehicle();
 
 
   }
-  
+  selectVehical(selectVehical:any){
+
+    this.router.navigate(['/StockManagement/JobCard'], {
+      queryParams:
+      {
+        VehicleID: selectVehical.VehicleID,
+        VehicleNumber: selectVehical.VehicleNumber,
+        Brand: selectVehical.Brand,
+        Model: selectVehical.Model,
+        Color: selectVehical.Color,
+        ClientID: selectVehical.ClientID,
+        ClientName: selectVehical.ClientName,
+        Phone: selectVehical.Phone,
+    }
+    });
+    this.closeClientVehicleModal();
+    console.log("selectVehical",selectVehical)
+  }
   sortTable(column: string): void {
 
     

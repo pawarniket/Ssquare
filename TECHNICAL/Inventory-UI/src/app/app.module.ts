@@ -17,6 +17,7 @@ import { loaderInterceptor } from './core/interceptors/loader.interceptor';
 import { LoaderComponent } from './pages/loader/loader.component';
 import { LayoutComponent } from './pages/layout/layout.component';
 import { ClientDetailsComponent } from './pages/sidebar/client-details/client-details.component';
+import { JobcardComponent } from './pages/sidebar/jobcard/jobcard.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ClientDetailsComponent } from './pages/sidebar/client-details/client-de
     LowstockComponent,
     LoaderComponent,
     LayoutComponent,
-    ClientDetailsComponent
+    ClientDetailsComponent,
+    JobcardComponent
   ],
   imports: [
     BrowserModule,

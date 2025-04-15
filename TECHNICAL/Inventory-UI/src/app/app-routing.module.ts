@@ -9,6 +9,7 @@ import { LowstockComponent } from './pages/sidebar/lowstock/lowstock.component';
 import { SaleDetailsComponent } from './pages/sidebar/sale-details/sale-details.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { ClientDetailsComponent } from './pages/sidebar/client-details/client-details.component';
+import { JobcardComponent } from './pages/sidebar/jobcard/jobcard.component';
 
 
 const routes: Routes = [
@@ -35,8 +36,10 @@ const routes: Routes = [
        {path: 'SaleDetails', component: SaleDetailsComponent,
         canActivate: [AuthGuard]
        },
-
        {path: 'ClientDetails', component: ClientDetailsComponent,
+        canActivate: [AuthGuard]
+       },
+       {path: 'JobCard', component: JobcardComponent,
         canActivate: [AuthGuard]
        }
     ]
