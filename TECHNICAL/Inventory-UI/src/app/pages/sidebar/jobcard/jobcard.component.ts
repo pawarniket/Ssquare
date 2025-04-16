@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { JobcardService } from '../../../core/service/jobcard/jobcard.service';
+import { ProductService } from '../../../core/service/product/product.service';
 @Component({
   selector: 'app-jobcard',
   templateUrl: './jobcard.component.html',
@@ -9,8 +11,12 @@ import { ActivatedRoute } from '@angular/router';
 export class JobcardComponent {
   jobCardForm: FormGroup;
   vehicleDetails: any;
+  productList :any= [];
 
-  constructor(private fb: FormBuilder,private route: ActivatedRoute) {
+  constructor(private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private JobCardService :JobcardService,
+  private ProductService:ProductService) {
     this.jobCardForm = this.fb.group({
       customer: this.fb.group({
         name: ['', Validators.required],
@@ -47,12 +53,33 @@ export class JobcardComponent {
       });
       
     });
-  }
+    const val={}
+    this.ProductService.getProduct(val).subscribe((data)=>{
+      if(data.status_code===100){
+        this.productList=JSON.parse(data["message"])
+      }
 
+  })
+  }
+  
+  generateXML(products: any): string {
+    let xmlString = '<Products>';
+
+    products.forEach((product:any) => {
+      xmlString += `<Product>
+                      <ProductID>${product.ProductID}</ProductID>
+                      <Quantity>${product.Quantity}</Quantity>
+                    </Product>`;
+    });
+
+    xmlString += '</Products>';
+
+    return xmlString;
+  }
   createProduct(): FormGroup {
     return this.fb.group({
-      partName: ['', Validators.required],
-      quantity: ['', [Validators.required, Validators.min(1)]]
+      ProductID: ['', Validators.required],
+      Quantity: ['', [Validators.required, Validators.min(1)]]
     });
   }
 
@@ -61,15 +88,41 @@ export class JobcardComponent {
   }
 
   addProduct(): void {
+    const lastProduct = this.products.at(this.products.length - 1);
+
+    if (lastProduct && lastProduct.invalid) {
+      alert("please fill required fields")
+      return; 
+    }else{
     this.products.push(this.createProduct());
   }
-
+}
+  deleteProduct(index: number): void {
+    if (index===0){
+      return ;
+    }
+    else{
+    this.products.removeAt(index);
+    }
+  }
   save(): void {
     if (this.jobCardForm.valid) {
       console.log('Job Card Data:', this.jobCardForm.value);
-      // Send this.jobCardForm.value to backend
+      const ProductXML=this.generateXML(this.jobCardForm.value.products)// Send this.jobCardForm.value to backend
+      const val={
+        VehicleID: this.vehicleDetails.VehicleID,
+        ClientID: this.vehicleDetails.ClientID,
+        WorkDescription:this.jobCardForm.value.service.work,
+        Remarks:this.jobCardForm.value.remarks,
+        ProductsXML:ProductXML
+      }
+      // this.JobCardService.InsertJobCard(val).subscribe((data)=>{
+      // })
+      console.log('Jbrijesh', val);
     } else {
       this.jobCardForm.markAllAsTouched();
     }
   }
+
+  
 }

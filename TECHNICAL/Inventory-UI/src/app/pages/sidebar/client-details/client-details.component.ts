@@ -458,7 +458,7 @@ this.getvehicle();
     });
   }
   
-  openClientVehicleModal(ModalName:any) {
+openClientVehicleModal(ModalName:any) {
     const modalElement = document.getElementById(ModalName);
     if (modalElement) {
       this.clientVehicleModal = new Modal(modalElement);

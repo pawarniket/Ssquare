@@ -38,6 +38,11 @@ export const APIConstant = {
         getvehicle:"Vehicle/get",
         insertvehicle:"vehicle/insert",
         Updatevehicle:"vehicle/update"
+      },
+      JobCard:{
+        getJobCard:"jobcard/get",
+        insertJobCard:"jobcard/insert",
+        UpdateJobCard:"jobcard/update"
       }
 
 }

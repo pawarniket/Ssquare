@@ -63,3 +63,10 @@ button:hover {
 .add-btn:hover {
     background-color: #1976D2;
 }
+select{
+    width: 50% !important;
+}
+.delete-btn{
+    background-color: red;
+    height: 44px;
+}
