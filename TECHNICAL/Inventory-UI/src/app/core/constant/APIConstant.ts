@@ -3,7 +3,10 @@ export const APIConstant = {
    
     Users: {
         userlogin: 'user/login',
- 
+        getuser:'Users/Get',
+        inseruser:'Users/insert',
+        updateuser:'users/update',
+        deleteuser:'users/delete'
       },
 
       Products:{

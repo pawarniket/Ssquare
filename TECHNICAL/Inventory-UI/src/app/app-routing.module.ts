@@ -10,6 +10,8 @@ import { SaleDetailsComponent } from './pages/sidebar/sale-details/sale-details.
 import { AuthGuard } from './core/guards/auth.guard';
 import { ClientDetailsComponent } from './pages/sidebar/client-details/client-details.component';
 import { JobcardComponent } from './pages/sidebar/jobcard/jobcard.component';
+import { SaleDashboardComponent } from './pages/sidebar/sale-dashboard/sale-dashboard.component';
+import { EmployeeComponent } from './pages/sidebar/employee/employee.component';
 
 
 const routes: Routes = [
@@ -21,6 +23,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
 
     children:[
+      { path: 'Saledashboard', component: SaleDashboardComponent , canActivate: [AuthGuard],},
+
       { path: 'Product', component: ProductComponent , canActivate: [AuthGuard],
 
         children:[
@@ -40,6 +44,9 @@ const routes: Routes = [
         canActivate: [AuthGuard]
        },
        {path: 'JobCard', component: JobcardComponent,
+        canActivate: [AuthGuard]
+       },
+       {path: 'EmployeeDetails', component: EmployeeComponent,
         canActivate: [AuthGuard]
        }
     ]

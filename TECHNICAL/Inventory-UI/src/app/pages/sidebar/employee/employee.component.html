@@ -1,0 +1,209 @@
+<div class="page-wrapper">
+    <div class="content">
+        <div class="page-header">
+            <div class="add-item d-flex justify-content-between align-items-center">
+                <div class="page-title">
+                    <h4 class="fw-bold">Employee List</h4>
+                    <h6>Manage your Employee </h6>
+                </div>
+                
+            <div class="page-btn">
+                <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addemployee"><i
+                        class="ti ti-circle-plus me-1"></i>Add Employee </a>
+            </div>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="container bg-white rounded p-4 mt-4 shadow">
+    <div class="row align-items-center justify-content-between mb-4">
+      <!-- Title and Search -->
+      <div class="col-md-6 d-flex align-items-center gap-3">
+        <!-- <h3 class="fw-bold mb-0">Booking List</h3> -->
+  
+        <form class="input-group w-100" role="search">
+          <input type="search" class="form-control" placeholder="Search here" aria-label="Search bookings"
+            (keyup)="onSearch($event)" autocomplete="off" />
+          <span class="input-group-text">
+            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/a2d24a7ceb684c1f468bdd9e1e90fbb04e0da74d9655bc2729b38bcacb6192d0"
+              alt="Search" style="width: 16px;" />
+          </span>
+        </form>
+      </div>
+  
+      <!-- Print Button -->
+      <div class="col-md-3 text-end">
+        <!-- <button (click)="printTable()" class="btn btn-black">
+          <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/2c4cd31f4573b466716d0076623b4003b678b69f9e6f4b56e543f3956469a44c"
+            alt="Print" style="width: 16px;" />
+          Print
+        </button> -->
+      </div>
+    </div>
+  
+    <!-- Table Section -->
+    <div class="table-responsive">
+      <table class="table  text-left align-middle" id="bookinglisttable">
+        <thead class="bg-black text-white">
+            <tr>
+      
+            <th style="cursor:pointer">
+              Employee Name 
+            </th>
+            <th  style="cursor:pointer">
+                Phone
+            </th>
+            <th style="cursor:pointer">Role</th>
+            <th class="text-center" style="cursor:pointer">Action</th>
+
+          </tr>
+        </thead>
+        <tbody>
+            <tr class="text-left" *ngFor="let employeelist of getPaginatedData()" >
+            <td>{{ employeelist.FullName }}</td>
+            <td>{{ employeelist.Phone }}</td>
+            <td>{{ employeelist.Role }}</td>
+
+            <td>
+              <div class="d-flex justify-content-center gap-2">
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addemployee"
+                (click)="editemployee(employeelist)"  >
+                  <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="btn btn-danger btn-sm" (click)="deleteemployee(employeelist)">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Pagination -->
+    <div class="d-flex justify-content-end align-items-center gap-3 mt-3">
+      <button class="btn btn-secondary btn-sm" (click)="prevPage()" [disabled]="currentPage === 1">
+        Previous
+      </button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button class="btn btn-secondary btn-sm" (click)="nextPage()" [disabled]="currentPage === totalPages">
+        Next
+      </button>
+    </div>
+  </div>
+
+
+
+  <!-- Modal -->
+<div class="modal fade" id="addemployee" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content shadow-lg">
+        
+        <!-- Header -->
+        <div class="modal-header text-white rounded-top" style="background-color: #8c1818;">
+          <h5 class="modal-title d-flex align-items-center" id="modalLabel">
+            <i class="bi bi-box-seam me-2"></i>
+            {{ employeeform.value.UserID ? 'Update' : 'Add' }} Employee
+          </h5>
+          <button type="button" id="closebtn" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" (click)="Resetform()"></button>
+        </div>
+  
+        
+        <!-- Body -->
+        <div class="modal-body">
+          <form [formGroup]="employeeform" class="add-product-form">
+            <div class="add-product">
+              <div class="accordions-items-seperate" id="accordionSpacingExample">
+                <div class="accordion-item mb-4">
+                  <h2 class="accordion-header" id="headingSpacingOne">
+                    <div class="accordion-button collapsed bg-white" data-bs-toggle="collapse" data-bs-target="#SpacingOne" aria-expanded="true" aria-controls="SpacingOne">
+                      <div class="d-flex align-items-center justify-content-between flex-fill">
+                        <h5 class="d-flex align-items-center">
+                          <i class="bi bi-info-circle-fill  me-2" style="color: #8c1818;"></i>
+                          <span>Employee Information</span>
+                        </h5>
+                      </div>
+                    </div>
+                  </h2>
+  
+                  <div id="SpacingOne" class="accordion-collapse collapse show" aria-labelledby="headingSpacingOne">
+                    <div class="accordion-body border-top">
+                      
+                      <!-- Row 1 -->
+                      <div class="row">
+                        <div class="col-sm-6 col-12 mb-3">
+                          <label class="form-label fw-semibold text-muted">First Name <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" formControlName="FirstName" placeholder="Enter First Name*">
+                          <div *ngIf="employeeform.get('FirstName')?.invalid && employeeform.get('FirstName')?.touched" class="text-danger text-sm mt-1">
+                            First Name is required.
+                          </div>
+                        </div>
+                        <div class="col-sm-6 col-12 mb-3">
+                          <label class="form-label fw-semibold text-muted">Last Name <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" formControlName="LastName" placeholder="Enter Last Name*">
+                          <div *ngIf="employeeform.get('LastName')?.invalid && employeeform.get('LastName')?.touched" class="text-danger text-sm mt-1">
+                            Last Name  is required.
+                          </div>
+                        </div>
+                      </div>
+  
+                      <!-- Row 2 -->
+                      <div class="row">
+                        <div class="col-sm-6 col-12 mb-3">
+                            <label class="form-label fw-semibold text-muted">
+                              Role <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select" formControlName="EmployeeRole" [disabled]="true">
+                              <option value="User">Employee</option>
+                            </select>
+                          </div>
+                          
+                        <div class="col-sm-6 col-12 mb-3">
+                          <label class="form-label fw-semibold text-muted">Email </label>
+                          <input type="email" class="form-control" formControlName="email" placeholder="Enter Email">
+                
+                        </div>
+                      </div>
+  
+                      <!-- Row 3 -->
+                      <div class="row">
+                        <div class="col-sm-6 col-12 mb-3">
+                          <label class="form-label fw-semibold text-muted">Phone Number <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control" formControlName="Phone" placeholder="Enter Phone Number">
+                          <div *ngIf="employeeform.get('Phone')?.invalid && employeeform.get('Phone')?.touched" class="text-danger text-sm mt-1">
+                            Phone Number is required.
+                          </div>
+                        </div>
+               
+                      </div>
+  
+          
+  
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <!-- Buttons -->
+            <div class="col-lg-12">
+              <div class="d-flex align-items-center justify-content-end gap-2 mb-3">
+                <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal" (click)="Resetform()">Cancel</button>
+                <button type="submit" class="btn btn-primary px-4" (click)="employee()">
+                  {{ employeeform.value.UserID ? 'Update' : 'Add' }} Employee
+                </button>
+              </div>
+            </div>
+  
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  

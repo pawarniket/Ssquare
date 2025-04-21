@@ -22,3 +22,6 @@ table.dataTable {
 }
 .table .ligth th {
   padding: 15px 15px !important;}
+  .sidebar-default .iq-sidebar-menu .iq-menu>li.active>a svg{
+    color: #8c1818 !important;
+  }

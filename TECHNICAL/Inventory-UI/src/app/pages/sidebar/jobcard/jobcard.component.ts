@@ -98,10 +98,15 @@ export class JobcardComponent {
   }
 }
   deleteProduct(index: number): void {
-    if (index===0){
+    if (index===0 ){
+      this.products.at(0).reset({
+        ProductID: '',
+        Quantity: ''
+      });
       return ;
     }
     else{
+
     this.products.removeAt(index);
     }
   }

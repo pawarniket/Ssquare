@@ -49,4 +49,20 @@ export class UserService {
     return this.masterService.post(environment.api+APIConstant.Users.userlogin,val)
 
   }
+  getuser(val:any){
+    return this.masterService.post(environment.api+APIConstant.Users.getuser,val)
+
+  }
+  insertuser(val:any){
+    return this.masterService.post(environment.api+APIConstant.Users.inseruser,val)
+
+  }
+  updateuser(val:any){
+    return this.masterService.post(environment.api+APIConstant.Users.updateuser,val)
+
+  }
+  deleteuser(val:any){
+    return this.masterService.post(environment.api+APIConstant.Users.deleteuser,val)
+
+  }
 }

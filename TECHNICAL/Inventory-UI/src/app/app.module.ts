@@ -18,6 +18,8 @@ import { LoaderComponent } from './pages/loader/loader.component';
 import { LayoutComponent } from './pages/layout/layout.component';
 import { ClientDetailsComponent } from './pages/sidebar/client-details/client-details.component';
 import { JobcardComponent } from './pages/sidebar/jobcard/jobcard.component';
+import { SaleDashboardComponent } from './pages/sidebar/sale-dashboard/sale-dashboard.component';
+import { EmployeeComponent } from './pages/sidebar/employee/employee.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { JobcardComponent } from './pages/sidebar/jobcard/jobcard.component';
     LoaderComponent,
     LayoutComponent,
     ClientDetailsComponent,
-    JobcardComponent
+    JobcardComponent,
+    SaleDashboardComponent,
+    EmployeeComponent
   ],
   imports: [
     BrowserModule,

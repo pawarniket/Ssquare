@@ -99,9 +99,9 @@ this.getProductcategory();
       response => {
         console.log("response", response);
         this.StockList = JSON.parse(response['message']);
-console.log("this.StockList",this.StockList.StockQuantity>5);
-const StockQuantity = this.StockList.filter((item: any) => item.StockQuantity <=5 && item.StockQuantity !== 0);
-console.log("StockQuantity",StockQuantity);
+        console.log("this.StockList",this.StockList.StockQuantity>5);
+        const StockQuantity = this.StockList.filter((item: any) => item.StockQuantity <=5 && item.StockQuantity !== 0);
+        console.log("StockQuantity",StockQuantity);
 
         this.filterBookingData = StockQuantity;
         if (this.filterBookingData[0]?.Message === 'Data not found') {

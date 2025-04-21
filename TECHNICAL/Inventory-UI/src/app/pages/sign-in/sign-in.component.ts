@@ -73,7 +73,7 @@ if(response.status_code == 100){
 );
 this.user.isAuthenticated = true;
 
-      this.router.navigate(['/StockManagement/Product']); // Default fallback route
+      this.router.navigate(['/StockManagement/Saledashboard']); // Default fallback route
 }
 else{
   Popupdisplay("User Not Found");
