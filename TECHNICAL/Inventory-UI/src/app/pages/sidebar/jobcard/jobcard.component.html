@@ -1,4 +1,4 @@
-<div class="job-card" [formGroup]="jobCardForm">
+<div class="job-card" [formGroup]="jobCardForm" *ngIf="vehicleDetails">
 
   
     <!-- Customer Details -->
@@ -60,3 +60,37 @@
     </div>
   </div>
   
+
+  <div  class="table-responsive" *ngIf="!vehicleDetails">
+    <table class="table  text-left align-middle" id="bookinglisttable">
+      <thead class="bg-black text-white">
+        <tr>
+
+          <th (click)="sortTable('ClientName')" style="cursor:pointer">
+            Client Name <i [ngClass]="getSortIcon('ClientName')" class="ms-1"></i>
+          </th>
+        
+          <th (click)="sortTable('Phone')" style="cursor:pointer">
+            Phone <i [ngClass]="getSortIcon('Phone')" class="ms-1"></i>
+          </th>
+          <th class="text-center">Action
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="text-left" *ngFor="let Clientlist of getPaginatedData()">
+          <td>{{ Clientlist.ClientName }}</td>
+          <td>{{ Clientlist.Phone }}</td>
+          <td>
+            <div class="d-flex justify-content-center gap-2">
+              <button class="btn btn-primary btn-sm" 
+                (click)="selectJob(Clientlist)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+            
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
