@@ -86,9 +86,9 @@ export class SaleDetailsComponent {
      this.products.getProduct(val).subscribe(
        response => {
          console.log("response", response);
-         this.StockList = JSON.parse(response['message']);
- console.log("this.StockList",this.StockList.StockQuantity);
- this.Quntity=this.StockList.StockQuantity
+         let allProducts = JSON.parse(response['message']);
+         this.StockList = allProducts.filter((p: any) => p.StockQuantity > 1);
+
          if (this.StockList[0]?.Message === 'Data not found') {
            this.StockList = [];
          }
