@@ -9,6 +9,9 @@ namespace MS.SSquare.API.Models
         public int? ClientID { get; set; }
         public string WorkDescription { get; set; }
         public string Remarks { get; set; }
+        public string MechanicName { get; set; }
+        public string Status { get; set; }
+        public string PaymentMode { get; set; }
         public DateTime JobCardDate { get; set; }
 
         public string ProductsXML { get; set; }

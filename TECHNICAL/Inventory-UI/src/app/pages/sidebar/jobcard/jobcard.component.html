@@ -1,3 +1,17 @@
+<div *ngIf="vehicleDetails" class="d-flex justify-content-end">
+
+  <button class="btn btn-success btn-sm" (click)="back()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+      class="bi bi-arrow-left me-1" viewBox="0 0 16 16">
+      <path fill-rule="evenodd"
+        d="M15 8a.5.5 0 0 1-.5.5H3.707l4.147 4.146a.5.5 0 0 1-.708.708l-5-5a.5.5 0 0 1 0-.708l5-5a.5.5 0 0 1 .708.708L3.707 7.5H14.5A.5.5 0 0 1 15 8z" />
+    </svg>
+    Back
+  </button>
+  
+
+</div>
+
 <div class="job-card" [formGroup]="jobCardForm" *ngIf="vehicleDetails" class="p-4 bg-white rounded shadow-sm">
 
   <!-- Customer Details -->
@@ -65,7 +79,36 @@
     </div>
     <button class="btn btn-primary" (click)="addProduct()">+ Add More Product</button>
   </div>
+<!-- Mechanic Selection -->
+<div class="section mb-4">
+  <h3 class="mb-3">Select Mechanic</h3>
+  <select formControlName="mechanicName" class="form-control">
+    <option value="">-- Select Mechanic --</option>
+    <option *ngFor="let mechanic of mechanicList" [value]="mechanic.FullName">{{ mechanic.FullName }}</option>
+  </select>
+</div>
 
+<!-- Status -->
+<div class="section mb-4">
+  <h3 class="mb-3">Job Status</h3>
+  <select formControlName="status" class="form-control">
+    <option value="">-- Select Status --</option>
+    <option *ngFor="let status of statusList" [value]="status">
+      {{ status }}
+    </option>
+  </select>
+</div>
+
+<!-- Payment Mode -->
+<div class="section mb-4">
+  <h3 class="mb-3">Payment Mode</h3>
+  <select formControlName="paymentMode" class="form-control">
+    <option value="">-- Select Payment Mode --</option>
+    <option *ngFor="let mode of paymentModes" [value]="mode">
+      {{ mode }}
+    </option>
+  </select>
+</div>
   <!-- Mechanic Remarks -->
   <div class="section mb-4">
     <h3 class="mb-3">Mechanic Remarks</h3>
@@ -94,6 +137,15 @@
           <th (click)="sortTable('Phone')" style="cursor:pointer">
             Phone <i [ngClass]="getSortIcon('Phone')" class="ms-1"></i>
           </th>
+          <th (click)="sortTable('status')" style="cursor:pointer">
+            Status <i [ngClass]="getSortIcon('status')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('mechanicName')" style="cursor:pointer">
+            Mechanic Name <i [ngClass]="getSortIcon('mechanicName')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('paymentMode')" style="cursor:pointer">
+            Payment Mode <i [ngClass]="getSortIcon('paymentMode')" class="ms-1"></i>
+          </th>
           <th (click)="sortTable('JobCardDate')" style="cursor:pointer">
             Date <i [ngClass]="getSortIcon('JobCardDate')" class="ms-1"></i>
           </th>
@@ -105,6 +157,9 @@
         <tr class="text-left" *ngFor="let Clientlist of getPaginatedData()">
           <td>{{ Clientlist.ClientName }}</td>
           <td>{{ Clientlist.Phone }}</td>
+          <td>{{ Clientlist.Status }}</td>
+          <td>{{ Clientlist.MechanicName }}</td>
+          <td>{{ Clientlist.PaymentMode }}</td>
           <td>{{ Clientlist.JobCardDate| date:'dd-MMM-yyyy'  }}</td>
           <td>
             <div class="d-flex justify-content-center gap-2">

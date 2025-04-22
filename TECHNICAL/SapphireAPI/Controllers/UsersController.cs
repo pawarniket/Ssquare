@@ -109,7 +109,10 @@ namespace MS.SSquare.API.Controllers
                 {
                     oDBUtility.AddParameters("@USERID", DBUtilDBType.Integer, DBUtilDirection.In, 50, user.UserID);
                 }
-            
+                if (user.Role != null)
+                {
+                    oDBUtility.AddParameters("@Role", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, user.Role);
+                }
 
                 DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_GET_USER");
                 oServiceRequestProcessor = new ServiceRequestProcessor();

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { JobcardService } from '../../../core/service/jobcard/jobcard.service';
 import { ProductService } from '../../../core/service/product/product.service';
+import { UserService } from './../../../core/service/user/user.service';
 @Component({
   selector: 'app-jobcard',
   templateUrl: './jobcard.component.html',
@@ -16,14 +17,16 @@ export class JobcardComponent {
   sortDirection: 'asc' | 'desc' | 'none' = 'none';
   sortColumn: string = ''; // Column being sorted
   filterBookingData: any;
-
+  mechanicList :any= [];
   currentPage = 1;
   itemsPerPage = 5;
-
+  statusList = ['In Process', 'Completed'];
+  paymentModes = ['Cash', 'Card', 'UPI', 'Net Banking'];
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
     private JobCardService :JobcardService,
-  private ProductService:ProductService) {
+    private ProductService:ProductService,
+    private UserService:UserService) {
     this.jobCardForm = this.fb.group({
       customer: this.fb.group({
         name: ['', Validators.required],
@@ -40,10 +43,20 @@ export class JobcardComponent {
       products: this.fb.array([
         this.createProduct()
       ]),
-      remarks: ['']
+      remarks: [''],
+      mechanicName: ['',Validators.required], 
+      status: ['',Validators.required],           
+      paymentMode: ['',Validators.required]  
     });
   }
   ngOnInit() {
+    const role={Role:"User"}
+    this.UserService.getuser(role).subscribe((data:any)=>{
+      if(data.status_code===100){
+        this.mechanicList=JSON.parse(data["message"])
+        console.log(this.mechanicList)
+      }
+    })
     this.route.queryParams.subscribe((params:any) => {
       if(params && params.ClientName &&params.Phone&&params.VehicleNumber&&params.Model&&params.Color){
         this.vehicleDetails = params;
@@ -83,6 +96,9 @@ export class JobcardComponent {
       }
       
   })
+  }
+  back(){
+    this.vehicleDetails="";
   }
   generateXML(products: any): string {
     let xmlString = '<Products>';
@@ -141,7 +157,10 @@ export class JobcardComponent {
         ClientID: this.vehicleDetails.ClientID,
         WorkDescription:this.jobCardForm.value.service.work,
         Remarks:this.jobCardForm.value.remarks,
-        ProductsXML:ProductXML
+        ProductsXML:ProductXML,
+        PaymentMode:this.jobCardForm.value.paymentMode,
+        Status:this.jobCardForm.value.status,
+        MechanicName:this.jobCardForm.value.mechanicName
       }
       this.JobCardService.InsertJobCard(val).subscribe((data)=>{
         alert("added successfully")
@@ -149,6 +168,7 @@ export class JobcardComponent {
         this.getJobCard();
       })
     } else {
+      alert("please fill all the form")
       this.jobCardForm.markAllAsTouched();
     }
   }
@@ -237,7 +257,10 @@ export class JobcardComponent {
       service: {
         work: jobCardData.WorkDescription
       },
-      remarks: jobCardData.Remarks
+      remarks: jobCardData.Remarks,
+      paymentMode:jobCardData.PaymentMode,
+      status:jobCardData.Status,
+      mechanicName:jobCardData.MechanicName
     });
   
     // Clear existing products

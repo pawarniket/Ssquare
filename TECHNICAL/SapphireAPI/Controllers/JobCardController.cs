@@ -102,6 +102,9 @@ namespace MS.SSquare.API.Controllers
                 oDBUtility.AddParameters("@VehicleID", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.VehicleID);
                 oDBUtility.AddParameters("@ClientID", DBUtilDBType.Integer, DBUtilDirection.In, 100, jobcard.ClientID);
                 oDBUtility.AddParameters("@WorkDescription", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.WorkDescription);
+                oDBUtility.AddParameters("@MechanicName", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.MechanicName);
+                oDBUtility.AddParameters("@Status", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.Status);
+                oDBUtility.AddParameters("@PaymentMode", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.PaymentMode);
                 oDBUtility.AddParameters("@Remarks", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.Remarks);
 
                 DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_INSERT_JobCard");

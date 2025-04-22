@@ -45,7 +45,6 @@ employee(){
   }
   const formvalue = this.employeeform.value;
     if (formvalue.UserID) {
-      console.log("If ai gaya");
       const val = {
         UserID: formvalue.UserID,
         FullName: formvalue.FirstName + ' ' + formvalue.LastName,
