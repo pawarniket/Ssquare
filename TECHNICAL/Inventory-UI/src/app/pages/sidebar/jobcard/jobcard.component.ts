@@ -61,14 +61,7 @@ export class JobcardComponent {
         });
       }else{
         this.vehicleDetails='';
-        const val={}
-        this.JobCardService.GetJobCard(val).subscribe((data)=>{
-          if(data.status_code===100){
-            this.jobcardDetails=JSON.parse(data["message"])
-            console.log("jobcardDetails",this.jobcardDetails)
-          }
-          
-      })
+       this.getJobCard();
       }
      
       
@@ -81,7 +74,16 @@ export class JobcardComponent {
 
   })
   }
-  
+  getJobCard(){
+    const val={}
+    this.JobCardService.GetJobCard(val).subscribe((data)=>{
+      if(data.status_code===100){
+        this.jobcardDetails=JSON.parse(data["message"])
+        console.log("jobcardDetails",this.jobcardDetails)
+      }
+      
+  })
+  }
   generateXML(products: any): string {
     let xmlString = '<Products>';
 
@@ -144,6 +146,7 @@ export class JobcardComponent {
       this.JobCardService.InsertJobCard(val).subscribe((data)=>{
         alert("added successfully")
         this.vehicleDetails='';
+        this.getJobCard();
       })
     } else {
       this.jobCardForm.markAllAsTouched();
