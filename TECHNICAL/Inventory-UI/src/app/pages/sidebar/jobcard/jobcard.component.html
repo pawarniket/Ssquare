@@ -94,6 +94,9 @@
           <th (click)="sortTable('Phone')" style="cursor:pointer">
             Phone <i [ngClass]="getSortIcon('Phone')" class="ms-1"></i>
           </th>
+          <th (click)="sortTable('JobCardDate')" style="cursor:pointer">
+            Date <i [ngClass]="getSortIcon('JobCardDate')" class="ms-1"></i>
+          </th>
           <th class="text-center">Action
           </th>
         </tr>
@@ -102,6 +105,7 @@
         <tr class="text-left" *ngFor="let Clientlist of getPaginatedData()">
           <td>{{ Clientlist.ClientName }}</td>
           <td>{{ Clientlist.Phone }}</td>
+          <td>{{ Clientlist.JobCardDate| date:'dd-MMM-yyyy'  }}</td>
           <td>
             <div class="d-flex justify-content-center gap-2">
               <button class="btn btn-primary btn-sm" 
