@@ -29,7 +29,13 @@ export const APIConstant = {
         deletesales:'Sales/Delete'
 
       },
+      salesdetails:{
+        insertsalesdetails:'SalesDetails/insert',
+        Updatesalesdetails:'SalesDetails/Update',
+        getsalesdetails:'SalesDetails/Get',
+        deletesalesdetails:'SalesDetails/Delete'
 
+      },
       Client:{
         insertclient:'Client/add',
         Updateclient:'Client/update',

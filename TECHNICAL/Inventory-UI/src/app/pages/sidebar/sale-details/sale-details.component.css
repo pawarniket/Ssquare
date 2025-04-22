@@ -145,3 +145,10 @@
     font-weight: bold;
     border-radius: 5px;
 }
+.custom-header {
+    background-color: #8c1818;
+  }
+  .custumbtn{
+    display: flex !important;
+    justify-content: flex-end !important;
+  }

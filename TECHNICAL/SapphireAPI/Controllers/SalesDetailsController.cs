@@ -32,9 +32,9 @@ namespace MS.SSquare.API.Controllers
                     oDBUtility.AddParameters("@SaleID", DBUtilDBType.Integer, DBUtilDirection.In, 50, salesdetails.SaleID);
                 }
 
-                if (salesdetails.SaleDetailID != 0)
+                if (salesdetails.ProductID != 0)
                 {
-                    oDBUtility.AddParameters("@ClientID", DBUtilDBType.Varchar, DBUtilDirection.In, 8000, salesdetails.SaleDetailID);
+                    oDBUtility.AddParameters("@ProductID", DBUtilDBType.Varchar, DBUtilDirection.In, 8000, salesdetails.ProductID);
 
                 }
 

@@ -1,64 +1,85 @@
-<div class="job-card" [formGroup]="jobCardForm" *ngIf="vehicleDetails">
+<div class="job-card" [formGroup]="jobCardForm" *ngIf="vehicleDetails" class="p-4 bg-white rounded shadow-sm">
 
-  
-    <!-- Customer Details -->
-    <div class="section" formGroupName="customer">
-      <h3>Customer Details</h3>
-      <label>Name:</label>
-      <input type="text" formControlName="name" placeholder="Enter customer's name">
-      <label>Phone:</label>
-      <input type="text" formControlName="phone" placeholder="Enter phone number">
-    </div>
-  
-    <!-- Vehicle Details -->
-    <div class="section" formGroupName="vehicle">
-      <h3>Vehicle Details</h3>
-      <label>Vehicle Number:</label>
-      <input type="text" formControlName="number" placeholder="Enter vehicle number">
-      <label>Model:</label>
-      <input type="text" formControlName="model" placeholder="Enter vehicle model">
-      <label>Color:</label>
-      <input type="text" formControlName="color" placeholder="Enter vehicle color">
-    </div>
-  
-    <!-- Service Details -->
-    <div class="section" formGroupName="service">
-      <h3>Service Details</h3>
-      <label>Work to be done:</label>
-      <textarea rows="4" formControlName="work" placeholder="Describe the required services"></textarea>
-    </div>
-  
-    <!-- Products/Parts Used -->
-    <div class="section">
-      <h3>Products/Parts Used</h3>
-      <div formArrayName="products" id="product-list" class="product-list">
-        <div *ngFor="let product of products.controls; let i = index" [formGroupName]="i" class="product-item">
-          <!-- <input type="text" formControlName="ProductID" placeholder="Part Name"> -->
-          <select formControlName="ProductID">
-            <option value="">-- Select Product --</option>
-            <option *ngFor="let product of productList" [value]="product.ProductID">
-              {{ product.ProductName }}
-            </option>
-          </select>
-          <input type="number" formControlName="Quantity" placeholder="Quantity">
-          <button type="button" class="delete-btn" (click)="deleteProduct(i)"><i class="fa-solid fa-trash"></i></button>
-
-        </div>
+  <!-- Customer Details -->
+  <div class="section mb-4" formGroupName="customer">
+    <h3 class="mb-3">Customer Details</h3>
+    <div class="form-row">
+      <div class="col-md-6">
+        <label for="name">Name:</label>
+        <input id="name" type="text" formControlName="name" class="form-control" placeholder="Enter customer's name">
       </div>
-      <button class="add-btn" (click)="addProduct()">+ Add More Product</button>
-    </div>
-  
-    <!-- Mechanic Remarks -->
-    <div class="section">
-      <h3>Mechanic Remarks</h3>
-      <textarea rows="3" formControlName="remarks" placeholder="Mechanic's observations"></textarea>
-    </div>
-  
-    <!-- Save Button -->
-    <div style="text-align: center;">
-      <button (click)="save()">Save Job Card</button>
+      <div class="col-md-6">
+        <label for="phone">Phone:</label>
+        <input id="phone" type="text" formControlName="phone" class="form-control" placeholder="Enter phone number">
+      </div>
     </div>
   </div>
+
+  <!-- Vehicle Details -->
+  <div class="section mb-4" formGroupName="vehicle">
+    <h3 class="mb-3">Vehicle Details</h3>
+    <div class="form-row">
+      <div class="col-md-4">
+        <label for="number">Vehicle Number:</label>
+        <input id="number" type="text" formControlName="number" class="form-control" placeholder="Enter vehicle number">
+      </div>
+      <div class="col-md-4">
+        <label for="model">Model:</label>
+        <input id="model" type="text" formControlName="model" class="form-control" placeholder="Enter vehicle model">
+      </div>
+      <div class="col-md-4">
+        <label for="color">Color:</label>
+        <input id="color" type="text" formControlName="color" class="form-control" placeholder="Enter vehicle color">
+      </div>
+    </div>
+  </div>
+
+  <!-- Service Details -->
+  <div class="section mb-4" formGroupName="service">
+    <h3 class="mb-3">Service Details</h3>
+    <textarea rows="4" formControlName="work" class="form-control" placeholder="Describe the required services"></textarea>
+  </div>
+
+  <!-- Products/Parts Used -->
+  <div class="section mb-4">
+    <h3 class="mb-3">Products/Parts Used</h3>
+    <div formArrayName="products" id="product-list" class="product-list">
+      <div *ngFor="let product of products.controls; let i = index" [formGroupName]="i" class="product-item mb-3 p-3 border rounded">
+        <div class=" col-md-12 form-row align-items-center">
+          <div class="col-md-6">
+            <select formControlName="ProductID" class="form-control">
+              <option value="">-- Select Product --</option>
+              <option *ngFor="let product of productList" [value]="product.ProductID">{{ product.ProductName }}</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <input type="number" formControlName="Quantity" class="form-control" placeholder="Quantity">
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-danger  w-100" (click)="deleteProduct(i)">
+              <i class="fa-solid fa-trash"></i> Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary" (click)="addProduct()">+ Add More Product</button>
+  </div>
+
+  <!-- Mechanic Remarks -->
+  <div class="section mb-4">
+    <h3 class="mb-3">Mechanic Remarks</h3>
+    <textarea rows="3" formControlName="remarks" class="form-control" placeholder="Mechanic's observations"></textarea>
+  </div>
+
+  <!-- Save Button -->
+  <div class="text-center">
+    <button class="btn btn-success btn-lg" (click)="save()">Save Job Card</button>
+  </div>
+
+</div>
+
+
   
 
   <div  class="table-responsive" *ngIf="!vehicleDetails">

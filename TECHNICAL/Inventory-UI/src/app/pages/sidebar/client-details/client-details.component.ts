@@ -91,7 +91,7 @@ this.vehicleClientName=""
           this.closePopup();
           this.Clientform.reset();
 
-         Popupdisplay('Product Updated Successfully');
+         Popupdisplay('Client Updated Successfully');
 this.getclient();
 
         });
@@ -115,7 +115,7 @@ this.getclient();
           this.closePopup();
           this.Clientform.reset();
         ;
-          Popupdisplay('Product Added Successfully');
+          Popupdisplay('Client Added Successfully');
           this.getclient();
 
         });

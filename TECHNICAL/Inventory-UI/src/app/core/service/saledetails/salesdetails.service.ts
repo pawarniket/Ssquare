@@ -27,4 +27,9 @@ export class SalesdetailsService {
     return this.masterService.post(environment.api+APIConstant.sales.deletesales,val)
 
   }
+
+  Addsalesdetails(val:any){
+    return this.masterService.post(environment.api+APIConstant.salesdetails.insertsalesdetails,val)
+
+  }
 }
