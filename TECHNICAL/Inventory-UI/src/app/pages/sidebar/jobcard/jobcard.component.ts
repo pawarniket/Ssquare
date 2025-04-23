@@ -20,6 +20,8 @@ export class JobcardComponent {
   mechanicList :any= [];
   currentPage = 1;
   itemsPerPage = 5;
+  searchText: any;
+
   statusList = ['In Process', 'Completed'];
   paymentModes = ['Cash', 'Card', 'UPI', 'Net Banking'];
   constructor(private fb: FormBuilder,
@@ -235,6 +237,7 @@ export class JobcardComponent {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     return this.jobcardDetails.slice(startIndex, startIndex + this.itemsPerPage);
   }
+
   selectJob(selectJob:any){
     console.log('selectJob',selectJob)
     this.vehicleDetails=selectJob;
@@ -276,6 +279,48 @@ export class JobcardComponent {
         })
       );
     });
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.jobcardDetails.length / this.itemsPerPage);
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+  
+
+  onSearch(event: any) {
+    this.searchText = event.target.value;
+    this.applySearch();
+  }
+
+
+  
+  applySearch() {
+    const searchValue = this.searchText?.trim().toLowerCase();
+  
+    if (!searchValue) {
+      // Reset the filtered data if no search text is entered
+      this.jobcardDetails = [...this.jobcardDetails];
+    } else {
+      // Filter based on ClientName or Phone
+      this.jobcardDetails = this.jobcardDetails.filter((jobcard: any) => {
+        const clientName = jobcard.ClientName?.toLowerCase() || '';
+        const phone = jobcard.Phone?.toLowerCase() || '';
+        return clientName.includes(searchValue) || phone.includes(searchValue);
+      });
+    }
+  
+    console.log("Filtered Data:", this.jobcardDetails);
   }
   
 }
