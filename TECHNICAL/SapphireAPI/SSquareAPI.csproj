@@ -50,6 +50,29 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\assets\canvasjs.min.js" />
+    <None Include="wwwroot\assets\css\fonts\remixicondf6d.svg" />
+    <None Include="wwwroot\assets\css\fonts\remixicondf6d.woff2" />
+    <None Include="wwwroot\assets\js\app.js" />
+    <None Include="wwwroot\assets\js\backend-bundle.min.js" />
+    <None Include="wwwroot\assets\js\chart-custom.js" />
+    <None Include="wwwroot\assets\js\customizer.js" />
+    <None Include="wwwroot\assets\js\script.js" />
+    <None Include="wwwroot\assets\js\table-treeview.js" />
+    <None Include="wwwroot\assets\js\tableHTMLExport.js" />
+    <None Include="wwwroot\assets\js\toastDemo.js" />
+    <None Include="wwwroot\assets\js\toast\app.min.js" />
+    <None Include="wwwroot\assets\js\toast\demo.toastr.js" />
+    <None Include="wwwroot\assets\js\toast\jsToaster.js" />
+    <None Include="wwwroot\assets\js\toast\toast.js" />
+    <None Include="wwwroot\assets\js\toast\vendor.min.js" />
+    <None Include="wwwroot\assets\vendor\jquery-toast-plugin\jquery.toast.min.js" />
+    <None Include="wwwroot\assets\vendor\line-awesome\dist\line-awesome\css\fonts\la-solid-900.woff2" />
+    <None Include="wwwroot\assets\vendor\remixicon\fonts\remixicondf6d.svg" />
+    <None Include="wwwroot\assets\vendor\remixicon\fonts\remixicondf6d.woff2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FRAMEWORK\DAEConfiguration.csproj" />
   </ItemGroup>
 
@@ -58,6 +81,10 @@
       <HintPath>..\FRAMEWORK\CROSS CUTTING\DAE.Common.EncryptionDecryption\DAE.Common.EncryptionDecryption.dll</HintPath>
       <Private>True</Private>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\assets\canvasjs.angular.component.ts" />
   </ItemGroup>
 
   <ItemGroup>

@@ -76,3 +76,4 @@ TECHNICAL/CODE/.vs/Bclusive/config/applicationhost.config
 *.json
 /TECHNICAL/CODE/.vs/Bclusive/v17/.futdcache.v2
 /TECHNICAL/CODE/.vs/Bclusive/v17/DocumentLayout.json
+/TECHNICAL/SapphireAPI/wwwroot
