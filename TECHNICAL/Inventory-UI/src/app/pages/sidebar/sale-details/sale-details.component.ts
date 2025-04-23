@@ -163,6 +163,8 @@ logProducts(): void {
       if (data.status_code === 100) { 
         console.log("this.Quntity",this.Quntity-item.Qty );
         console.log(item.Qty ,"item.Qty ");
+        this.printInvoice();
+
         const productFromStock = this.StockList.find((p: { ProductID: any; }) => p.ProductID === item.ProductID);
 
         if (productFromStock) {
@@ -173,13 +175,15 @@ logProducts(): void {
             StockQuantity: updatedStock
           };
 
+
           this.products.UpdateProduct(updatedProduct).subscribe((res) => {
             console.log(`Updated stock for ProductID ${item.ProductID}: ${updatedStock}`);
           });
+          this.Resetform();
+
         }
       }
         });
-        this.Resetform();
         // this.selectedProducts=[];
         // this.isSidebarVisible = false;
       });
@@ -187,6 +191,160 @@ logProducts(): void {
     }
   });
 }
+printInvoice(): void {
+  const printContents = document.getElementById('printcontent')?.innerHTML;
+  if (!printContents) {
+    alert('No content available to print.');
+    return;
+  }
+  const clientPhone = this.selectedClientName?.Phone || 'N/A';
+  const clientName = this.selectedClientName?.ClientName  || 'N/A';
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleDateString('en-GB', {
+    day: '2-digit', month: 'short', year: 'numeric'
+  }).replace(/ /g, '-');
+  const invoiceNo = `INV-${currentDate.getFullYear()}${(currentDate.getMonth()+1).toString().padStart(2, '0')}${currentDate.getDate().toString().padStart(2, '0')}`;
+
+
+  // Generate dynamic rows from billItems
+  let total = 0;
+  const billRows = this.billItems.map((item: any, index: number) => {
+
+    return `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${item.ProductName}</td>
+        <td class="text-center">${item.Qty}</td>
+        <td class="text-end">₹${item.Price}</td>
+        <td class="text-end">₹${item.Total}</td>
+      </tr>`;
+  }).join('');
+
+  const grandTotal = (this.grandTotal );
+  const logoPath = `${location.origin}/assets/images/ssquarelogo/namelogo.png`;
+
+  const popupWin = window.open('', '_blank', 'width=800,height=600');
+
+  if (popupWin) {
+    const htmlContent = `
+      <html>
+        <head>
+          <meta charset="UTF-8">
+          <title>Ssquare Invoice - Bike Service</title>
+          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+          <style>
+            :root { --primary-brown: #6a2c1a; }
+            body {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              background-color: #f8f9fa;
+            }
+            .invoice-container {
+              max-width: 900px;
+              background: #fff;
+              margin: 40px auto;
+              padding: 30px 40px;
+              box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+              border-radius: 12px;
+            }
+            .invoice-header h2 {
+              color: var(--primary-brown);
+              font-weight: 700;
+            }
+            .invoice-header p {
+              margin: 0;
+              color: #6c757d;
+            }
+            .table th {
+              background-color: var(--primary-brown);
+              color: white;
+            }
+            .total-row {
+              background-color: #f3f3f3;
+              font-weight: 600;
+            }
+            .footer-note {
+              color: #6c757d;
+              font-size: 14px;
+            }
+            .text-small {
+              font-size: 14px;
+            }
+           .logo {
+    width: 150px;  /* Adjust width as needed */
+    height: auto;  /* Maintain aspect ratio */
+  }
+    
+          </style>
+        </head>
+        <body>
+          <div class="invoice-container">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+              <div>
+                <img src="${logoPath}" class="logo" alt="Ssquare Logo">
+                <p class="text-small mt-2">123 Main Street, Pune, MH - 411001<br>
+                  Phone: +91-98765 43210<br>Email: support@ssquaregarage.com
+                </p>
+              </div>
+              <div class="text-end">
+                <h5 class="fw-bold" style="color: var(--primary-brown);">Invoice</h5>
+                <p class="mb-0 text-small">Invoice No: <strong>${invoiceNo}</strong></p>
+                <p class="mb-0 text-small">Date: <strong>${formattedDate}</strong></p>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <h6 class="fw-bold">Billed To:</h6>
+              <p class="mb-1">${clientName}</p>
+                            <p class="mb-1">${clientPhone}</p>
+
+            </div>
+
+            <table class="table table-bordered align-middle">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Service</th>
+                  <th class="text-center">Qty</th>
+                  <th class="text-end">Unit Price</th>
+                  <th class="text-end">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${billRows}
+           
+        
+                <tr class="total-row">
+                  <td colspan="4" class="text-end">Total</td>
+                  <td class="text-end">₹${grandTotal}</td>
+                </tr>
+              </tbody>
+            </table>
+
+
+            <div class="mt-4">
+              <p><strong>Payment Mode:</strong> Cash</p>
+              <p class="footer-note">Thank you for servicing with <strong>Ssquare by Salvi's Services</strong>. We appreciate your trust!</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
+    popupWin.document.open();
+    popupWin.document.write(htmlContent);
+    popupWin.document.close();
+
+    // Wait for the popup to load before printing
+    popupWin.onload = () => {
+      popupWin.focus();
+      popupWin.print();
+      popupWin.close();
+    };
+  }
+}
+
+
+
 
 clearProducts(): void {
   this.selectedProducts = []; // Clears all products and hides the sidebar
@@ -296,5 +454,16 @@ Client() {
 
       });
   
+}
+
+get selectedClientName() {
+
+  console.log("niket",  this.selectedClient);
+
+  const client = this.ClientList.find((client: { ClientID: any; }) => client.ClientID === parseInt(this.selectedClient, 10));
+  console.log("niket 2",  client.ClientID );
+
+  console.log("hii",client);  // Debugging output}
+return client;
 }
 }
