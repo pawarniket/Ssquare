@@ -12,6 +12,9 @@ declare function Popupdisplay(message: any): any;
   styleUrl: './client-details.component.css'
 })
 export class ClientDetailsComponent {
+  toastVisible = false;
+  toastMessage = '';
+  toastColor: 'primary' | 'success' | 'danger' | 'warning' | 'info' = 'primary';
   Vehicle =false
   cilentName:any
   Clientform!: FormGroup;
@@ -429,13 +432,12 @@ this.getvehicle();
         // Open modal if multiple vehicles exist
         this.openClientVehicleModal('clientVehical');
         this.cilentName = this.clientVehicleList[0]?.ClientName;
-        console.log("Multiple vehicles:", this.clientVehicleList);
       }
       else if (this.clientVehicleList.length === 1) {
         const vehicle = this.clientVehicleList[0];
   
         if (vehicle?.Message === "Data not found") {
-          alert("Please add vehicle");
+          this.showToast('Please add vehicle', 'danger');
         } else {
           // Navigate with full queryParams
           this.router.navigate(['/StockManagement/JobCard'], {
@@ -453,7 +455,7 @@ this.getvehicle();
         }
       }
       else {
-        alert("No vehicles found for this client.");
+        this.showToast('No vehicles found for this client.', 'danger');
       }
     });
   }
@@ -620,4 +622,18 @@ openClientVehicleModal(ModalName:any) {
 //       );
 //     }
 //   }
+
+showToast(message: string, color: 'primary' | 'success' | 'danger' | 'warning' | 'info' = 'primary') {
+  this.toastMessage = message;
+  this.toastColor = color;
+  this.toastVisible = true;
+
+  setTimeout(() => {
+    this.toastVisible = false;
+  }, 3000); // auto hide after 3s
+}
+
+hideToast() {
+  this.toastVisible = false;
+}
 }

@@ -33,17 +33,21 @@
   <div class="section mb-4" formGroupName="vehicle">
     <h3 class="mb-3">Vehicle Details</h3>
     <div class="form-row">
-      <div class="col-md-4">
+      <div class="col-md-3">
         <label for="number">Vehicle Number:</label>
         <input id="number" type="text" formControlName="number" class="form-control" placeholder="Enter vehicle number">
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <label for="model">Model:</label>
         <input id="model" type="text" formControlName="model" class="form-control" placeholder="Enter vehicle model">
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <label for="color">Color:</label>
         <input id="color" type="text" formControlName="color" class="form-control" placeholder="Enter vehicle color">
+      </div>
+      <div class="col-md-3">
+        <label for="kmReading">Km Reading:</label>
+        <input id="kmReading" type="number" formControlName="kmReading" class="form-control" placeholder="Enter Km Reading">
       </div>
     </div>
   </div>
@@ -212,7 +216,7 @@
             <td>
               <div class="d-flex justify-content-center gap-2">
                 <button class="btn btn-primary btn-sm" 
-                  (click)="selectJob(Clientlist)">
+                  (click)="selectJob(Clientlist,true)">
                   <i class="fas fa-edit"></i> Edit
                 </button>
               
@@ -222,6 +226,18 @@
         </tbody>
       </table>
     </div>
+  <div *ngIf="toastVisible" class="toast align-items-center border-0 show"
+     role="alert" aria-live="assertive" aria-atomic="true"
+     [ngClass]="['text-bg-' + toastColor]" style="position: fixed; top: 5rem; right: 1rem; z-index: 1055;">
+  <div class="d-flex">
+    <div class="toast-body">
+      {{ toastMessage }}
+    </div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto"
+            (click)="hideToast()" aria-label="Close"></button>
+  </div>
+</div>
+
   
   
     <!-- Pagination -->

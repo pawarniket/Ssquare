@@ -101,6 +101,7 @@ namespace MS.SSquare.API.Controllers
                 // Insert JobCard
                 oDBUtility.AddParameters("@VehicleID", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.VehicleID);
                 oDBUtility.AddParameters("@ClientID", DBUtilDBType.Integer, DBUtilDirection.In, 100, jobcard.ClientID);
+                oDBUtility.AddParameters("@KmReading", DBUtilDBType.Integer, DBUtilDirection.In, 100, jobcard.KmReading);
                 oDBUtility.AddParameters("@WorkDescription", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.WorkDescription);
                 oDBUtility.AddParameters("@MechanicName", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.MechanicName);
                 oDBUtility.AddParameters("@Status", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.Status);

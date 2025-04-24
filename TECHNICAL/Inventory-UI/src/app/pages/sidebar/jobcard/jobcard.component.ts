@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { JobcardService } from '../../../core/service/jobcard/jobcard.service';
 import { ProductService } from '../../../core/service/product/product.service';
 import { UserService } from './../../../core/service/user/user.service';
@@ -10,6 +10,10 @@ import { UserService } from './../../../core/service/user/user.service';
   styleUrl: './jobcard.component.css'
 })
 export class JobcardComponent {
+  isJobCard=false;
+  toastVisible = false;
+  toastMessage = '';
+  toastColor: 'primary' | 'success' | 'danger' | 'warning' | 'info' = 'primary';
   jobCardForm: FormGroup;
   vehicleDetails: any;
   productList :any= [];
@@ -28,7 +32,8 @@ export class JobcardComponent {
     private route: ActivatedRoute,
     private JobCardService :JobcardService,
     private ProductService:ProductService,
-    private UserService:UserService) {
+    private UserService:UserService,
+  private router: Router) {
     this.jobCardForm = this.fb.group({
       customer: this.fb.group({
         name: ['', Validators.required],
@@ -37,7 +42,8 @@ export class JobcardComponent {
       vehicle: this.fb.group({
         number: ['', Validators.required],
         model: ['', Validators.required],
-        color: ['', Validators.required]
+        color: ['', Validators.required],
+        kmReading: ['', Validators.required],
       }),
       service: this.fb.group({
         work: ['', Validators.required]
@@ -99,9 +105,14 @@ export class JobcardComponent {
       
   })
   }
-  back(){
-    this.vehicleDetails="";
+  back() {
+    if (this.isJobCard) {
+      this.vehicleDetails = '';
+    } else {
+      this.router.navigate(['/StockManagement/ClientDetails']);
+    }
   }
+  
   generateXML(products: any): string {
     let xmlString = '<Products>';
 
@@ -131,7 +142,7 @@ export class JobcardComponent {
     const lastProduct = this.products.at(this.products.length - 1);
 
     if (lastProduct && lastProduct.invalid) {
-      alert("please fill required fields")
+      this.showToast('Please fill required fields!', 'danger');
       return; 
     }else{
     this.products.push(this.createProduct());
@@ -152,7 +163,7 @@ export class JobcardComponent {
   }
   save(): void {
     if (this.jobCardForm.valid) {
-      console.log('Job Card Data:', this.jobCardForm.value);
+     
       const ProductXML=this.generateXML(this.jobCardForm.value.products)// Send this.jobCardForm.value to backend
       const val={
         VehicleID: this.vehicleDetails.VehicleID,
@@ -162,15 +173,21 @@ export class JobcardComponent {
         ProductsXML:ProductXML,
         PaymentMode:this.jobCardForm.value.paymentMode,
         Status:this.jobCardForm.value.status,
-        MechanicName:this.jobCardForm.value.mechanicName
+        MechanicName:this.jobCardForm.value.mechanicName,
+        KmReading:this.jobCardForm.value.vehicle.kmReading
       }
       this.JobCardService.InsertJobCard(val).subscribe((data)=>{
-        alert("added successfully")
+        if(data.status_code===100){
+       
+        this.showToast('added successfully!', 'success');
         this.vehicleDetails='';
         this.getJobCard();
+        }
       })
+    
     } else {
-      alert("please fill all the form")
+      
+      this.showToast('Please fill all the form!', 'danger');
       this.jobCardForm.markAllAsTouched();
     }
   }
@@ -238,11 +255,11 @@ export class JobcardComponent {
     return this.jobcardDetails.slice(startIndex, startIndex + this.itemsPerPage);
   }
 
-  selectJob(selectJob:any){
+  selectJob(selectJob:any, anytrue:boolean){
     console.log('selectJob',selectJob)
     this.vehicleDetails=selectJob;
    this.patchJobCard(selectJob);
-
+this.isJobCard=anytrue;
     
   }
   patchJobCard(jobCardData: any) {
@@ -255,7 +272,8 @@ export class JobcardComponent {
       vehicle: {
         number: jobCardData.VehicleNumber,
         model: jobCardData.Model,
-        color: jobCardData.Color
+        color: jobCardData.Color,
+        kmReading:jobCardData.KmReading
       },
       service: {
         work: jobCardData.WorkDescription
@@ -323,4 +341,17 @@ export class JobcardComponent {
     console.log("Filtered Data:", this.jobcardDetails);
   }
   
+  showToast(message: string, color: 'primary' | 'success' | 'danger' | 'warning' | 'info' = 'primary') {
+    this.toastMessage = message;
+    this.toastColor = color;
+    this.toastVisible = true;
+
+    setTimeout(() => {
+      this.toastVisible = false;
+    }, 3000); // auto hide after 3s
+  }
+
+  hideToast() {
+    this.toastVisible = false;
+  }
 }

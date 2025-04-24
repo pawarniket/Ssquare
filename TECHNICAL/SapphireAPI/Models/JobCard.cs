@@ -7,6 +7,7 @@ namespace MS.SSquare.API.Models
         public int? JobCardID { get; set; }
         public int? VehicleID { get; set; }
         public int? ClientID { get; set; }
+        public int? KmReading { get; set; }
         public string WorkDescription { get; set; }
         public string Remarks { get; set; }
         public string MechanicName { get; set; }
