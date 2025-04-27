@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { UserService } from '../../core/service/user/user.service';
 import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Observable, Subscription } from 'rxjs';
+import { ProductService } from '../../core/service/product/product.service';
 
 @Component({
   selector: 'app-layout',
@@ -9,6 +11,10 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrl: './layout.component.css'
 })
 export class LayoutComponent {
+  remainingTools$: Observable<any> | undefined;
+  private toolsSubscription: Subscription | undefined;
+  lowStockQuantity:any;
+  stocktools:any;
   userPermissions = [
     {
       MenuHeaderCaption: "Sale-Dashboard",
@@ -90,9 +96,8 @@ export class LayoutComponent {
   UserName: any;
   profilePic: any;
   loading: any;
-constructor(private  user :UserService,private router :Router,    private sanitizer:DomSanitizer
-){
-
+constructor(private  user :UserService,private router :Router,    private sanitizer:DomSanitizer,
+  private ToolService:ProductService){
 }
   SignOut() {
     try {
@@ -117,7 +122,20 @@ constructor(private  user :UserService,private router :Router,    private saniti
     return this.sanitizer.bypassSecurityTrustHtml(iconPath);
 
   }
-
+  ngOnInit(): void {
+    // Subscribe to the tools observable manually
+    this.toolsSubscription = this.ToolService.remainingTools$.subscribe({
+      next: (tools) => {
+        this.stocktools= JSON.parse(tools['message'])
+        console.log("this.stocktools",this.stocktools);
+        this.stocktools=this.stocktools.filter((item: any) => item.StockQuantity === 0);
+         this.lowStockQuantity = this.stocktools.length;
+      },
+      error: (err) => {
+        console.error("Error fetching tools:", err);
+      }
+    });
+  }
   
 }
 
