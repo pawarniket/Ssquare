@@ -43,6 +43,7 @@ namespace MS.SSquare.API.Controllers
                     oDBUtility.AddParameters("@CategoryID", DBUtilDBType.Integer, DBUtilDirection.In, 10, product.CategoryID);
                     oDBUtility.AddParameters("@Description", DBUtilDBType.Varchar, DBUtilDirection.In, 150, product.Description);
                     oDBUtility.AddParameters("@Price", DBUtilDBType.Decimal, DBUtilDirection.In, 250, product.Price);
+                    oDBUtility.AddParameters("@Selling_Price", DBUtilDBType.Decimal, DBUtilDirection.In, 250, product.Selling_Price);
                     oDBUtility.AddParameters("@StockQuantity", DBUtilDBType.Integer, DBUtilDirection.In, 50, product.StockQuantity);
                     oDBUtility.AddParameters("@RackNumber", DBUtilDBType.Varchar, DBUtilDirection.In, 100, product.RackNumber);
                     oDBUtility.AddParameters("@IsActive", DBUtilDBType.Boolean, DBUtilDirection.In, 10, product.IsActive);
@@ -91,6 +92,11 @@ namespace MS.SSquare.API.Controllers
                 if (product.Price != null)
                 {
                     oDBUtility.AddParameters("@Price", DBUtilDBType.Decimal, DBUtilDirection.In, 50, product.Price);
+                }
+
+                if (product.Selling_Price != null)
+                {
+                    oDBUtility.AddParameters("@Selling_Price", DBUtilDBType.Decimal, DBUtilDirection.In, 250, product.Selling_Price);
                 }
 
                 if (product.StockQuantity !=null)

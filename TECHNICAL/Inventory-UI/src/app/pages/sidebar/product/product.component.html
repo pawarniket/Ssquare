@@ -65,7 +65,10 @@
               Category Name <i [ngClass]="getSortIcon('CategoryName')" class="ms-1"></i>
             </th>
             <th (click)="sortTable('Price')" style="cursor:pointer">
-              Price <i [ngClass]="getSortIcon('Price')" class="ms-1"></i>
+             Purchase Price <i [ngClass]="getSortIcon('Price')" class="ms-1"></i>
+            </th>
+            <th (click)="sortTable('Selling_Price')" style="cursor:pointer">
+              Selling Price <i [ngClass]="getSortIcon('Selling_Price')" class="ms-1"></i>
             </th>
             <th (click)="sortTable('StockQuantity')" style="cursor:pointer">
               Qty <i [ngClass]="getSortIcon('StockQuantity')" class="ms-1"></i>
@@ -81,6 +84,8 @@
             <td>{{ product.ProductName }}</td>
             <td>{{ product.CategoryName }}</td>
             <td>₹{{ product.Price }}</td>
+            <td>₹{{ product.Selling_Price }}</td>
+
             <td>{{ product.StockQuantity }}</td>
             <td>{{ product.RackNumber }}</td>
             <td>
@@ -182,8 +187,8 @@
                         </div>
                       </div>
                       <div class="col-sm-6 col-12 mb-3">
-                        <label class="form-label fw-semibold text-muted">Price <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" formControlName="Price" placeholder="Enter price*">
+                        <label class="form-label fw-semibold text-muted">Purchase Price <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="Price" placeholder="Enter Purchase price*">
                         <div *ngIf="productform.get('Price')?.invalid && productform.get('Price')?.touched" class="text-danger text-sm mt-1">
                           Product Price is required.
                         </div>
@@ -193,21 +198,33 @@
                     <!-- Row 3 -->
                     <div class="row">
                       <div class="col-sm-6 col-12 mb-3">
+                        <label class="form-label fw-semibold text-muted">Selling Price <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="Selling_Price" placeholder="Enter Selling price*">
+                        <div *ngIf="productform.get('Selling_Price')?.invalid && productform.get('Selling_Price')?.touched" class="text-danger text-sm mt-1">
+                          Product SellingPrice is required.
+                        </div>
+                    </div>
+                      <div class="col-sm-6 col-12 mb-3">
                         <label class="form-label fw-semibold text-muted">Quantity <span class="text-danger">*</span></label>
                         <input type="number" class="form-control" formControlName="Quantity" placeholder="Enter Quantity*">
                         <div *ngIf="productform.get('Quantity')?.invalid && productform.get('Quantity')?.touched" class="text-danger text-sm mt-1">
                           Product Quantity is required.
                         </div>
                       </div>
-                      <div class="col-sm-6 col-12 mb-3">
-                        <label class="form-label fw-semibold text-muted">Rack Number <span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" formControlName="RackNumber" placeholder="Enter Rack Number*">
-                        <div *ngIf="productform.get('RackNumber')?.invalid && productform.get('RackNumber')?.touched" class="text-danger text-sm mt-1">
-                          Product RackNumber is required.
-                        </div>
+          
+                
+                  
+                    </div>
+                    <div class="row">
+
+                    <div class="col-sm-6 col-12 mb-3">
+                      <label class="form-label fw-semibold text-muted">Rack Number <span class="text-danger">*</span></label>
+                      <input type="number" class="form-control" formControlName="RackNumber" placeholder="Enter Rack Number*">
+                      <div *ngIf="productform.get('RackNumber')?.invalid && productform.get('RackNumber')?.touched" class="text-danger text-sm mt-1">
+                        Product RackNumber is required.
                       </div>
                     </div>
-
+                    </div>
                     <!-- Active Status -->
                     <div class="form-check form-switch mt-3">
                       <input type="checkbox" class="form-check-input" formControlName="ISActive" id="isActive">

@@ -354,4 +354,184 @@ this.isJobCard=anytrue;
   hideToast() {
     this.toastVisible = false;
   }
+
+  printInvoice(): void {
+  const printContents = document.getElementById('printcontent')?.innerHTML;
+  if (!printContents) {
+    alert('No content available to print.');
+    return;
+  }
+  // const clientPhone = this.selectedClientName?.Phone || 'N/A';
+  // const clientName = this.selectedClientName?.ClientName || 'N/A';
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleDateString('en-GB', {
+    day: '2-digit', month: 'short', year: 'numeric'
+  }).replace(/ /g, '-');
+  const invoiceNo = `INV-${currentDate.getFullYear()}${(currentDate.getMonth() + 1).toString().padStart(2, '0')}${currentDate.getDate().toString().padStart(2, '0')}`;
+
+  // const billRows = this.billItems.map((item: any) => `
+  //   <tr>
+  //     <td>${item.ProductName}</td>
+  //     <td>${item.Qty}</td>
+  //     <td>₹${item.Price}</td>
+  //     <td>₹${item.Total}</td>
+  //   </tr>
+  // `).join('');
+
+  // const grandTotal = this.grandTotal;
+  const logoPath = `${location.origin}/assets/images/ssquarelogo/namelogo.png`; // If you want to keep logo
+
+  const popupWin = window.open('', '_blank', 'width=800,height=600');
+
+  if (popupWin) {
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Garage Job Card Invoice</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+          body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+          }
+          .invoice-container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin: 0 auto;
+          }
+          .invoice-header {
+            text-align: center;
+            margin-bottom: 30px;
+          }
+          .invoice-header h1 {
+            font-size: 36px;
+            font-weight: bold;
+            color: #6a2c1a;
+            margin-bottom: 10px;
+          }
+          .invoice-header p {
+            font-size: 18px;
+            color: #6a2c1a;
+            margin: 0;
+          }
+          .section-title {
+            font-size: 22px;
+            margin-top: 20px;
+            color: #6a2c1a;
+            border-bottom: 2px solid #6a2c1a;
+            padding-bottom: 5px;
+            font-weight: bold;
+          }
+          .invoice-table th, .invoice-table td {
+            text-align: left;
+            padding: 12px;
+            font-size: 16px;
+          }
+          .invoice-table th {
+            background-color: #f7e6d5;
+            color: #6a2c1a;
+          }
+          .total-row {
+            font-size: 18px;
+            font-weight: bold;
+            color: #6a2c1a;
+          }
+          .total-row td {
+            padding-top: 15px;
+            padding-bottom: 15px;
+          }
+          .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 16px;
+            color: #6a2c1a;
+          }
+          .footer p {
+            margin: 5px 0;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container mt-5">
+          <div class="invoice-container">
+            <div class="invoice-header">
+              <h1>SSquare by Salvi Services</h1>
+              <p>Garage Name | Address | Contact</p>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Invoice Number:</strong> ${invoiceNo}</p>
+                <p><strong>Date of Issue:</strong> ${formattedDate}</p>
+                <p><strong>Job Card Number:</strong> JC-${invoiceNo}</p>
+              </div>
+              <div class="col-md-6 text-right">
+                <p><strong>Customer Name:</strong> Niket</p>
+                <p><strong>Contact Number:</strong> 88792555555</p>
+                <p><strong>Email:</strong> support@ssquaregarage.com</p>
+              </div>
+            </div>
+
+            <div class="section-title">Vehicle Information</div>
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Make:</strong> Toyota</p> <!-- Replace dynamically if needed -->
+                <p><strong>Model:</strong> Camry</p>
+                <p><strong>Year:</strong> 2020</p>
+                <p><strong>License Plate:</strong> MH-12-AB-1234</p>
+                <p><strong>VIN Number:</strong> 1HGBH41JXMN109186</p>
+              </div>
+            </div>
+
+            <div class="section-title">Job Details</div>
+            <table class="table table-bordered invoice-table">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Quantity</th>
+                  <th>Unit Price</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="total-row">
+                  <td colspan="3" class="text-right">Grand Total</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="payment-info">
+              <p><strong>Payment Mode:</strong> Cash</p>
+            </div>
+
+            <div class="footer">
+              <p>Thank you for servicing with <strong>SSquare by Salvi Services</strong>.</p>
+              <p>We appreciate your trust!</p>
+            </div>
+
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    popupWin.document.open();
+    popupWin.document.write(htmlContent);
+    popupWin.document.close();
+
+    popupWin.onload = () => {
+      popupWin.focus();
+      popupWin.print();
+      popupWin.close();
+    };
+  }
+}
+
 }

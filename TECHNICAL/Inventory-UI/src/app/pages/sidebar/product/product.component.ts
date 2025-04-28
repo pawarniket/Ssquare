@@ -31,6 +31,7 @@ export class ProductComponent {
       ProductDescription: ['', Validators.required],
       ProductCategory: ['', Validators.required],
       Price: ['', Validators.required],
+      Selling_Price: ['', Validators.required],
       Quantity: ['', Validators.required],
       RackNumber: ['', Validators.required],
       ISActive: true
@@ -57,6 +58,7 @@ export class ProductComponent {
         Description: formvalue.ProductDescription,
         CategoryID: formvalue.ProductCategory,
         Price: formvalue.Price,
+        Selling_Price: formvalue.Selling_Price,
         StockQuantity: formvalue.Quantity,
         RackNumber: formvalue.RackNumber,
         ISActive: formvalue.ISActive
@@ -82,6 +84,7 @@ export class ProductComponent {
         Description: formvalue.ProductDescription,
         CategoryID: formvalue.ProductCategory,
         Price: formvalue.Price,
+        Selling_Price: formvalue.Selling_Price,
         StockQuantity: formvalue.Quantity,
         RackNumber: formvalue.RackNumber,
         ISActive: formvalue.ISActive
@@ -190,6 +193,7 @@ console.log("this.StockList",this.StockList.StockQuantity>5);
       ProductDescription: product.Description,
       ProductCategory: product.CategoryID,
       Price: product.Price,
+      Selling_Price: product.Selling_Price,
       Quantity: product.StockQuantity,
       ISActive: product.IsActive,
       RackNumber: product.RackNumber
@@ -316,7 +320,8 @@ this.products.deleteProduct(val).subscribe(
         <tr>
           <th>Product Name</th>
           <th>Category Name</th>
-          <th>Price</th>
+          <th>Purchase Price</th>
+          <th>Selling Price</th>
           <th>Qty</th>
           <th>Rack Number</th>
         </tr>
@@ -327,6 +332,7 @@ this.products.deleteProduct(val).subscribe(
               <td>${item.ProductName || '-'}</td>          
                   <td>${item.CategoryName || '-'}</td>
               <td>${item.Price ? item.Price + ' ' : '-'}</td>
+              <td>${item.Selling_Price ? item.Selling_Price + ' ' : '-'}</td>
 
               <td style="color: ${item.StockQuantity > 5 ? '#027A48' : '#F89500'}; font-weight: bold;">
                 ${item.StockQuantity}

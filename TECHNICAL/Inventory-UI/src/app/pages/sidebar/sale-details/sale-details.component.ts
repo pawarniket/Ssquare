@@ -356,7 +356,7 @@ isProductSelected(product: any): boolean {
 onProductChange() {
   const product = this.StockList.find((p: { ProductID: any; }) => p.ProductID == this.selectedProductID);
   if (product) {
-    this.selectedPrice = product.Price;
+    this.selectedPrice = product.Selling_Price;
   } else {
     this.selectedPrice = 0;
   }
@@ -391,7 +391,7 @@ addItem() {
   if (existingItem) {
     // If exists, update quantity and total
     existingItem.Qty += this.quantity;
-    existingItem.Total = existingItem.Price * existingItem.Qty;
+    existingItem.Total = existingItem.Selling_Price * existingItem.Qty;
     this.updateGrandTotal();  // Update grand total after removing an item
 
   } else {
@@ -399,9 +399,9 @@ addItem() {
     const newItem = {
       ProductID: product.ProductID,
       ProductName: product.ProductName,
-      Price: product.Price,
+      Price: product.Selling_Price,
       Qty: this.quantity,
-      Total: product.Price * this.quantity
+      Total: product.Selling_Price * this.quantity
     };
 
     this.billItems.push(newItem);
