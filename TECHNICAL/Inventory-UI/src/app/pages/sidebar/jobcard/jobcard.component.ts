@@ -91,6 +91,8 @@ export class JobcardComponent {
     this.ProductService.getProduct(val).subscribe((data)=>{
       if(data.status_code===100){
         this.productList=JSON.parse(data["message"])
+        this.productList=this.productList.filter((item: any) => item.StockQuantity != 0)
+        
       }
 
   })
@@ -140,7 +142,17 @@ export class JobcardComponent {
 
   addProduct(): void {
     const lastProduct = this.products.at(this.products.length - 1);
+    const product=this.products
+    debugger;
+    const selectedProductIDs = this.products.controls
+    .map(control => control.get('ProductID')?.value)
+    .filter(id => id); // filter out empty or null values
 
+  this.productList = this.productList.map((product:any) => ({
+    ...product,
+    isDisabled: selectedProductIDs.includes(product.ProductID)
+  }));
+    console.log("lastProduct",this.productList)
     if (lastProduct && lastProduct.invalid) {
       this.showToast('Please fill required fields!', 'danger');
       return; 
@@ -260,7 +272,14 @@ export class JobcardComponent {
     this.vehicleDetails=selectJob;
    this.patchJobCard(selectJob);
 this.isJobCard=anytrue;
-    
+const selectedProductIDs = this.products.controls
+.map(control => control.get('ProductID')?.value)
+.filter(id => id); // filter out empty or null values
+
+this.productList = this.productList.map((product:any) => ({
+...product,
+isDisabled: selectedProductIDs.includes(product.ProductID)
+}));
   }
   patchJobCard(jobCardData: any) {
     // Patch basic fields

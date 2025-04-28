@@ -67,7 +67,7 @@
           <div class="col-md-6">
             <select formControlName="ProductID" class="form-control">
               <option value="">-- Select Product --</option>
-              <option *ngFor="let product of productList" [value]="product.ProductID">{{ product.ProductName }}</option>
+              <option *ngFor="let product of productList" [value]="product.ProductID" [disabled]="product.isDisabled">{{ product.ProductName }}</option>
             </select>
           </div>
           <div class="col-md-4">
@@ -219,11 +219,10 @@
                 (click)="printInvoice()">
                 <i class="fas fa-file-invoice"></i> Generate Bill
               </button>
-                <button class="btn btn-primary btn-sm" 
+                <button *ngIf="Clientlist.Status !== 'Completed'" class="btn btn-primary btn-sm" 
                   (click)="selectJob(Clientlist,true)">
                   <i class="fas fa-edit"></i> Edit
                 </button>
-              
               </div>
             </td>
           </tr>
