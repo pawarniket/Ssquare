@@ -58,6 +58,8 @@
     <textarea rows="4" formControlName="work" class="form-control" placeholder="Describe the required services"></textarea>
   </div>
 
+
+  
   <!-- Products/Parts Used -->
   <div class="section mb-4">
     <h3 class="mb-3">Products/Parts Used</h3>
@@ -71,7 +73,7 @@
             </select>
           </div>
           <div class="col-md-4">
-            <input type="number" formControlName="Quantity" class="form-control" placeholder="Quantity">
+            <input type="number" formControlName="Quantity" class="form-control" placeholder="Quantity"  (input)="onQuantityChange(i)">
           </div>
           <div class="col-md-2">
             <button type="button" class="btn btn-danger  w-100" (click)="deleteProduct(i)">
@@ -83,12 +85,37 @@
     </div>
     <button class="btn btn-primary" (click)="addProduct()">+ Add More Product</button>
   </div>
+
+
+    <!-- Service -->
+    <div class="section mb-4">
+      <h3 class="mb-3">Services/Charges</h3>
+      <div formArrayName="JobCardServices" id="JobCardServices-list" class="product-list">
+        <div *ngFor="let Service of JobCardServices.controls; let i = index" [formGroupName]="i" class="product-item mb-3 p-3 border rounded">
+          <div class=" col-md-12 form-row align-items-center">
+            <div class="col-md-6">
+              <input type="text" formControlName="JobCardServiceName" class="form-control" placeholder="ServiceName">
+            </div>
+            <div class="col-md-4">
+              <input type="number" formControlName="Amount" class="form-control" placeholder="Amount">
+            </div>
+            <div class="col-md-2">
+              <button type="button" class="btn btn-danger  w-100" (click)="deleteService(i)">
+                <i class="fa-solid fa-trash"></i> Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary" (click)="addServices()">+ Add More Service Charges </button>
+    </div>
+
 <!-- Mechanic Selection -->
 <div class="section mb-4">
   <h3 class="mb-3">Select Mechanic</h3>
   <select formControlName="mechanicName" class="form-control">
-    <option value="">-- Select Mechanic --</option>
-    <option *ngFor="let mechanic of mechanicList" [value]="mechanic.FullName">{{ mechanic.FullName }}</option>
+    <option [ngValue]="0">-- Select Mechanic --</option>
+    <option *ngFor="let mechanic of mechanicList" [ngValue]="mechanic.UserID">{{ mechanic.FullName }}</option>
   </select>
 </div>
 
@@ -181,25 +208,36 @@
       <table class="table  text-left align-middle" id="bookinglisttable">
         <thead class="bg-black text-white">
           <tr>
-  
             <th (click)="sortTable('ClientName')" style="cursor:pointer">
-              Client Name <i [ngClass]="getSortIcon('ClientName')" class="ms-1"></i>
+              JobCard Id<i [ngClass]="getSortIcon('ClientName')" class="ms-1"></i>
+            </th>
+            <th (click)="sortTable('ClientName')" style="cursor:pointer">
+              Client Name<i [ngClass]="getSortIcon('ClientName')" class="ms-1"></i>
             </th>
           
             <th (click)="sortTable('Phone')" style="cursor:pointer">
-              Phone <i [ngClass]="getSortIcon('Phone')" class="ms-1"></i>
+              Phone<i [ngClass]="getSortIcon('Phone')" class="ms-1"></i>
             </th>
             <th (click)="sortTable('status')" style="cursor:pointer">
-              Status <i [ngClass]="getSortIcon('status')" class="ms-1"></i>
+              Status<i [ngClass]="getSortIcon('status')" class="ms-1"></i>
             </th>
             <th (click)="sortTable('mechanicName')" style="cursor:pointer">
-              Mechanic Name <i [ngClass]="getSortIcon('mechanicName')" class="ms-1"></i>
+              Mechanic Name<i [ngClass]="getSortIcon('mechanicName')" class="ms-1"></i>
+            </th>
+            <th (click)="sortTable('mechanicName')" style="cursor:pointer">
+              Balance Amount<i [ngClass]="getSortIcon('mechanicName')" class="ms-1"></i>
+            </th>
+            <th (click)="sortTable('mechanicName')" style="cursor:pointer">
+              Total Amount<i [ngClass]="getSortIcon('mechanicName')" class="ms-1"></i>
+            </th>
+            <th (click)="sortTable('mechanicName')" style="cursor:pointer">
+              Paid Amount<i [ngClass]="getSortIcon('mechanicName')" class="ms-1"></i>
             </th>
             <th (click)="sortTable('paymentMode')" style="cursor:pointer">
-              Payment Mode <i [ngClass]="getSortIcon('paymentMode')" class="ms-1"></i>
+              Payment Mode<i [ngClass]="getSortIcon('paymentMode')" class="ms-1"></i>
             </th>
             <th (click)="sortTable('JobCardDate')" style="cursor:pointer">
-              Date <i [ngClass]="getSortIcon('JobCardDate')" class="ms-1"></i>
+              Date<i [ngClass]="getSortIcon('JobCardDate')" class="ms-1"></i>
             </th>
             <th class="text-center">Action
             </th>
@@ -207,10 +245,14 @@
         </thead>
         <tbody>
           <tr class="text-left" *ngFor="let Clientlist of getPaginatedData()">
+            <td>{{ Clientlist.JobCardID }}</td>
             <td>{{ Clientlist.ClientName }}</td>
             <td>{{ Clientlist.Phone }}</td>
             <td>{{ Clientlist.Status }}</td>
-            <td>{{ Clientlist.MechanicName }}</td>
+            <td>{{ Clientlist.MechanicUserID }}</td>
+            <td>{{ Clientlist.BalanceAmount}}</td>
+            <td>{{ Clientlist.TotalAmount}}</td>
+            <td>{{ Clientlist.PaidAmount}}</td>
             <td>{{ Clientlist.PaymentMode }}</td>
             <td>{{ Clientlist.JobCardDate| date:'dd-MMM-yyyy'  }}</td>
             <td>

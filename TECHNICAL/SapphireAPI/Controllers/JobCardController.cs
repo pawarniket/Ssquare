@@ -35,10 +35,7 @@ namespace MS.SSquare.API.Controllers
 
                     DBUtility oDBUtility = new DBUtility(_configurationIG);
                     {
-                        if (jobcard.VehicleID > 0)
-                        {
-                            oDBUtility.AddParameters("@JobCardID", DBUtilDBType.Integer, DBUtilDirection.In, 10, jobcard.JobCardID);
-                        }
+                      
                         if (jobcard.ClientID > 0)
                         {
                             oDBUtility.AddParameters("@ClientID", DBUtilDBType.Integer, DBUtilDirection.In, 10, jobcard.ClientID);
@@ -103,7 +100,7 @@ namespace MS.SSquare.API.Controllers
                 oDBUtility.AddParameters("@ClientID", DBUtilDBType.Integer, DBUtilDirection.In, 100, jobcard.ClientID);
                 oDBUtility.AddParameters("@KmReading", DBUtilDBType.Integer, DBUtilDirection.In, 100, jobcard.KmReading);
                 oDBUtility.AddParameters("@WorkDescription", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.WorkDescription);
-                oDBUtility.AddParameters("@MechanicName", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.MechanicName);
+                oDBUtility.AddParameters("@MechanicUserID", DBUtilDBType.Integer, DBUtilDirection.In, 100, jobcard.MechanicUserID);
                 oDBUtility.AddParameters("@Status", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.Status);
                 oDBUtility.AddParameters("@PaymentMode", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.PaymentMode);
                 oDBUtility.AddParameters("@Remarks", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.Remarks);
@@ -132,7 +129,19 @@ namespace MS.SSquare.API.Controllers
                     // Optional logging or debugging
                      Console.WriteLine("JobCardID or ProductsXML missing");
                   }
-
+                // Now Insert services 
+                if (newJobCardID > 0 && !string.IsNullOrWhiteSpace(jobcard.ServiceXML))
+                {
+                    DBUtility oProductUtility = new DBUtility(_configurationIG);
+                    oProductUtility.AddParameters("@JobCardID", DBUtilDBType.Integer, DBUtilDirection.In, 100, newJobCardID);
+                    oProductUtility.AddParameters("@ServiceXML", DBUtilDBType.Nvarchar, DBUtilDirection.In, int.MaxValue, jobcard.ServiceXML);
+                    oProductUtility.Execute_StoreProc_DataSet("USP_INSERT_JOBCARD_SERVICES");
+                }
+                else
+                {
+                    // Optional logging or debugging
+                    Console.WriteLine("JobCardID or ProductsXML missing");
+                }
                 oServiceRequestProcessor = new ServiceRequestProcessor();
                 return Ok(oServiceRequestProcessor.ProcessRequest(ds));
             }

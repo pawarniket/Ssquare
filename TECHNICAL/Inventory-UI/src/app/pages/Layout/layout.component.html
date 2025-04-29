@@ -197,26 +197,22 @@
                   <!-- Out of Stock Notification Dropdown -->
                   <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="outOfStock">
                     <div class="card shadow-none m-0">
-                      <div class="card-body p-0 text-center">
-                        <table class="table table-striped table-bordered">
-                          <thead>
-                            <tr>
-                              <th>Sr.No</th>
-                              <th>Product Name</th>
-                              <th>Stock Quantity</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr *ngFor="let tool of stocktools; let i = index">
-                              <td>{{ i + 1 }}</td>
-                              <td>{{ tool.ProductName }}</td>
-                              <td><span class="text-danger">{{ tool.StockQuantity }}</span></td>
-                            </tr>
-                          </tbody>
-                        </table>
+                      <div class="card-body p-0">
+                        <a
+                          *ngFor="let tool of stocktools; let i = index"
+                          [routerLink]="['/StockManagement/LowStock']"
+                          class="dropdown-item d-flex align-items-start text-dark text-decoration-none"
+                        >
+                          <div class="flex-grow-1">
+                            <div class="fw-bold">{{ tool.ProductName }}</div>
+                            <small class="text-danger">Stock: {{ tool.StockQuantity }}</small>
+                          </div>
+                        </a>
                       </div>
                     </div>
                   </div>
+                  
+                  
                 </li>
               
                 <!-- User Profile Dropdown -->

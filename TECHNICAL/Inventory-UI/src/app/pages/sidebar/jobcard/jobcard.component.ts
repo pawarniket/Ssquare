@@ -51,6 +51,9 @@ export class JobcardComponent {
       products: this.fb.array([
         this.createProduct()
       ]),
+      JobCardServices:this.fb.array([
+        this.createJobCardServices()
+      ]),
       remarks: [''],
       mechanicName: ['',Validators.required], 
       status: ['',Validators.required],           
@@ -62,7 +65,7 @@ export class JobcardComponent {
     this.UserService.getuser(role).subscribe((data:any)=>{
       if(data.status_code===100){
         this.mechanicList=JSON.parse(data["message"])
-        console.log(this.mechanicList)
+        console.log("mechanicList0",this.mechanicList)
       }
     })
     this.route.queryParams.subscribe((params:any) => {
@@ -90,12 +93,25 @@ export class JobcardComponent {
     const val={}
     this.ProductService.getProduct(val).subscribe((data)=>{
       if(data.status_code===100){
-        this.productList=JSON.parse(data["message"])
-        this.productList=this.productList.filter((item: any) => item.StockQuantity != 0)
-        
+        this.productList=JSON.parse(data["message"]);
+        this.productList=this.productList.filter((item: any) => item.StockQuantity != 0);
       }
-
   })
+  }
+
+  deleteService(index: number){
+
+if (index===0 ){
+  this.JobCardServices.at(0).reset({
+    JobCardServiceName: '',
+    Amount: ''
+  });
+  return ;
+}
+else{
+
+this.JobCardServices.removeAt(index);
+}
   }
   getJobCard(){
     const val={}
@@ -129,10 +145,30 @@ export class JobcardComponent {
 
     return xmlString;
   }
+  generateJobserviceXML(JobCardServices: any): string {
+    let xmlString = '<JobCardServices>';
+
+    JobCardServices.forEach((JobCardService:any) => {
+      xmlString += `<JobCardService>
+                      <ServiceName>${JobCardService.JobCardServiceName}</ServiceName>
+                      <ServiceCost>${JobCardService.Amount}</ServiceCost>
+                    </JobCardService>`;
+    });
+
+    xmlString += '</JobCardServices>';
+
+    return xmlString;
+  }
   createProduct(): FormGroup {
     return this.fb.group({
       ProductID: ['', Validators.required],
       Quantity: ['', [Validators.required, Validators.min(1)]]
+    });
+  }
+  createJobCardServices():FormGroup{
+    return this.fb.group({
+      JobCardServiceName: ['', Validators.required],
+      Amount: ['', [Validators.required]]
     });
   }
 
@@ -140,10 +176,11 @@ export class JobcardComponent {
     return this.jobCardForm.get('products') as FormArray;
   }
 
+  get JobCardServices(): FormArray {
+    return this.jobCardForm.get('JobCardServices') as FormArray;
+  }
   addProduct(): void {
     const lastProduct = this.products.at(this.products.length - 1);
-    const product=this.products
-    debugger;
     const selectedProductIDs = this.products.controls
     .map(control => control.get('ProductID')?.value)
     .filter(id => id); // filter out empty or null values
@@ -160,6 +197,16 @@ export class JobcardComponent {
     this.products.push(this.createProduct());
   }
 }
+
+addServices(){
+  const lastProduct = this.JobCardServices.at(this.JobCardServices.length - 1);
+  if (lastProduct && lastProduct.invalid) {
+    this.showToast('Please fill required fields!', 'danger');
+    return; 
+  }else{
+  this.JobCardServices.push(this.createJobCardServices());
+}
+}
   deleteProduct(index: number): void {
     if (index===0 ){
       this.products.at(0).reset({
@@ -175,7 +222,8 @@ export class JobcardComponent {
   }
   save(): void {
     if (this.jobCardForm.valid) {
-     
+     const JobCardServiceXML=this.generateJobserviceXML(this.jobCardForm.value.JobCardServices);
+     console.log("brijesh",JobCardServiceXML)
       const ProductXML=this.generateXML(this.jobCardForm.value.products)// Send this.jobCardForm.value to backend
       const val={
         VehicleID: this.vehicleDetails.VehicleID,
@@ -185,8 +233,9 @@ export class JobcardComponent {
         ProductsXML:ProductXML,
         PaymentMode:this.jobCardForm.value.paymentMode,
         Status:this.jobCardForm.value.status,
-        MechanicName:this.jobCardForm.value.mechanicName,
-        KmReading:this.jobCardForm.value.vehicle.kmReading
+        MechanicUserID:parseInt(this.jobCardForm.value.mechanicName),
+        KmReading:this.jobCardForm.value.vehicle.kmReading,
+        ServiceXML:JobCardServiceXML
       }
       this.JobCardService.InsertJobCard(val).subscribe((data)=>{
         if(data.status_code===100){
@@ -196,6 +245,7 @@ export class JobcardComponent {
         this.getJobCard();
         }
       })
+      console.log("val",val)
     
     } else {
       
@@ -300,12 +350,12 @@ isDisabled: selectedProductIDs.includes(product.ProductID)
       remarks: jobCardData.Remarks,
       paymentMode:jobCardData.PaymentMode,
       status:jobCardData.Status,
-      mechanicName:jobCardData.MechanicName
+      mechanicName:jobCardData.MechanicUserID
     });
   
     // Clear existing products
     this.products.clear();
-  
+    this.JobCardServices.clear();
     // Parse and patch products
     const productList = JSON.parse(jobCardData.ProductList);
     productList.forEach((product: any) => {
@@ -313,6 +363,16 @@ isDisabled: selectedProductIDs.includes(product.ProductID)
         this.fb.group({
           ProductID: [product.ProductID],
           Quantity: [product.Quantity]
+        })
+      );
+    });
+
+    const serviceList = JSON.parse(jobCardData.ServiceList);
+    serviceList.forEach((service: any) => {
+      this.JobCardServices.push(
+        this.fb.group({
+          JobCardServiceName: [service.ServiceName],
+          Amount: [service.ServiceCost]
         })
       );
     });
@@ -552,5 +612,14 @@ isDisabled: selectedProductIDs.includes(product.ProductID)
     };
   }
 }
+quantities: number[] = [];
 
+onQuantityChange(index: number) {
+  const control = this.products.at(index).get('Quantity');
+  this.quantities[index] = control?.value || 0;
+  this.quantities.forEach((quantity,index)=>{
+    console.log("quantity",quantity,index)
+  })
+  console.log("JobCardServices",this.jobCardForm.value.products)
+}
 }
