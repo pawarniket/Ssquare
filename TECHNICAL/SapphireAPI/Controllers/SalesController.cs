@@ -50,6 +50,21 @@ namespace MS.SSquare.API.Controllers
                     oDBUtility.AddParameters("@TotalAmount", DBUtilDBType.Decimal, DBUtilDirection.In, 10, sale.TotalAmount);
                 }
 
+
+                if (sale.PaidAmount != 0)
+                {
+                    oDBUtility.AddParameters("@PaidAmount", DBUtilDBType.Decimal, DBUtilDirection.In, 10, sale.PaidAmount);
+                }
+                if (sale.BalanceAmount != 0)
+                {
+                    oDBUtility.AddParameters("@BalanceAmount", DBUtilDBType.Decimal, DBUtilDirection.In, 10, sale.BalanceAmount);
+                }
+                if (sale.PaymentMode != null)
+                {
+                    oDBUtility.AddParameters("@PaymentMode", DBUtilDBType.Nvarchar, DBUtilDirection.In, 10, sale.PaymentMode);
+                }
+
+
                 DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_InsertSale");
                 oServiceRequestProcessor = new ServiceRequestProcessor();
                 return Ok(oServiceRequestProcessor.ProcessRequest(ds));
@@ -107,10 +122,33 @@ namespace MS.SSquare.API.Controllers
                 {
                     oDBUtility.AddParameters("@SaleID", DBUtilDBType.Integer, DBUtilDirection.In, 50, sale.SaleID);
                 }
-                oDBUtility.AddParameters("@ClientID", DBUtilDBType.Integer, DBUtilDirection.In, 8000, sale.ClientID);
-                oDBUtility.AddParameters("@SaleDate", DBUtilDBType.DateTime, DBUtilDirection.In, 1, sale.SaleDate);
-                oDBUtility.AddParameters("@PaymentStatus", DBUtilDBType.Nvarchar, DBUtilDirection.In, 5, sale.PaymentStatus);
-                oDBUtility.AddParameters("@TotalAmount", DBUtilDBType.Decimal, DBUtilDirection.In, 10, sale.TotalAmount);
+                if (sale.ClientID != 0)
+                {
+                    oDBUtility.AddParameters("@ClientID", DBUtilDBType.Integer, DBUtilDirection.In, 8000, sale.ClientID);
+                }
+                if (sale.SaleDate.HasValue)
+                {
+                    oDBUtility.AddParameters("@SaleDate", DBUtilDBType.DateTime, DBUtilDirection.In, 1, sale.SaleDate);
+                }
+                if (sale.PaymentStatus != null)
+                {
+                    oDBUtility.AddParameters("@PaymentStatus", DBUtilDBType.Nvarchar, DBUtilDirection.In, 50, sale.PaymentStatus);
+                }
+          
+                    oDBUtility.AddParameters("@BalanceAmount", DBUtilDBType.Decimal, DBUtilDirection.In, 10, sale.BalanceAmount);
+                
+                if (sale.PaidAmount != 0)
+                { 
+                    oDBUtility.AddParameters("@PaidAmount", DBUtilDBType.Decimal, DBUtilDirection.In, 10, sale.PaidAmount);
+            }
+                if (sale.TotalAmount != 0)
+                {
+                    oDBUtility.AddParameters("@TotalAmount", DBUtilDBType.Decimal, DBUtilDirection.In, 10, sale.TotalAmount);
+                }
+                if (sale.PaymentMode != null)
+                {
+                    oDBUtility.AddParameters("@PaymentMode", DBUtilDBType.Nvarchar, DBUtilDirection.In, 10, sale.PaymentMode);
+                }
 
                 DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_UpdateSale");
                 oServiceRequestProcessor = new ServiceRequestProcessor();
@@ -144,5 +182,41 @@ namespace MS.SSquare.API.Controllers
             }
 
         }
+
+
+
+        [Route("SalesInvoice/Get")]
+        [HttpPost]
+        public IActionResult Invoice(Sales sale)
+        {
+            try
+            {
+                DBUtility oDBUtility = new DBUtility(_configurationIG);
+                if (sale.SaleID != 0)
+                {
+                    oDBUtility.AddParameters("@SaleID", DBUtilDBType.Integer, DBUtilDirection.In, 50, sale.SaleID);
+                }
+                //if (sale.ClientID != 0)
+                //{
+                //    oDBUtility.AddParameters("@ClientID", DBUtilDBType.Varchar, DBUtilDirection.In, 8000, sale.ClientID);
+
+                //}
+                //oDBUtility.AddParameters("@SaleDate", DBUtilDBType.DateTime, DBUtilDirection.In, 1, sale.SaleDate);
+                //oDBUtility.AddParameters("@PaymentStatus", DBUtilDBType.Nvarchar, DBUtilDirection.In, 5, sale.PaymentStatus);
+                //oDBUtility.AddParameters("@TotalAmount", DBUtilDBType.Decimal, DBUtilDirection.In, 10, sale.TotalAmount);
+
+                DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_GetSaleInvoice");
+                oServiceRequestProcessor = new ServiceRequestProcessor();
+                return Ok(oServiceRequestProcessor.ProcessRequest(ds));
+
+            }
+            catch (Exception ex)
+            {
+                oServiceRequestProcessor = new ServiceRequestProcessor();
+                return BadRequest(oServiceRequestProcessor.onError(ex.Message));
+            }
+
+        }
+
     }
 }

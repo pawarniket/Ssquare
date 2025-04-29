@@ -23,6 +23,10 @@ export class SalesdetailsService {
     return this.masterService.post(environment.api+APIConstant.sales.getsales,val)
 
   }
+  getsalesInvoice(val:any){
+    return this.masterService.post(environment.api+APIConstant.sales.getsalesInvoice,val)
+
+  }
   deletesales(val:any){
     return this.masterService.post(environment.api+APIConstant.sales.deletesales,val)
 
@@ -30,6 +34,10 @@ export class SalesdetailsService {
 
   Addsalesdetails(val:any){
     return this.masterService.post(environment.api+APIConstant.salesdetails.insertsalesdetails,val)
+
+  }
+  Updatesalesdetails(val:any){
+    return this.masterService.post(environment.api+APIConstant.salesdetails.Updatesalesdetails,val)
 
   }
 }

@@ -26,6 +26,7 @@ export const APIConstant = {
         insertsales:'Sales/insert',
         Updatesales:'Sales/Update',
         getsales:'Sales/Get',
+        getsalesInvoice:'SalesInvoice/Get',
         deletesales:'Sales/Delete'
 
       },

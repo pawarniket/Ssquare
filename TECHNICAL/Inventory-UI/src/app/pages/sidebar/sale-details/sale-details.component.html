@@ -6,11 +6,17 @@
                   <h4 class="fw-bold">Sale Product</h4>
                   <!-- <h6>Manage your Employee </h6> -->
               </div>
-<!--               
-          <div class="page-btn">
-              <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addemployee"><i
-                      class="ti ti-circle-plus me-1"></i>Add Employee </a>
-          </div> -->
+              
+              <div class="page-btn">
+                <a *ngIf="BillForm" class="btn btn-primary" (click)="saleProduct()">
+                  <i class="ti ti-circle-plus me-1"></i> Sale Product
+                </a>
+              
+                <a *ngIf="!BillForm" class="btn btn-primary" (click)="backToSaleProduct()">
+                  <i class="ti ti-arrow-left me-1"></i> Back
+                </a>
+              </div>
+              
           </div>
 
 
@@ -18,9 +24,112 @@
 
   </div>
 </div>
+<div *ngIf="!salehistory" class="container bg-white rounded p-4 mt-4 shadow">
+  <div class="row align-items-center justify-content-between mb-4">
+    <!-- Title and Search -->
+    <div class="col-md-6 d-flex align-items-center gap-3">
+      <!-- <h3 class="fw-bold mb-0">Booking List</h3> -->
+
+      <form class="input-group w-100" role="search">
+        <!-- <input type="search" class="form-control" placeholder="Search here" aria-label="Search bookings"
+          (keyup)="onSearch($event)" autocomplete="off" /> -->
+        <span class="input-group-text">
+          <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/a2d24a7ceb684c1f468bdd9e1e90fbb04e0da74d9655bc2729b38bcacb6192d0"
+            alt="Search" style="width: 16px;" />
+        </span>
+      </form>
+    </div>
+
+    <!-- Print Button -->
+    <div class="col-md-3 text-end">
+      <!-- <button (click)="printTable()" class="btn btn-black">
+        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/2c4cd31f4573b466716d0076623b4003b678b69f9e6f4b56e543f3956469a44c"
+          alt="Print" style="width: 16px;" />
+        Print
+      </button> -->
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <div class="table-responsive">
+    <table class="table  text-center align-middle" id="bookinglisttable">
+      <thead class="bg-black text-white">
+          <tr>
+          <th (click)="sortTable('ClientName')" style="cursor:pointer">
+            Client Name <i [ngClass]="getSortIcon('ClientName')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('Phone')" style="cursor:pointer">
+             Phone <i [ngClass]="getSortIcon('Phone')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('PaidAmount')" style="cursor:pointer">
+            Paid Amount  <i [ngClass]="getSortIcon('PaidAmount')" class="ms-1"></i>
+          </th>
+  
+          <th (click)="sortTable('BalanceAmount')" style="cursor:pointer">
+            Balance Amount <i [ngClass]="getSortIcon('BalanceAmount')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('TotalAmount')" style="cursor:pointer">
+            Total Amount  <i [ngClass]="getSortIcon('TotalAmount')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('SaleDate')" style="cursor:pointer">
+            Sale Date   <i [ngClass]="getSortIcon('SaleDate')" class="ms-1"></i>
+          </th>
+          <th (click)="sortTable('PaymentStatus')" style="cursor:pointer">
+             Payment Status  <i [ngClass]="getSortIcon('PaymentStatus')" class="ms-1"></i>
+          </th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sale of getPaginatedData()">
+          <td>{{ sale.ClientName }}</td>
+          <td>{{ sale.Phone }}</td>
+          <td>₹{{ sale.PaidAmount || 0}}</td>
+          <td>₹{{ sale.BalanceAmount || 0 }}</td>
+
+          <td>{{ sale.TotalAmount || 0 }}</td>
+          <td>{{ sale.SaleDate | date:'dd-MM-yyyy' }}</td>
+          <td [ngClass]="{
+            'fw-bold': true,
+            'text-warning': sale.PaymentStatus === 'Pending', 
+            'text-success': sale.PaymentStatus === 'Completed'
+          }">
+        {{ sale.PaymentStatus }}
+      </td>
+      
+          
+          
+          <td>
+            <div class="d-flex justify-content-center gap-2">
+              <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addProductModal"
+                (click)="printSaleInvoice(sale)">
+                <i class="fas fa-file-invoice"></i> Invoice 
+              </button>
+              <button *ngIf="sale.PaymentStatus== 'Pending'" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addProductModal"
+                  (click)="editProduct(sale)">
+                  <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="d-flex justify-content-end align-items-center gap-3 mt-3">
+    <button class="btn btn-secondary btn-sm" (click)="prevPage()" [disabled]="currentPage === 1">
+      Previous
+    </button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button class="btn btn-secondary btn-sm" (click)="nextPage()" [disabled]="currentPage === totalPages">
+      Next
+    </button>
+  </div>
+</div>
 
 
-<div class="container my-5">
+<div *ngIf="!BillForm" class="container my-5">
   <div  class="card p-3 mb-4 position-relative shadow-sm">
     <h5 class="mb-4 text-primary">Customer Info</h5>
     <div class="row">
@@ -128,6 +237,29 @@
     <div class="text-end total-box mt-3 fw-bold">
       <h4>Grand Total: ₹{{ grandTotal }}</h4>
     </div>
+  </div>
+  <div class="row justify-content-end mt-3">
+    <div class="col-md-6">
+      <label class="form-label">Amount Paid (₹)</label>
+      <input type="number" class="form-control" [(ngModel)]="amountPaid" (input)="calculateBalance()" placeholder="Enter amount paid">
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Balance Payment (₹)</label>
+      <input type="number" class="form-control" [value]="balancePayment" readonly>
+    </div>
+  </div>
+  <div class="row justify-content-start mt-3">
+<!-- Payment Mode -->
+  <div class="col-md-6">  <h3 class="mb-3">Payment Mode</h3>
+  <select [(ngModel)]="PaymentMode" class="form-control">
+    <option value="">-- Select Payment Mode --</option>
+    <option *ngFor="let mode of paymentModes" [value]="mode">
+      {{ mode }}
+    </option>
+  </select>
+
+</div>
+
   </div>
     <!-- Submit Button -->
     <div class="text-end mt-4">

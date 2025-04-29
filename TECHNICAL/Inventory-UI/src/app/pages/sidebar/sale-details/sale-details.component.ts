@@ -12,10 +12,14 @@ declare function Popupdisplay(message: any): any;
   styleUrl: './sale-details.component.css'
 })
 export class SaleDetailsComponent {
+  paymentModes = ['Cash', 'Card', 'UPI', 'Net Banking'];
+
   billItems: any[] = [];
   grandTotal = 0;  // Variable to store the grand total
   Clientform!: FormGroup;
-
+  BillForm=true;
+  salehistory=false;
+  SaleID:any;
  productform!: FormGroup;
  selectedClient: string = '';
  errorMessage: string = '';
@@ -24,12 +28,25 @@ export class SaleDetailsComponent {
    ProductCategoryList:any;
    StockList:any=[];
    ClientList:any=[];
+   salelist:any=[];
+   saleInvoicelist:any=[];
+
+   currentPage = 1;
+   itemsPerPage = 5;
    selectedProductID: any = '';
+   paymentmethod: any = '';
+
    selectedPrice: number = 0;
    quantity: number = 1;
    totalPrice: number = 0;
    selectedProducts: any[] = [];  // Store selected products
    isSidebarVisible = false;      // Sidebar visibility
+   amountPaid: number = 0;
+balancePayment: number = 0;
+filterBookingData: any = [];
+paymentStatus:string ="";
+PaymentMode: any;
+
    constructor(private products: ProductService, private Clientservice:ClientService,
     private ProductcategoryService: ProductcategoryService,
      private formBuilder: FormBuilder,public salesService :SalesdetailsService) {
@@ -60,9 +77,14 @@ export class SaleDetailsComponent {
      });
      this.getclient();
      this.getProduct();
+     this.getSales();
    }
+
  
-   
+   calculateBalance() {
+    this.balancePayment = (this.grandTotal || 0) - (this.amountPaid || 0);
+  }
+  
   getclient() {
     const val = {
     }
@@ -95,6 +117,36 @@ export class SaleDetailsComponent {
        });
    }
  
+   getSales() {
+    const val = {
+    }
+    this.salesService.getsales(val).subscribe(
+      response => {
+        console.log("response", response);
+        let allProducts = JSON.parse(response['message']);
+        this.salelist = allProducts;
+
+        if (this.salelist[0]?.Message === 'Data not found') {
+          this.salelist = [];
+        }
+      });
+  }
+  getSalesInvoice(SaleID:any) {
+    const val = {
+      SaleID:SaleID
+    }
+    this.salesService.getsalesInvoice(val).subscribe(
+      response => {
+        console.log("response", response);
+        let Invoice = JSON.parse(response['message']);
+        this.saleInvoicelist = Invoice;
+console.log("this.saleInvoicelist",this.saleInvoicelist);
+
+        if (this.saleInvoicelist[0]?.Message === 'Data not found') {
+          this.saleInvoicelist = [];
+        }
+      });
+  }
    closePopup() {
      var modal = document.getElementById("closebtn") as HTMLElement
      modal.click();
@@ -103,6 +155,9 @@ export class SaleDetailsComponent {
    Resetform(){
      this.selectedProductID = '';
      this.selectedPrice = 0;
+     this.amountPaid = 0;
+     this.balancePayment = 0;
+
      this.quantity = 1;
      this.totalPrice = 0;
      this.selectedClient="";
@@ -136,11 +191,52 @@ logProducts(): void {
     alert('Please make sure all fields are filled and at least one product is added to the bill.');
     return;
   }
-  console.log("Selected Products:", this.grandTotal);
+  if (this.balancePayment == 0) {
+    this.paymentStatus = "Completed"
+    console.log("hii");
+
+    
+  } else {
+    console.log("else hii");
+
+    this.paymentStatus = "Pending"
+  }
+  console.log("this.paymentmethod",this.paymentmethod);
+  
+if(this.SaleID){
+console.log("hii");
+const val={
+  SaleID:this.SaleID,
+  ClientID:this.selectedClient,
+  TotalAmount:this.grandTotal,
+  PaidAmount:this.amountPaid,
+  BalanceAmount:this.balancePayment,
+  PaymentStatus:this.paymentStatus,
+  PaymentMode:this.PaymentMode
+}
+
+this.salesService.Updatesales(val).subscribe((data) => {
+  
+  if (data.status_code === 100) { 
+    const Updatedata = JSON.parse(data.message);
+
+    this.BillForm = true;
+    this.salehistory = false;
+    this.getSales();
+    this.Resetform()
+  }
+});
+}
+  else{
   const val={
     ClientID:this.selectedClient,
-    PaymentStatus: 'Completed',
-    TotalAmount:this.grandTotal
+    // PaymentStatus: 'Completed',
+    TotalAmount:this.grandTotal,
+    PaidAmount:this.amountPaid,
+    BalanceAmount:this.balancePayment,
+    PaymentStatus:this.paymentStatus,
+    PaymentMode:this.PaymentMode
+
   }
   this.salesService.Addsales(val).subscribe((data) => {
     
@@ -163,7 +259,7 @@ logProducts(): void {
       if (data.status_code === 100) { 
         console.log("this.Quntity",this.Quntity-item.Qty );
         console.log(item.Qty ,"item.Qty ");
-        this.printInvoice();
+        // this.printInvoice();
 
         const productFromStock = this.StockList.find((p: { ProductID: any; }) => p.ProductID === item.ProductID);
 
@@ -178,8 +274,13 @@ logProducts(): void {
 
           this.products.UpdateProduct(updatedProduct).subscribe((res) => {
             console.log(`Updated stock for ProductID ${item.ProductID}: ${updatedStock}`);
+            this.BillForm = true;
+            this.salehistory = false;
+            this.getSales();
+            this.Resetform()
+
           });
-          this.Resetform();
+          // this.Resetform();
 
         }
       }
@@ -191,6 +292,10 @@ logProducts(): void {
     }
   });
 }
+}
+
+
+
 printInvoice(): void {
   const printContents = document.getElementById('printcontent')?.innerHTML;
   if (!printContents) {
@@ -375,39 +480,34 @@ updateTotal() {
 }
 
 addItem() {
-  const product = this.StockList.find((p: { ProductID: any; }) => p.ProductID == this.selectedProductID);
+  const product = this.StockList.find((p: { ProductID: any }) => p.ProductID == this.selectedProductID);
   if (!product || !this.quantity || this.quantity <= 0) return;
-  const stockQty = product.StockQuantity || 0;
 
-  // Check if product already exists in the bill
+  const stockQty = Number(product.StockQuantity) || 0;
+
   const existingItem = this.billItems.find(item => item.ProductID == product.ProductID);
-  const totalRequestedQty = existingItem ? existingItem.Qty + this.quantity : this.quantity;
+  const totalRequestedQty = (existingItem ? Number(existingItem.Qty) : 0) + Number(this.quantity);
 
   if (totalRequestedQty > stockQty) {
     alert(`Cannot add more than available stock. Available: ${stockQty}`);
-
     return;
   }
-  if (existingItem) {
-    // If exists, update quantity and total
-    existingItem.Qty += this.quantity;
-    existingItem.Total = existingItem.Selling_Price * existingItem.Qty;
-    this.updateGrandTotal();  // Update grand total after removing an item
 
+  if (existingItem) {
+    existingItem.Qty = Number(existingItem.Qty) + Number(this.quantity);
+    existingItem.Total = Number(existingItem.Price) * Number(existingItem.Qty);
   } else {
-    // Else, add new item
     const newItem = {
       ProductID: product.ProductID,
       ProductName: product.ProductName,
-      Price: product.Selling_Price,
-      Qty: this.quantity,
-      Total: product.Selling_Price * this.quantity
+      Price: Number(product.Selling_Price),
+      Qty: Number(this.quantity),
+      Total: Number(product.Selling_Price) * Number(this.quantity)
     };
-
     this.billItems.push(newItem);
-    this.updateGrandTotal();  // Update grand total after removing an item
-
   }
+
+  this.updateGrandTotal();
 
   // Reset inputs
   this.selectedProductID = '';
@@ -415,6 +515,7 @@ addItem() {
   this.quantity = 1;
   this.totalPrice = 0;
 }
+
 
 removeItem(index: number) {
   this.billItems.splice(index, 1);
@@ -466,4 +567,341 @@ get selectedClientName() {
   console.log("hii",client);  // Debugging output}
 return client;
 }
+
+sortDirection: 'asc' | 'desc' | 'none' = 'none';
+sortColumn: string = ''; // Column being sorted
+
+sortTable(column: string): void {
+
+    
+  // Toggle sort direction if the same column is clicked
+  if (this.sortColumn === column) {
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+  } else {
+    // Set the new column and default to ascending
+    this.sortColumn = column;
+    this.sortDirection = 'asc';
+  }
+
+  // Sort bookings based on the column and direction
+  this.filterBookingData.sort((a: any, b: any) => {
+    let valueA, valueB;
+
+    if (column === 'PrimaryGuestName') {
+      // Parse PrimaryGuestName and get the Username
+      valueA = a.PrimaryGuestName ? JSON.parse(a.PrimaryGuestName)?.Username || '' : '';
+      valueB = b.PrimaryGuestName ? JSON.parse(b.PrimaryGuestName)?.Username || '' : '';
+    } 
+    
+   else if (column === 'PaymentStatus') {
+      // Parse PrimaryGuestName and get the Username
+      valueA = a.PaymentStatus  ;
+      valueB = b.PaymentStatus ;
+    } 
+    
+    else if (column === 'OrderDate') {
+      // Parse PrimaryGuestName and get the Username
+      valueA = a.OrderDate ? new Date(a.OrderDate) : new Date(0); // Handle null values
+      valueB = b.OrderDate ? new Date(b.OrderDate) : new Date(0);
+    }
+    else {
+      // Handle other fields
+      valueA = a[column];
+      valueB = b[column];
+    }
+    if (valueA == null || valueB == null) {
+      return 0; // Handle null/undefined values
+    }
+
+    if (typeof valueA === 'string') {
+      return this.sortDirection === 'asc'
+        ? valueA.localeCompare(valueB)
+        : valueB.localeCompare(valueA);
+    } else {
+      return this.sortDirection === 'asc'
+        ? valueA - valueB
+        : valueB - valueA;
+    }
+  });
+}
+capitalizeFirstLetter(name: string): string {
+  return name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : '';
+}
+getSortIcon(column: string): string {
+  if (this.sortColumn === column) {
+    return this.sortDirection === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
+  }
+  return 'fas fa-sort';
+}
+
+
+getPaginatedData() {
+  const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+  return this.salelist.slice(startIndex, startIndex + this.itemsPerPage);
+}
+saleProduct(){
+  console.log("hii");
+  
+  this.BillForm =false;
+  this.salehistory =true;
+
+}
+backToSaleProduct(){
+  this.salehistory =false;
+  this.BillForm =true;
+
+}
+ClientName: any;
+
+printSaleInvoice(sale: any): void {
+  this.getSalesInvoice(sale.SaleID);
+
+  setTimeout(() => {
+    if (!this.saleInvoicelist) {
+      alert('Sale invoice data not available.');
+      return;
+    }
+
+    const clientPhone = this.saleInvoicelist[0]?.Phone || 'N/A';
+    const clientName = this.saleInvoicelist[0]?.ClientName || 'N/A';
+
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString('en-GB', {
+      day: '2-digit', month: 'short', year: 'numeric'
+    }).replace(/ /g, '-');
+
+    const invoiceNo = `INV-${currentDate.getFullYear()}${(currentDate.getMonth() + 1).toString().padStart(2, '0')}${currentDate.getDate().toString().padStart(2, '0')}`;
+
+    const billRows = this.saleInvoicelist.map((item: any, index: number) => {
+      return `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${item.ProductName}</td>
+          <td class="text-center">${item.Quantity}</td>
+          <td class="text-end">₹${item.Price}</td>
+          <td class="text-end">₹${item.TotalAmount}</td>
+        </tr>`;
+    }).join('');
+
+    const grandTotal = this.saleInvoicelist.reduce((sum: number, item: any) => sum + (item.TotalAmount || 0), 0);
+
+    const logoPath = `${location.origin}/assets/images/ssquarelogo/namelogo.png`;
+    const popupWin = window.open('', '_blank', 'width=800,height=600');
+    const BalanceAmount = this.saleInvoicelist[0]?.BalanceAmount || 0;
+    const PaidAmount = this.saleInvoicelist[0]?.PaidAmount || 0;
+    const PaymentMode = this.saleInvoicelist[0]?.PaymentMode || 0;
+
+    if (popupWin) {
+      const htmlContent = `
+        <html>
+          <head>
+            <meta charset="UTF-8">
+            <title>Ssquare Invoice - Bike Service</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+            <style>
+              :root { --primary-brown: #6a2c1a; }
+              body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f8f9fa;
+              }
+              .invoice-container {
+                max-width: 900px;
+                background: #fff;
+                margin: 40px auto;
+                padding: 30px 40px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                border-radius: 12px;
+              }
+              .invoice-header h2 {
+                color: var(--primary-brown);
+                font-weight: 700;
+              }
+              .invoice-header p {
+                margin: 0;
+                color: #6c757d;
+              }
+              .table th {
+                background-color: var(--primary-brown);
+                color: white;
+              }
+              .total-row {
+                background-color: #f3f3f3;
+                font-weight: 600;
+              }
+              .footer-note {
+                color: #6c757d;
+                font-size: 14px;
+              }
+              .text-small {
+                font-size: 14px;
+              }
+              .logo {
+                width: 150px;
+                height: auto;
+              }
+              .print-btn {
+                background-color: var(--primary-brown);
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                font-size: 14px;
+                border-radius: 4px;
+              }
+              @media print {
+                .print-btn {
+                  display: none !important;
+                }
+              }
+            </style>
+          </head>
+          <body>
+            <div class="invoice-container">
+              <div class="text-end mb-3">
+                <button class="btn print-btn" onclick="window.print()">Print Invoice</button>
+              </div>
+              <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+                <div>
+                  <img src="${logoPath}" class="logo" alt="Ssquare Logo">
+                  <p class="text-small mt-2">123 Main Street, Pune, MH - 411001<br>
+                    Phone: +91-98765 43210<br>Email: support@ssquaregarage.com
+                  </p>
+                </div>
+                <div class="text-end">
+                  <h5 class="fw-bold" style="color: var(--primary-brown);">Invoice</h5>
+                  <p class="mb-0 text-small">Invoice No: <strong>${invoiceNo}</strong></p>
+                  <p class="mb-0 text-small">Date: <strong>${formattedDate}</strong></p>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <h6 class="fw-bold">Billed To:</h6>
+                <p class="mb-1">${clientName}</p>
+                <p class="mb-1">${clientPhone}</p>
+              </div>
+
+              <table class="table table-bordered align-middle">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Service</th>
+                    <th class="text-center">Qty</th>
+                    <th class="text-end">Unit Price</th>
+                    <th class="text-end">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${billRows}
+                  <tr class="total-row">
+                    <td colspan="4" class="text-end">Total</td>
+                    <td class="text-end">₹${grandTotal}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="mt-4">
+                <p><strong>Paid Amount:</strong> ₹${PaidAmount}</p>
+                <p><strong>Balance Amount:</strong> ₹${BalanceAmount}</p>
+                <p><strong>Payment Mode:</strong>${PaymentMode}</p>
+                <p class="footer-note">Thank you for servicing with <strong>Ssquare by Salvi's Services</strong>. We appreciate your trust!</p>
+              </div>
+            </div>
+          </body>
+        </html>`;
+
+      popupWin.document.open();
+      popupWin.document.write(htmlContent);
+      popupWin.document.close();
+
+      popupWin.onload = () => {
+        setTimeout(() => {
+          popupWin.focus();
+        }, 500);
+      };
+    }
+  }, 500);
+}
+
+
+
+// editProduct(sale:any){ 
+//   this.BillForm =false;
+//   this.salehistory =true;
+//   console.log(sale,"sale");
+//   this.getSalesInvoice(sale.SaleID);
+//   console.log("niket");
+  
+//   if(this.saleInvoicelist[0].Status_Code)
+// console.log("this.saleInvoicelist niket",this.saleInvoicelist.Status_Code);
+// // this.selectedClient= this.saleInvoicelist[0].ClientID
+// this.selectedClient = this.saleInvoicelist[0]?.ClientID || 0;
+
+// }
+editProduct(sale: any) {
+  // this.BillForm = false;
+  //     this.salehistory = true;
+console.log("Sale Niket",sale.SaleID);
+this.SaleID=sale.SaleID
+  const val = {
+    SaleID: sale.SaleID
+  };
+
+  this.salesService.getsalesInvoice(val).subscribe((res: any) => {
+    console.log("res",res.status_code == '100');
+    console.log("res",res);
+    this. saleInvoicelist = JSON.parse(res['message']);
+console.log("saleInvoicelist",this.saleInvoicelist);
+
+    if ( res.status_code == '100') {
+      this.BillForm = false;
+      this.salehistory = true;
+
+      const invoice = this.saleInvoicelist[0];
+      console.log("invoice",invoice);
+
+      // Set selected client
+      this.selectedClient = invoice.ClientID ;
+      console.log("Client", invoice.ClientID );
+
+      // Load bill items into form
+      this.billItems = this.saleInvoicelist.map((item: any) => ({
+        
+        ProductID: item.ProductID,
+        ProductName: item.ProductName,
+        Price: item.Price,
+        Qty: item.Quantity, 
+        Total: item.Price 
+      }));
+      console.log("item",this.billItems);
+
+      // Calculate grand total
+      this.grandTotal = this.billItems.reduce((sum, item) => sum + (item.Total || 0), 0);
+console.log("in",invoice);
+
+this.amountPaid = invoice.PaidAmount || 0;
+this.balancePayment = this.grandTotal - this.amountPaid;
+this.paymentStatus = invoice.PaymentStatus;
+
+      console.log("Invoice list (niket):", this.saleInvoicelist);
+    } else {
+      console.warn("Invoice fetch failed or no data found.");
+    }
+  }, (error) => {
+    console.error("Error fetching invoice:", error);
+  });
+}
+get totalPages(): number {
+  return Math.ceil(this.salelist.length / this.itemsPerPage);
+}
+nextPage() {
+  if (this.currentPage < this.totalPages) {
+    this.currentPage++;
+  }
+}
+
+prevPage() {
+  if (this.currentPage > 1) {
+    this.currentPage--;
+  }
+}
+
 }
