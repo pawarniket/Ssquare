@@ -66,7 +66,7 @@
     <div formArrayName="products" id="product-list" class="product-list">
       <div *ngFor="let product of products.controls; let i = index" [formGroupName]="i" class="product-item mb-3 p-3 border rounded">
         <div class=" col-md-12 form-row align-items-center">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <select formControlName="ProductID" class="form-control">
               <option value="">-- Select Product --</option>
               <option *ngFor="let product of productList" [value]="product.ProductID" [disabled]="product.isDisabled">{{ product.ProductName }}</option>
@@ -74,6 +74,9 @@
           </div>
           <div class="col-md-4">
             <input type="number" formControlName="Quantity" class="form-control" placeholder="Quantity"  (input)="onQuantityChange(i)">
+          </div>
+          <div class="col-md-2">
+            <input [ngModel]="productAmounts[i]" class="form-control" readonly />
           </div>
           <div class="col-md-2">
             <button type="button" class="btn btn-danger  w-100" (click)="deleteProduct(i)">

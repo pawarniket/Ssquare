@@ -17,6 +17,7 @@ export class JobcardComponent {
   jobCardForm: FormGroup;
   vehicleDetails: any;
   productList :any= [];
+  productAmounts: number[] = [];
   jobcardDetails:any;
   sortDirection: 'asc' | 'desc' | 'none' = 'none';
   sortColumn: string = ''; // Column being sorted
@@ -620,6 +621,31 @@ onQuantityChange(index: number) {
   this.quantities.forEach((quantity,index)=>{
     console.log("quantity",quantity,index)
   })
+  // this.jobCardForm.value.products.forEach((Prod: any, i: number) => {
+  //   console.log("Quantity", Prod.Quantity, "at index", i);
+  //   const ProductID = Prod.ProductID;
+  //   // Get the matched product from productList using ProductID
+  //   const matchedProduct = this.productList.find((item: any) => item.ProductID === ProductID);
+  //   if (matchedProduct) {
+  //     console.log("Matched Product:", matchedProduct);
+  //     // Example: get price or amount if available
+  //     const amount = matchedProduct.Price || 0;
+  //     this.productAmount=amount*Prod.Quantity
+  //     console.log("Amount:", amount*Prod.Quantity);
+  //   } else {
+  //     console.log("No matching product found for ProductID:", ProductID);
+  //   }
+  // });
+  this.jobCardForm.value.products.forEach((Prod: any, i: number) => {
+    const ProductID = Prod.ProductID;
+    const Quantity = Prod.Quantity;
+  
+    const matchedProduct = this.productList.find((item: any) => item.ProductID === ProductID);
+    const price = matchedProduct?.Price || 0;
+  
+    this.productAmounts[i] = Quantity * price;
+  });
+  
   console.log("JobCardServices",this.jobCardForm.value.products)
 }
 }
