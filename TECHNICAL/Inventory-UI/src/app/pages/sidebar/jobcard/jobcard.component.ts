@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JobcardService } from '../../../core/service/jobcard/jobcard.service';
 import { ProductService } from '../../../core/service/product/product.service';
@@ -29,6 +29,8 @@ export class JobcardComponent {
 
   statusList = ['In Process', 'Completed'];
   paymentModes = ['Cash', 'Card', 'UPI', 'Net Banking'];
+  grandTotal: any;
+  StockQuantity: any;
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
     private JobCardService :JobcardService,
@@ -58,10 +60,14 @@ export class JobcardComponent {
       remarks: [''],
       mechanicName: ['',Validators.required], 
       status: ['',Validators.required],           
-      paymentMode: ['',Validators.required]  
+      paymentMode: ['',Validators.required],
+      AmountPaid: [0],
+      BalancePayment: [0],
+      GrandTotal: [0] 
     });
   }
   ngOnInit() {
+    this.setupFormValueChangeListeners();
     const role={Role:"User"}
     this.UserService.getuser(role).subscribe((data:any)=>{
       if(data.status_code===100){
@@ -96,6 +102,7 @@ export class JobcardComponent {
       if(data.status_code===100){
         this.productList=JSON.parse(data["message"]);
         this.productList=this.productList.filter((item: any) => item.StockQuantity != 0);
+        console.log("this.productList",this.productList)
       }
   })
   }
@@ -163,7 +170,8 @@ this.JobCardServices.removeAt(index);
   createProduct(): FormGroup {
     return this.fb.group({
       ProductID: ['', Validators.required],
-      Quantity: ['', [Validators.required, Validators.min(1)]]
+      Quantity: ['', [Validators.required, Validators.min(1)]],
+      Price: [0, Validators.required],
     });
   }
   createJobCardServices():FormGroup{
@@ -236,7 +244,11 @@ addServices(){
         Status:this.jobCardForm.value.status,
         MechanicUserID:parseInt(this.jobCardForm.value.mechanicName),
         KmReading:this.jobCardForm.value.vehicle.kmReading,
-        ServiceXML:JobCardServiceXML
+        ServiceXML:JobCardServiceXML,
+        TotalAmount:this.jobCardForm.value.GrandTotal,
+        BalanceAmount:this.jobCardForm.value.BalancePayment,
+        PaidAmount:this.jobCardForm.value.AmountPaid,
+        PaymentStatus: (+this.jobCardForm.value.BalancePayment || 0) === 0 ? 'Completed' : 'Pending'
       }
       this.JobCardService.InsertJobCard(val).subscribe((data)=>{
         if(data.status_code===100){
@@ -351,19 +363,35 @@ isDisabled: selectedProductIDs.includes(product.ProductID)
       remarks: jobCardData.Remarks,
       paymentMode:jobCardData.PaymentMode,
       status:jobCardData.Status,
-      mechanicName:jobCardData.MechanicUserID
+      mechanicName:jobCardData.MechanicUserID,
+      AmountPaid:jobCardData.PaidAmount
     });
   
     // Clear existing products
     this.products.clear();
     this.JobCardServices.clear();
     // Parse and patch products
-    const productList = JSON.parse(jobCardData.ProductList);
+    // const productList = JSON.parse(jobCardData.ProductList);
+    // productList.forEach((product: any) => {
+    //   this.products.push(
+    //     this.fb.group({
+    //       ProductID: [product.ProductID],
+    //       Quantity: [product.Quantity],
+    //       Price:[product.Price || 0]
+    //     })
+    //   );
+    // });
+    const productList = JSON.parse(jobCardData.ProductList || '[]');
     productList.forEach((product: any) => {
+      const matchedProduct = this.productList.find((p:any) => p.ProductID === parseInt(product.ProductID));
+      const unitPrice = matchedProduct?.Price || 0;
+      const totalPrice = unitPrice * product.Quantity;
+      const stockQty = matchedProduct?.StockQuantity || 0;
       this.products.push(
         this.fb.group({
           ProductID: [product.ProductID],
-          Quantity: [product.Quantity]
+          Quantity: [product.Quantity],
+          Price: [totalPrice]
         })
       );
     });
@@ -615,37 +643,137 @@ isDisabled: selectedProductIDs.includes(product.ProductID)
 }
 quantities: number[] = [];
 
-onQuantityChange(index: number) {
-  const control = this.products.at(index).get('Quantity');
-  this.quantities[index] = control?.value || 0;
-  this.quantities.forEach((quantity,index)=>{
-    console.log("quantity",quantity,index)
-  })
-  // this.jobCardForm.value.products.forEach((Prod: any, i: number) => {
-  //   console.log("Quantity", Prod.Quantity, "at index", i);
-  //   const ProductID = Prod.ProductID;
-  //   // Get the matched product from productList using ProductID
-  //   const matchedProduct = this.productList.find((item: any) => item.ProductID === ProductID);
-  //   if (matchedProduct) {
-  //     console.log("Matched Product:", matchedProduct);
-  //     // Example: get price or amount if available
-  //     const amount = matchedProduct.Price || 0;
-  //     this.productAmount=amount*Prod.Quantity
-  //     console.log("Amount:", amount*Prod.Quantity);
-  //   } else {
-  //     console.log("No matching product found for ProductID:", ProductID);
-  //   }
-  // });
-  this.jobCardForm.value.products.forEach((Prod: any, i: number) => {
-    const ProductID = Prod.ProductID;
-    const Quantity = Prod.Quantity;
+// onQuantityChange(index: number) {
+//   const control = this.products.at(index).get('Quantity');
+//   this.quantities[index] = control?.value || 0;
+//   this.quantities.forEach((quantity,index)=>{
+//     console.log("quantity",quantity,index)
+//   })
+//   // this.jobCardForm.value.products.forEach((Prod: any, i: number) => {
+//   //   console.log("Quantity", Prod.Quantity, "at index", i);
+//   //   const ProductID = Prod.ProductID;
+//   //   // Get the matched product from productList using ProductID
+//   //   const matchedProduct = this.productList.find((item: any) => item.ProductID === ProductID);
+//   //   if (matchedProduct) {
+//   //     console.log("Matched Product:", matchedProduct);
+//   //     // Example: get price or amount if available
+//   //     const amount = matchedProduct.Price || 0;
+//   //     this.productAmount=amount*Prod.Quantity
+//   //     console.log("Amount:", amount*Prod.Quantity);
+//   //   } else {
+//   //     console.log("No matching product found for ProductID:", ProductID);
+//   //   }
+//   // });
+//   this.jobCardForm.value.products.forEach((Prod: any, i: number) => {
+//     const ProductID = Prod.ProductID;
+//     const Quantity = Prod.Quantity;
   
-    const matchedProduct = this.productList.find((item: any) => item.ProductID === ProductID);
-    const price = matchedProduct?.Price || 0;
+//     const matchedProduct = this.productList.find((item: any) => item.ProductID === ProductID);
+//     const price = matchedProduct?.Price || 0;
+//     const control = this.products.at(i);
+    
+//     const value = Quantity * price;
+//     control.patchValue({ Price: value });
+//   });
   
-    this.productAmounts[i] = Quantity * price;
-  });
-  
-  console.log("JobCardServices",this.jobCardForm.value.products)
+//   console.log("JobCardServices",this.jobCardForm.value.products)
+// }
+
+// Unified method to update price based on ProductID and Quantity
+updateProductPrice(index: number) {
+  const control = this.products.at(index);
+  const productId = control.get('ProductID')?.value;
+  const quantity = control.get('Quantity')?.value || 0;
+
+  // Find the selected product
+  const selectedProduct = this.productList.find((p:any) => p.ProductID === parseInt(productId));
+  this.StockQuantity=selectedProduct.StockQuantity;
+  const unitPrice = selectedProduct?.Price || 0;
+
+  // Calculate total price
+  const totalPrice = quantity * unitPrice;
+
+  // Update the Price field
+  control.patchValue({ Price: totalPrice }, { emitEvent: false });
 }
+
+// Called when a product is selected
+onProductSelect(index: number) {
+  this.updateProductPrice(index);
+}
+
+// Called when quantity is changed
+onQuantityChange(index: number) {
+  this.updateProductPrice(index);
+}
+
+setupFormValueChangeListeners() {
+  this.products.valueChanges.subscribe(() => {
+    this.recalculateProductPrices();
+    this.calculateTotal();
+  });
+  this.jobCardForm.get('AmountPaid')?.valueChanges.subscribe(() => {
+    this.calculateTotal();
+  });
+  this.JobCardServices.valueChanges.subscribe(() => {
+    this.calculateTotal();
+  });
+}
+// calculateTotal() {
+//   let productTotal = 0;
+//   let serviceTotal = 0;
+
+//   this.products.controls.forEach(ctrl => {
+//     productTotal += +ctrl.get('Price')?.value || 0;
+//   });
+
+//   this.JobCardServices.controls.forEach(ctrl => {
+//     serviceTotal += +ctrl.get('Amount')?.value || 0;
+//   });
+
+//   const grandTotal = productTotal + serviceTotal;
+//   console.log('Grand Total:', grandTotal);
+
+//   // Optional: store/display this somewhere
+//   this.grandTotal = grandTotal;
+//   console.log("this.grandTotal1",this.grandTotal)
+// }
+calculateTotal() {
+  let totalProductAmount = 0;
+  let totalServiceAmount = 0;
+
+  this.products.controls.forEach(ctrl => {
+    totalProductAmount += +ctrl.get('Price')?.value || 0;
+  });
+
+  this.JobCardServices.controls.forEach(ctrl => {
+    totalServiceAmount += +ctrl.get('Amount')?.value || 0;
+  });
+
+  const grandTotal = totalProductAmount + totalServiceAmount;
+  const amountPaid = +this.jobCardForm.get('AmountPaid')?.value || 0;
+  const balancePayment = grandTotal - amountPaid;
+
+  this.jobCardForm.patchValue({
+    GrandTotal: grandTotal,
+    BalancePayment: balancePayment
+  }, { emitEvent: false });
+}
+
+
+recalculateProductPrices() {
+  this.products.controls.forEach((productGroup: AbstractControl, index: number) => {
+    const productId = productGroup.get('ProductID')?.value;
+    const quantity = +productGroup.get('Quantity')?.value || 0;
+
+    const matchedProduct = this.productList.find((p:any) => p.ProductID === parseInt(productId));
+    const pricePerUnit = matchedProduct?.Price || 0;
+
+    const total = quantity * pricePerUnit;
+    productGroup.patchValue({ Price: total }, { emitEvent: false }); // prevent infinite loop
+
+  });
+}
+
+
 }

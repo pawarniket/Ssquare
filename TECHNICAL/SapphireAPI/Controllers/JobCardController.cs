@@ -104,6 +104,11 @@ namespace MS.SSquare.API.Controllers
                 oDBUtility.AddParameters("@Status", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.Status);
                 oDBUtility.AddParameters("@PaymentMode", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.PaymentMode);
                 oDBUtility.AddParameters("@Remarks", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.Remarks);
+                oDBUtility.AddParameters("@PaymentStatus", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.PaymentStatus);
+                oDBUtility.AddParameters("@TotalAmount", DBUtilDBType.Decimal, DBUtilDirection.In, 100, jobcard.TotalAmount);
+                oDBUtility.AddParameters("@BalanceAmount", DBUtilDBType.Decimal, DBUtilDirection.In, 100, jobcard.BalanceAmount);
+                oDBUtility.AddParameters("@PaidAmount", DBUtilDBType.Decimal, DBUtilDirection.In, 100, jobcard.PaidAmount);
+
 
                 DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_INSERT_JobCard");
 

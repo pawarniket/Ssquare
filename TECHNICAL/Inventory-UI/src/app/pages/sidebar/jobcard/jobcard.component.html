@@ -65,21 +65,24 @@
     <h3 class="mb-3">Products/Parts Used</h3>
     <div formArrayName="products" id="product-list" class="product-list">
       <div *ngFor="let product of products.controls; let i = index" [formGroupName]="i" class="product-item mb-3 p-3 border rounded">
-        <div class=" col-md-12 form-row align-items-center">
+        <div class="col-md-12 form-row align-items-center">
           <div class="col-md-4">
-            <select formControlName="ProductID" class="form-control">
+            <label for="SelectProduct">Select Product:</label>
+            <select formControlName="ProductID" class="form-control" (change)="onProductSelect(i)">
               <option value="">-- Select Product --</option>
               <option *ngFor="let product of productList" [value]="product.ProductID" [disabled]="product.isDisabled">{{ product.ProductName }}</option>
             </select>
           </div>
           <div class="col-md-4">
-            <input type="number" formControlName="Quantity" class="form-control" placeholder="Quantity"  (input)="onQuantityChange(i)">
+            <label for="Quantity">Quantity: <span class="text-danger">{{StockQuantity +" "+ "left"}}</span> </label>
+            <input type="number" formControlName="Quantity" class="form-control" placeholder="Quantity" (input)="onQuantityChange(i)">
           </div>
           <div class="col-md-2">
-            <input [ngModel]="productAmounts[i]" class="form-control" readonly />
+            <label for="Price">Price:</label>
+            <input type="number" formControlName="Price" class="form-control" placeholder="Price" [readonly]="true">
           </div>
           <div class="col-md-2">
-            <button type="button" class="btn btn-danger  w-100" (click)="deleteProduct(i)">
+            <button type="button" class="btn btn-danger w-100" (click)="deleteProduct(i)">
               <i class="fa-solid fa-trash"></i> Delete
             </button>
           </div>
@@ -88,6 +91,7 @@
     </div>
     <button class="btn btn-primary" (click)="addProduct()">+ Add More Product</button>
   </div>
+  
 
 
     <!-- Service -->
@@ -112,9 +116,9 @@
       </div>
       <button class="btn btn-primary" (click)="addServices()">+ Add More Service Charges </button>
     </div>
-
+<div class="col-md-12 form-row align-items-center">
 <!-- Mechanic Selection -->
-<div class="section mb-4">
+<div class="col-md-4">
   <h3 class="mb-3">Select Mechanic</h3>
   <select formControlName="mechanicName" class="form-control">
     <option [ngValue]="0">-- Select Mechanic --</option>
@@ -123,7 +127,7 @@
 </div>
 
 <!-- Status -->
-<div class="section mb-4">
+<div class="col-md-4">
   <h3 class="mb-3">Job Status</h3>
   <select formControlName="status" class="form-control">
     <option value="">-- Select Status --</option>
@@ -134,7 +138,7 @@
 </div>
 
 <!-- Payment Mode -->
-<div class="section mb-4">
+<div class="col-md-4">
   <h3 class="mb-3">Payment Mode</h3>
   <select formControlName="paymentMode" class="form-control">
     <option value="">-- Select Payment Mode --</option>
@@ -144,11 +148,26 @@
   </select>
 </div>
   <!-- Mechanic Remarks -->
-  <div class="section mb-4">
+  <div class="col-md-12">
     <h3 class="mb-3">Mechanic Remarks</h3>
     <textarea rows="3" formControlName="remarks" class="form-control" placeholder="Mechanic's observations"></textarea>
   </div>
+</div>
 
+<div class="col-md-12 form-row align-items-center">
+  <div class="col-md-4">
+    <h3 class="mb-3">Amount Paid (₹):</h3>
+    <input type="number" formControlName="AmountPaid" class="form-control" placeholder="Price" >
+  </div>
+  <div class="col-md-4">
+    <h3 class="mb-3">Balance Payment (₹):</h3>
+    <input type="number" formControlName="BalancePayment" class="form-control" placeholder="Price" [readonly]="true">
+  </div>
+  <div class="col-md-4">
+    <h3 class="mb-3">Grand Total:</h3>
+    <input type="number" formControlName="GrandTotal" class="form-control" placeholder="Price">
+  </div>
+</div>
   <!-- Save Button -->
   <div class="text-center">
     <button class="btn btn-success btn-lg" (click)="save()">Save Job Card</button>
@@ -239,6 +258,9 @@
             <th (click)="sortTable('paymentMode')" style="cursor:pointer">
               Payment Mode<i [ngClass]="getSortIcon('paymentMode')" class="ms-1"></i>
             </th>
+            <th (click)="sortTable('paymentMode')" style="cursor:pointer">
+              Payment Status<i [ngClass]="getSortIcon('paymentMode')" class="ms-1"></i>
+            </th>
             <th (click)="sortTable('JobCardDate')" style="cursor:pointer">
               Date<i [ngClass]="getSortIcon('JobCardDate')" class="ms-1"></i>
             </th>
@@ -252,11 +274,12 @@
             <td>{{ Clientlist.ClientName }}</td>
             <td>{{ Clientlist.Phone }}</td>
             <td>{{ Clientlist.Status }}</td>
-            <td>{{ Clientlist.MechanicUserID }}</td>
+            <td>{{ Clientlist.MechanicName }}</td>
             <td>{{ Clientlist.BalanceAmount}}</td>
             <td>{{ Clientlist.TotalAmount}}</td>
             <td>{{ Clientlist.PaidAmount}}</td>
             <td>{{ Clientlist.PaymentMode }}</td>
+            <td>{{ Clientlist.PaymentStatus }}</td>
             <td>{{ Clientlist.JobCardDate| date:'dd-MMM-yyyy'  }}</td>
             <td>
               <div class="d-flex justify-content-center gap-2">
