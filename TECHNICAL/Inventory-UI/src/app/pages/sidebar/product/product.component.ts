@@ -161,6 +161,7 @@ console.log("this.StockList",this.StockList.StockQuantity>5);
       this.filterBookingData = [...this.StockList]; // Correctly copying data
     } else {
       this.filterBookingData = this.StockList.filter((category: any) =>
+        
         category.Price.toString().includes(this.searchText) ||
       category.RackNumber.toString().includes(this.searchText) ||
       category.StockQuantity.toString().includes(this.searchText) ||
