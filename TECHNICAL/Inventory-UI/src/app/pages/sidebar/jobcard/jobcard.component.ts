@@ -102,13 +102,13 @@ export class JobcardComponent {
     this.UserService.getuser(role).subscribe((data:any)=>{
       if(data.status_code===100){
         this.mechanicList=JSON.parse(data["message"])
-        console.log("mechanicList0",this.mechanicList)
+        
       }
     })
     this.route.queryParams.subscribe((params:any) => {
       if(params && params.ClientName &&params.Phone&&params.VehicleNumber&&params.Model&&params.Color){
         this.vehicleDetails = params;
-        console.log("Received vehicle data:", this.vehicleDetails);
+        ;
         this.jobCardForm.patchValue({
           customer: {
             name:  this.vehicleDetails.ClientName,
@@ -132,7 +132,7 @@ export class JobcardComponent {
       if(data.status_code===100){
         this.productList=JSON.parse(data["message"]);
         this.productList=this.productList.filter((item: any) => item.StockQuantity != 0);
-        console.log("this.productList",this.productList)
+        
       }
   })
   }
@@ -157,7 +157,7 @@ this.JobCardServices.removeAt(index);
       if(data.status_code===100){
         this.jobcardDetails=JSON.parse(data["message"]);
         this.allJobcardDetails = [...this.jobcardDetails];
-        console.log("jobcardDetails",this.jobcardDetails)
+        
       }
       
   })
@@ -232,7 +232,7 @@ this.JobCardServices.removeAt(index);
     ...product,
     isDisabled: selectedProductIDs.includes(product.ProductID)
   }));
-    console.log("lastProduct",this.productList)
+    
     if (lastProduct && lastProduct.invalid) {
       this.showToast('Please fill required fields!', 'danger');
       return; 
@@ -264,9 +264,24 @@ addServices(){
     }
   }
   save(): void {
+    const vehicleProducts = JSON.parse(this.vehicleDetails.ProductList); // Assuming it's a JSON string
+    const selectedProducts = this.jobCardForm.value.products;
+    vehicleProducts.forEach((vehicleProduct:any) => {
+    const matchedProduct = selectedProducts.find((p:any) => p.ProductID === vehicleProduct.ProductID);
+
+  if (matchedProduct) {
+    const vehicleQty = vehicleProduct.Quantity || 0;
+    const selectedQty = matchedProduct.Quantity || 0;
+    if (vehicleQty > selectedQty) {
+      const shortage = vehicleQty - selectedQty; // Negative value
+      console.log(`Product ID ${vehicleProduct.ProductID} is short by ${shortage}`);
+    }
+  }
+});
+
     if (this.jobCardForm.valid) {
      const JobCardServiceXML=this.generateJobserviceXML(this.jobCardForm.value.JobCardServices);
-     console.log("brijesh",JobCardServiceXML)
+     
       const ProductXML=this.generateXML(this.jobCardForm.value.products)// Send this.jobCardForm.value to backend
       const val={
         JobCardID:this.vehicleDetails.JobCardID?this.vehicleDetails.JobCardID:0,
@@ -285,15 +300,17 @@ addServices(){
         PaidAmount:this.jobCardForm.value.AmountPaid,
         PaymentStatus: (+this.jobCardForm.value.BalancePayment || 0) === 0 ? 'Completed' : 'Pending'
       }
-      this.JobCardService.InsertJobCard(val).subscribe((data)=>{
-        if(data.status_code===100){
-       
-        this.showToast('added successfully!', 'success');
-        this.vehicleDetails='';
-        this.getJobCard();
-        }
-      })
-      console.log("val",val)
+      // this.JobCardService.InsertJobCard(val).subscribe((data)=>{
+      //   if(data.status_code===100){
+      //   this.StockQuantity=[];
+      //   this.products.clear();
+      //   this.JobCardServices.clear();
+      //   this.showToast('added successfully!', 'success');
+      //   this.vehicleDetails='';
+      //   this.getJobCard();
+      //   }
+      // })
+      
     
     } else {
       
@@ -403,7 +420,6 @@ addServices(){
   }
 
   selectJob(selectJob:any, anytrue:boolean){
-    console.log('selectJob',selectJob)
     this.vehicleDetails=selectJob;
    this.patchJobCard(selectJob);
 this.isJobCard=anytrue;
@@ -718,21 +734,21 @@ quantities: number[] = [];
 //   const control = this.products.at(index).get('Quantity');
 //   this.quantities[index] = control?.value || 0;
 //   this.quantities.forEach((quantity,index)=>{
-//     console.log("quantity",quantity,index)
+//     
 //   })
 //   // this.jobCardForm.value.products.forEach((Prod: any, i: number) => {
-//   //   console.log("Quantity", Prod.Quantity, "at index", i);
+//   //   ;
 //   //   const ProductID = Prod.ProductID;
 //   //   // Get the matched product from productList using ProductID
 //   //   const matchedProduct = this.productList.find((item: any) => item.ProductID === ProductID);
 //   //   if (matchedProduct) {
-//   //     console.log("Matched Product:", matchedProduct);
+//   //     ;
 //   //     // Example: get price or amount if available
 //   //     const amount = matchedProduct.Price || 0;
 //   //     this.productAmount=amount*Prod.Quantity
-//   //     console.log("Amount:", amount*Prod.Quantity);
+//   //     ;
 //   //   } else {
-//   //     console.log("No matching product found for ProductID:", ProductID);
+//   //     ;
 //   //   }
 //   // });
 //   this.jobCardForm.value.products.forEach((Prod: any, i: number) => {
@@ -747,7 +763,7 @@ quantities: number[] = [];
 //     control.patchValue({ Price: value });
 //   });
   
-//   console.log("JobCardServices",this.jobCardForm.value.products)
+//   
 // }
 
 // Unified method to update price based on ProductID and Quantity
@@ -803,11 +819,11 @@ setupFormValueChangeListeners() {
 //   });
 
 //   const grandTotal = productTotal + serviceTotal;
-//   console.log('Grand Total:', grandTotal);
+//   ;
 
 //   // Optional: store/display this somewhere
 //   this.grandTotal = grandTotal;
-//   console.log("this.grandTotal1",this.grandTotal)
+//   
 // }
 calculateTotal() {
   let totalProductAmount = 0;
