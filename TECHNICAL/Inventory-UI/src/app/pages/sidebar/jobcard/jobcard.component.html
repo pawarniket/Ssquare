@@ -183,7 +183,7 @@
       <div class="page-header">
           <div class="add-item d-flex justify-content-between align-items-center">
               <div class="page-title">
-                  <h4 class="fw-bold">JobCard List</h4>
+                  <h4 class="fw-bold">Job Card List</h4>
                   <h6>Manage your Client Jobcards </h6>
               </div>
               
@@ -199,7 +199,7 @@
 
 
 
-  <div  *ngIf="!vehicleDetails" class="container bg-white rounded p-4 mt-4 shadow">
+  <div  *ngIf="!vehicleDetails" class="lg-container bg-white rounded p-4 mt-4 shadow">
     <div class="row align-items-center justify-content-between mb-4">
       <!-- Title and Search -->
       <div class="col-md-6 d-flex align-items-center gap-3">
@@ -285,7 +285,7 @@
               <div class="d-flex justify-content-center gap-2">
                 <button class="btn btn-primary btn-sm" 
                 (click)="printInvoice()">
-                <i class="fas fa-file-invoice"></i> Generate Bill
+                <i class="fas fa-file-invoice"></i> Invoice
               </button>
                 <button *ngIf="Clientlist.PaymentStatus !== 'Completed'" class="btn btn-primary btn-sm" 
                   (click)="selectJob(Clientlist,true)">

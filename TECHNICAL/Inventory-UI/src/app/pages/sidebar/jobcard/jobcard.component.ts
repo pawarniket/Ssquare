@@ -838,7 +838,7 @@ recalculateProductPrices() {
     const quantity = +productGroup.get('Quantity')?.value || 0;
 
     const matchedProduct = this.productList.find((p:any) => p.ProductID === parseInt(productId));
-    const pricePerUnit = matchedProduct?.Price || 0;
+    const pricePerUnit = matchedProduct?.Selling_Price || 0;
 
     const total = quantity * pricePerUnit;
     productGroup.patchValue({ Price: total }, { emitEvent: false }); // prevent infinite loop
