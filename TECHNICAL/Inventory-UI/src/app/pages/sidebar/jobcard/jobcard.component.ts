@@ -31,6 +31,7 @@ export class JobcardComponent {
   paymentModes = ['Cash', 'Card', 'UPI', 'Net Banking'];
   grandTotal: any;
   StockQuantity: any=[];
+  allJobcardDetails: any;
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
     private JobCardService :JobcardService,
@@ -154,7 +155,8 @@ this.JobCardServices.removeAt(index);
     const val={}
     this.JobCardService.GetJobCard(val).subscribe((data)=>{
       if(data.status_code===100){
-        this.jobcardDetails=JSON.parse(data["message"])
+        this.jobcardDetails=JSON.parse(data["message"]);
+        this.allJobcardDetails = [...this.jobcardDetails];
         console.log("jobcardDetails",this.jobcardDetails)
       }
       
@@ -303,47 +305,27 @@ addServices(){
     }
   }
   sortTable(column: string): void {
-
-    
-    // Toggle sort direction if the same column is clicked
     if (this.sortColumn === column) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
-      // Set the new column and default to ascending
       this.sortColumn = column;
       this.sortDirection = 'asc';
     }
-
-    // Sort bookings based on the column and direction
-    this.filterBookingData.sort((a: any, b: any) => {
-      let valueA, valueB;
-
-      if (column === 'PrimaryGuestName') {
-        // Parse PrimaryGuestName and get the Username
-        valueA = a.PrimaryGuestName ? JSON.parse(a.PrimaryGuestName)?.Username || '' : '';
-        valueB = b.PrimaryGuestName ? JSON.parse(b.PrimaryGuestName)?.Username || '' : '';
-      } 
-      
-     else if (column === 'PaymentStatus') {
-        // Parse PrimaryGuestName and get the Username
-        valueA = a.PaymentStatus  ;
-        valueB = b.PaymentStatus ;
-      } 
-      
-      else if (column === 'OrderDate') {
-        // Parse PrimaryGuestName and get the Username
-        valueA = a.OrderDate ? new Date(a.OrderDate) : new Date(0); // Handle null values
-        valueB = b.OrderDate ? new Date(b.OrderDate) : new Date(0);
-      }
-      else {
-        // Handle other fields
-        valueA = a[column];
-        valueB = b[column];
-      }
+  
+    this.jobcardDetails.sort((a: any, b: any) => {
+      let valueA = a[column];
+      let valueB = b[column];
+  
       if (valueA == null || valueB == null) {
-        return 0; // Handle null/undefined values
+        return 0;
       }
-
+  
+      // Convert dates if the column is a date
+      if (column.toLowerCase().includes('date')) {
+        valueA = new Date(valueA);
+        valueB = new Date(valueB);
+      }
+  
       if (typeof valueA === 'string') {
         return this.sortDirection === 'asc'
           ? valueA.localeCompare(valueB)
@@ -355,6 +337,60 @@ addServices(){
       }
     });
   }
+  
+  // sortTable(column: string): void {
+
+    
+  //   // Toggle sort direction if the same column is clicked
+  //   if (this.sortColumn === column) {
+  //     this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+  //   } else {
+  //     // Set the new column and default to ascending
+  //     this.sortColumn = column;
+  //     this.sortDirection = 'asc';
+  //   }
+
+  //   // Sort bookings based on the column and direction
+  //   this.filterBookingData.sort((a: any, b: any) => {
+  //     let valueA, valueB;
+
+  //     if (column === 'PrimaryGuestName') {
+  //       // Parse PrimaryGuestName and get the Username
+  //       valueA = a.PrimaryGuestName ? JSON.parse(a.PrimaryGuestName)?.Username || '' : '';
+  //       valueB = b.PrimaryGuestName ? JSON.parse(b.PrimaryGuestName)?.Username || '' : '';
+  //     } 
+      
+  //    else if (column === 'PaymentStatus') {
+  //       // Parse PrimaryGuestName and get the Username
+  //       valueA = a.PaymentStatus  ;
+  //       valueB = b.PaymentStatus ;
+  //     } 
+      
+  //     else if (column === 'OrderDate') {
+  //       // Parse PrimaryGuestName and get the Username
+  //       valueA = a.OrderDate ? new Date(a.OrderDate) : new Date(0); // Handle null values
+  //       valueB = b.OrderDate ? new Date(b.OrderDate) : new Date(0);
+  //     }
+  //     else {
+  //       // Handle other fields
+  //       valueA = a[column];
+  //       valueB = b[column];
+  //     }
+  //     if (valueA == null || valueB == null) {
+  //       return 0; // Handle null/undefined values
+  //     }
+
+  //     if (typeof valueA === 'string') {
+  //       return this.sortDirection === 'asc'
+  //         ? valueA.localeCompare(valueB)
+  //         : valueB.localeCompare(valueA);
+  //     } else {
+  //       return this.sortDirection === 'asc'
+  //         ? valueA - valueB
+  //         : valueB - valueA;
+  //     }
+  //   });
+  // }
   getSortIcon(column: string): string {
     if (this.sortColumn === column) {
       return this.sortDirection === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
@@ -472,19 +508,17 @@ isDisabled: selectedProductIDs.includes(product.ProductID)
     const searchValue = this.searchText?.trim().toLowerCase();
   
     if (!searchValue) {
-      // Reset the filtered data if no search text is entered
-      this.jobcardDetails = [...this.jobcardDetails];
+      this.jobcardDetails = [...this.allJobcardDetails]; // Reset to original
     } else {
-      // Filter based on ClientName or Phone
-      this.jobcardDetails = this.jobcardDetails.filter((jobcard: any) => {
-        const clientName = jobcard.ClientName?.toLowerCase() || '';
-        const phone = jobcard.Phone?.toLowerCase() || '';
-        return clientName.includes(searchValue) || phone.includes(searchValue);
+      this.jobcardDetails = this.allJobcardDetails.filter((jobcard: any) => {
+        return Object.values(jobcard).some((val) =>
+          String(val).toLowerCase().includes(searchValue)
+        );
       });
     }
-  
-    console.log("Filtered Data:", this.jobcardDetails);
   }
+  
+  
   
   showToast(message: string, color: 'primary' | 'success' | 'danger' | 'warning' | 'info' = 'primary') {
     this.toastMessage = message;
