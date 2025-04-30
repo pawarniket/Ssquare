@@ -30,13 +30,41 @@ export class JobcardComponent {
   statusList = ['In Process', 'Completed'];
   paymentModes = ['Cash', 'Card', 'UPI', 'Net Banking'];
   grandTotal: any;
-  StockQuantity: any;
+  StockQuantity: any=[];
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
     private JobCardService :JobcardService,
     private ProductService:ProductService,
     private UserService:UserService,
   private router: Router) {
+    // this.jobCardForm = this.fb.group({
+    //   customer: this.fb.group({
+    //     name: ['', Validators.required],
+    //     phone: ['', Validators.required]
+    //   }),
+    //   vehicle: this.fb.group({
+    //     number: ['', Validators.required],
+    //     model: ['', Validators.required],
+    //     color: ['', Validators.required],
+    //     kmReading: ['', Validators.required],
+    //   }),
+    //   service: this.fb.group({
+    //     work: ['', Validators.required]
+    //   }),
+    //   products: this.fb.array([
+    //     this.createProduct()
+    //   ]),
+    //   JobCardServices:this.fb.array([
+    //     this.createJobCardServices()
+    //   ]),
+    //   remarks: [''],
+    //   mechanicName: ['',Validators.required], 
+    //   status: ['',Validators.required],           
+    //   paymentMode: ['',Validators.required],
+    //   AmountPaid: [0,Validators.required],
+    //   BalancePayment: [0,Validators.required],
+    //   GrandTotal: [0,Validators.required] 
+    // });
     this.jobCardForm = this.fb.group({
       customer: this.fb.group({
         name: ['', Validators.required],
@@ -46,7 +74,7 @@ export class JobcardComponent {
         number: ['', Validators.required],
         model: ['', Validators.required],
         color: ['', Validators.required],
-        kmReading: ['', Validators.required],
+        kmReading: [0, [Validators.required, Validators.min(0)]],
       }),
       service: this.fb.group({
         work: ['', Validators.required]
@@ -54,17 +82,18 @@ export class JobcardComponent {
       products: this.fb.array([
         this.createProduct()
       ]),
-      JobCardServices:this.fb.array([
+      JobCardServices: this.fb.array([
         this.createJobCardServices()
       ]),
-      remarks: [''],
-      mechanicName: ['',Validators.required], 
-      status: ['',Validators.required],           
-      paymentMode: ['',Validators.required],
-      AmountPaid: [0],
-      BalancePayment: [0],
-      GrandTotal: [0] 
+      remarks: ['',Validators.required], // Optional field
+      mechanicName: [0, Validators.required],
+      status: ['', Validators.required],
+      paymentMode: ['', Validators.required],
+      AmountPaid: [0,],
+      BalancePayment: [0, [Validators.required, Validators.min(0)]],
+      GrandTotal: [0, [Validators.required, Validators.min(0)]]
     });
+    
   }
   ngOnInit() {
     this.setupFormValueChangeListeners();
@@ -146,6 +175,7 @@ this.JobCardServices.removeAt(index);
       xmlString += `<Product>
                       <ProductID>${product.ProductID}</ProductID>
                       <Quantity>${product.Quantity}</Quantity>
+                      <Price>${product.Price}</Price>
                     </Product>`;
     });
 
@@ -169,17 +199,18 @@ this.JobCardServices.removeAt(index);
   }
   createProduct(): FormGroup {
     return this.fb.group({
-      ProductID: ['', Validators.required],
-      Quantity: ['', [Validators.required, Validators.min(1)]],
-      Price: [0, Validators.required],
+      ProductID: [0, Validators.required],
+      Quantity: [1, [Validators.required, Validators.min(1)]],
+      Price: [0, Validators.required]
     });
   }
-  createJobCardServices():FormGroup{
+  createJobCardServices(): FormGroup {
     return this.fb.group({
       JobCardServiceName: ['', Validators.required],
-      Amount: ['', [Validators.required]]
+      Amount: [0, [Validators.required, Validators.min(0)]]
     });
   }
+  
 
   get products(): FormArray {
     return this.jobCardForm.get('products') as FormArray;
@@ -188,6 +219,7 @@ this.JobCardServices.removeAt(index);
   get JobCardServices(): FormArray {
     return this.jobCardForm.get('JobCardServices') as FormArray;
   }
+
   addProduct(): void {
     const lastProduct = this.products.at(this.products.length - 1);
     const selectedProductIDs = this.products.controls
@@ -235,6 +267,7 @@ addServices(){
      console.log("brijesh",JobCardServiceXML)
       const ProductXML=this.generateXML(this.jobCardForm.value.products)// Send this.jobCardForm.value to backend
       const val={
+        JobCardID:this.vehicleDetails.JobCardID?this.vehicleDetails.JobCardID:0,
         VehicleID: this.vehicleDetails.VehicleID,
         ClientID: this.vehicleDetails.ClientID,
         WorkDescription:this.jobCardForm.value.service.work,
@@ -264,6 +297,9 @@ addServices(){
       
       this.showToast('Please fill all the form!', 'danger');
       this.jobCardForm.markAllAsTouched();
+      this.products.controls.forEach(c => c.markAllAsTouched());
+      this.JobCardServices.controls.forEach(service => service.markAllAsTouched());
+      return;
     }
   }
   sortTable(column: string): void {
@@ -382,18 +418,19 @@ isDisabled: selectedProductIDs.includes(product.ProductID)
     //   );
     // });
     const productList = JSON.parse(jobCardData.ProductList || '[]');
-    productList.forEach((product: any) => {
+    productList.forEach((product: any,index:number) => {
       const matchedProduct = this.productList.find((p:any) => p.ProductID === parseInt(product.ProductID));
-      const unitPrice = matchedProduct?.Price || 0;
+      const unitPrice = matchedProduct?.Selling_Price || 0;
       const totalPrice = unitPrice * product.Quantity;
       const stockQty = matchedProduct?.StockQuantity || 0;
       this.products.push(
         this.fb.group({
           ProductID: [product.ProductID],
           Quantity: [product.Quantity],
-          Price: [totalPrice]
+          Price: [product.Price]
         })
       );
+      this.StockQuantity[index]=stockQty;
     });
 
     const serviceList = JSON.parse(jobCardData.ServiceList);
@@ -687,8 +724,8 @@ updateProductPrice(index: number) {
 
   // Find the selected product
   const selectedProduct = this.productList.find((p:any) => p.ProductID === parseInt(productId));
-  this.StockQuantity=selectedProduct.StockQuantity;
-  const unitPrice = selectedProduct?.Price || 0;
+  this.StockQuantity[index]=selectedProduct.StockQuantity;
+  const unitPrice = selectedProduct?.Selling_Price || 0;
 
   // Calculate total price
   const totalPrice = quantity * unitPrice;
@@ -774,6 +811,49 @@ recalculateProductPrices() {
 
   });
 }
+// isInvalid(path: string): boolean {
+//   const control = this.jobCardForm.get(path);
+//   return !!(control && control.invalid && (control.touched || control.dirty));
+// }
+isInvalid(path: string): boolean {
+  const control = this.jobCardForm.get(path);
+  // Check if the control is invalid, touched, and if its value is 0 (default option)
+  return !!(control && control.invalid && (control.touched || control.dirty) || control?.value === 0);
+}
+// isProductInvalid(index: number, controlName: string): boolean {
+//   const control = this.products.at(index).get(controlName);
+//   return !!(control && control.invalid && (control.touched || control.dirty));
+// }
+isProductInvalid(index: number, controlName: string): boolean {
+  const control = this.products.at(index).get(controlName);
+  
+  // Check if the control is invalid, touched, or dirty, and for ProductID value '0'
+  if (controlName === 'ProductID' && control?.value === 0) {
+    return true;  // Consider this invalid if the value is 0
+  }
 
+  return !!(control && control.invalid && (control.touched || control.dirty));
+}
+// isServiceInvalid(index: number, controlName: string): boolean {
+//   const control = this.JobCardServices.at(index).get(controlName);
+//   return !!(control && control.invalid && (control.touched || control.dirty));
+// }
+isServiceInvalid(index: number, controlName: string): boolean {
+  const control = this.JobCardServices.at(index).get(controlName);
+  return !!(control && control.invalid && (control.touched || control.dirty) || control?.value === 0);
+}
+
+markAllAsTouched() {
+  Object.keys(this.jobCardForm.controls).forEach(field => {
+    const control = this.jobCardForm.get(field);
+    if (control instanceof FormGroup) {
+      Object.keys(control.controls).forEach(subField => {
+        control.get(subField)?.markAsTouched();
+      });
+    } else {
+      control?.markAsTouched();
+    }
+  });
+}
 
 }

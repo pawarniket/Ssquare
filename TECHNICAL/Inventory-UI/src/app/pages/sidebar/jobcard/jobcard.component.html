@@ -20,11 +20,11 @@
     <div class="form-row">
       <div class="col-md-6">
         <label for="name">Name:</label>
-        <input id="name" type="text" formControlName="name" class="form-control" placeholder="Enter customer's name">
+        <input id="name" type="text" formControlName="name" class="form-control" placeholder="Enter customer's name"  [ngClass]="{ 'is-invalid': isInvalid('customer.name') }">
       </div>
       <div class="col-md-6">
         <label for="phone">Phone:</label>
-        <input id="phone" type="text" formControlName="phone" class="form-control" placeholder="Enter phone number">
+        <input id="phone" type="text" formControlName="phone" class="form-control" placeholder="Enter phone number" [ngClass]="{ 'is-invalid': isInvalid('customer.phone') }">
       </div>
     </div>
   </div>
@@ -35,19 +35,19 @@
     <div class="form-row">
       <div class="col-md-3">
         <label for="number">Vehicle Number:</label>
-        <input id="number" type="text" formControlName="number" class="form-control" placeholder="Enter vehicle number">
+        <input id="number" type="text" formControlName="number" class="form-control" placeholder="Enter vehicle number" [ngClass]="{ 'is-invalid': isInvalid('vehicle.number') }">
       </div>
       <div class="col-md-3">
         <label for="model">Model:</label>
-        <input id="model" type="text" formControlName="model" class="form-control" placeholder="Enter vehicle model">
+        <input id="model" type="text" formControlName="model" class="form-control" placeholder="Enter vehicle model" [ngClass]="{ 'is-invalid': isInvalid('vehicle.model') }">
       </div>
       <div class="col-md-3">
         <label for="color">Color:</label>
-        <input id="color" type="text" formControlName="color" class="form-control" placeholder="Enter vehicle color">
+        <input id="color" type="text" formControlName="color" class="form-control" placeholder="Enter vehicle color" [ngClass]="{ 'is-invalid': isInvalid('vehicle.color') }">
       </div>
       <div class="col-md-3">
         <label for="kmReading">Km Reading:</label>
-        <input id="kmReading" type="number" formControlName="kmReading" class="form-control" placeholder="Enter Km Reading">
+        <input id="kmReading" type="number" formControlName="kmReading" class="form-control" placeholder="Enter Km Reading" [ngClass]="{ 'is-invalid': isInvalid('vehicle.kmReading') }">
       </div>
     </div>
   </div>
@@ -55,7 +55,7 @@
   <!-- Service Details -->
   <div class="section mb-4" formGroupName="service">
     <h3 class="mb-3">Service Details</h3>
-    <textarea rows="4" formControlName="work" class="form-control" placeholder="Describe the required services"></textarea>
+    <textarea rows="4" formControlName="work" class="form-control" placeholder="Describe the required services" [ngClass]="{ 'is-invalid': isInvalid('service.work') }"></textarea>
   </div>
 
 
@@ -68,14 +68,14 @@
         <div class="col-md-12 form-row align-items-center">
           <div class="col-md-4">
             <label for="SelectProduct">Select Product:</label>
-            <select formControlName="ProductID" class="form-control" (change)="onProductSelect(i)">
-              <option value="">-- Select Product --</option>
+            <select formControlName="ProductID" class="form-control" (change)="onProductSelect(i)"  [ngClass]="{ 'is-invalid': isProductInvalid(i, 'ProductID') }">
+              <option [ngValue]="0">-- Select Product --</option>
               <option *ngFor="let product of productList" [value]="product.ProductID" [disabled]="product.isDisabled">{{ product.ProductName }}</option>
             </select>
           </div>
           <div class="col-md-4">
-            <label for="Quantity">Quantity: <span class="text-danger">{{StockQuantity +" "+ "left"}}</span> </label>
-            <input type="number" formControlName="Quantity" class="form-control" placeholder="Quantity" (input)="onQuantityChange(i)">
+            <label for="Quantity">Quantity: <span class="text-danger">{{(StockQuantity[i] || 0) + " left"}}</span> </label>
+            <input type="number" formControlName="Quantity" class="form-control" placeholder="Quantity" (input)="onQuantityChange(i)"  [ngClass]="{ 'is-invalid': isProductInvalid(i, 'Quantity') }">
           </div>
           <div class="col-md-2">
             <label for="Price">Price:</label>
@@ -101,10 +101,10 @@
         <div *ngFor="let Service of JobCardServices.controls; let i = index" [formGroupName]="i" class="product-item mb-3 p-3 border rounded">
           <div class=" col-md-12 form-row align-items-center">
             <div class="col-md-6">
-              <input type="text" formControlName="JobCardServiceName" class="form-control" placeholder="ServiceName">
+              <input type="text" formControlName="JobCardServiceName" class="form-control" placeholder="ServiceName" [ngClass]="{ 'is-invalid': isServiceInvalid(i, 'JobCardServiceName') }">
             </div>
             <div class="col-md-4">
-              <input type="number" formControlName="Amount" class="form-control" placeholder="Amount">
+              <input type="number" formControlName="Amount" class="form-control" placeholder="Amount"  [ngClass]="{ 'is-invalid': isServiceInvalid(i, 'Amount') }">
             </div>
             <div class="col-md-2">
               <button type="button" class="btn btn-danger  w-100" (click)="deleteService(i)">
@@ -120,7 +120,7 @@
 <!-- Mechanic Selection -->
 <div class="col-md-4">
   <h3 class="mb-3">Select Mechanic</h3>
-  <select formControlName="mechanicName" class="form-control">
+  <select formControlName="mechanicName" class="form-control" [ngClass]="{ 'is-invalid': isInvalid('mechanicName') }">
     <option [ngValue]="0">-- Select Mechanic --</option>
     <option *ngFor="let mechanic of mechanicList" [ngValue]="mechanic.UserID">{{ mechanic.FullName }}</option>
   </select>
@@ -129,8 +129,8 @@
 <!-- Status -->
 <div class="col-md-4">
   <h3 class="mb-3">Job Status</h3>
-  <select formControlName="status" class="form-control">
-    <option value="">-- Select Status --</option>
+  <select formControlName="status" class="form-control" [ngClass]="{ 'is-invalid': isInvalid('status') }">
+    <option [ngValue]="0">-- Select Status --</option>
     <option *ngFor="let status of statusList" [value]="status">
       {{ status }}
     </option>
@@ -140,8 +140,8 @@
 <!-- Payment Mode -->
 <div class="col-md-4">
   <h3 class="mb-3">Payment Mode</h3>
-  <select formControlName="paymentMode" class="form-control">
-    <option value="">-- Select Payment Mode --</option>
+  <select formControlName="paymentMode" class="form-control" [ngClass]="{ 'is-invalid': isInvalid('paymentMode') }">
+    <option [ngValue]="0">-- Select Payment Mode --</option>
     <option *ngFor="let mode of paymentModes" [value]="mode">
       {{ mode }}
     </option>
@@ -150,7 +150,7 @@
   <!-- Mechanic Remarks -->
   <div class="col-md-12">
     <h3 class="mb-3">Mechanic Remarks</h3>
-    <textarea rows="3" formControlName="remarks" class="form-control" placeholder="Mechanic's observations"></textarea>
+    <textarea rows="3" formControlName="remarks" class="form-control" placeholder="Mechanic's observations" [ngClass]="{ 'is-invalid': isInvalid('remarks') }"></textarea>
   </div>
 </div>
 
@@ -287,7 +287,7 @@
                 (click)="printInvoice()">
                 <i class="fas fa-file-invoice"></i> Generate Bill
               </button>
-                <button *ngIf="Clientlist.Status !== 'Completed'" class="btn btn-primary btn-sm" 
+                <button *ngIf="Clientlist.PaymentStatus !== 'Completed'" class="btn btn-primary btn-sm" 
                   (click)="selectJob(Clientlist,true)">
                   <i class="fas fa-edit"></i> Edit
                 </button>

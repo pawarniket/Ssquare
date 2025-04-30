@@ -96,6 +96,10 @@ namespace MS.SSquare.API.Controllers
                 DBUtility oDBUtility = new DBUtility(_configurationIG);
 
                 // Insert JobCard
+                if (jobcard.JobCardID > 0)
+                {
+                    oDBUtility.AddParameters("@JobCardID", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.JobCardID);
+                }
                 oDBUtility.AddParameters("@VehicleID", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, jobcard.VehicleID);
                 oDBUtility.AddParameters("@ClientID", DBUtilDBType.Integer, DBUtilDirection.In, 100, jobcard.ClientID);
                 oDBUtility.AddParameters("@KmReading", DBUtilDBType.Integer, DBUtilDirection.In, 100, jobcard.KmReading);
