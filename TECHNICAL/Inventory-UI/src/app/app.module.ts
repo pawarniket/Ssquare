@@ -1,3 +1,4 @@
+import { NgChartsModule } from 'ng2-charts';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
@@ -45,7 +46,8 @@ import { EmployeeComponent } from './pages/sidebar/employee/employee.component';
     FormsModule,
     HttpClientModule,
 ReactiveFormsModule,
-  ],
+NgChartsModule
+],
   providers: [
     
     provideClientHydration(withEventReplay()),

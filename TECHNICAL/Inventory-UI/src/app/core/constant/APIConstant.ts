@@ -54,6 +54,8 @@ export const APIConstant = {
         getJobCard:"jobcard/get",
         insertJobCard:"jobcard/insert",
         UpdateJobCard:"jobcard/update"
+      },
+      Dashboard:{
+        getDashboard:"Dashboard/get"
       }
-
 }

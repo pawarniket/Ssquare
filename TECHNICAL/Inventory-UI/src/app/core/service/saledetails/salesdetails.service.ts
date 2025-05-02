@@ -40,4 +40,8 @@ export class SalesdetailsService {
     return this.masterService.post(environment.api+APIConstant.salesdetails.Updatesalesdetails,val)
 
   }
+  getDashboard(val:any){
+    return this.masterService.post(environment.api+APIConstant.Dashboard.getDashboard,val)
+
+  }
 }
