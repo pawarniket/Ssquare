@@ -11,6 +11,7 @@ namespace MS.SSquare.API.Models
         public string CategoryName { get; set; }
 
         public string ProductName { get; set; }
+        public string ProductXML { get; set; }
         public string Description { get; set; }
         public string RackNumber { get; set; }
 

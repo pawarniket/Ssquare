@@ -36,7 +36,10 @@ export class ProductService {
       return this.masterService.post(environment.api+APIConstant.Products.AddProducts,val)
 
     }
-    
+    Productstockupdate(val:any){
+      return this.masterService.post(environment.api+APIConstant.Products.Productstockupdate,val)
+
+    }
     UpdateProduct(val:any){
       return this.masterService.post(environment.api+APIConstant.Products.UpdateProducts,val)
     }

@@ -74,9 +74,23 @@
             </select>
           </div>
           <div class="col-md-4">
-            <label for="Quantity">Quantity: <span class="text-danger">{{(StockQuantity[i] || 0) + " left"}}</span> </label>
-            <input type="number" min="1" formControlName="Quantity" class="form-control" placeholder="Quantity" (input)="onQuantityChange(i)"  [ngClass]="{ 'is-invalid': isProductInvalid(i, 'Quantity') }">
+            <!-- <label for="Quantity">Quantity: <span class="text-danger">{{(StockQuantity[i] || 0) + " left"}}</span> </label> -->
+            <label for="Quantity">
+              Quantity:
+          
+              <!-- Show error if quantity exceeds stock -->
+              <span class="text-danger" *ngIf="products.at(i).get('Quantity')?.errors?.['max']">
+                {{ StockQuantity[i] || 0 }} left — Quantity cannot exceed available stock
+              </span>
+          
+              <!-- Otherwise show normal stock left -->
+              <ng-container *ngIf="!products.at(i).get('Quantity')?.errors?.['max']">
+                <span class="text-muted">({{ StockQuantity[i] || 0 }} left)</span>
+              </ng-container>
+            </label>
+            <input type="number"  [max]="(StockQuantity[i] +databaseStockqty[i]) || 0" min="1" formControlName="Quantity" class="form-control" placeholder="Quantity" (input)="onQuantityChange(i)"  [ngClass]="{ 'is-invalid': isProductInvalid(i, 'Quantity') }">
           </div>
+          
           <div class="col-md-2">
             <label for="Price">Price:</label>
             <input type="number" formControlName="Price" class="form-control" placeholder="Price" [readonly]="true">

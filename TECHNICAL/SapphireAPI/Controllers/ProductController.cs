@@ -347,6 +347,27 @@ namespace MS.SSquare.API.Controllers
             }
         }
 
+        [Route("ProductStock/Update")]
+        [HttpPost]
+        public IActionResult productstockupdate(Products product)
+        {
+            try
+            {
+
+                DBUtility oDBUtility = new DBUtility(_configurationIG);
+                oDBUtility.AddParameters("@ProductXML", DBUtilDBType.Varchar, DBUtilDirection.In, 250, product.ProductXML);
+                DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_ADD_STOCK_TO_PRODUCTS");
+                return Ok(new { status_code = 100, Message = "Product Updated successfully Successfully." });
+
+
+            }
+            catch (Exception ex)
+            {
+                oServiceRequestProcessor = new ServiceRequestProcessor();
+                return BadRequest(oServiceRequestProcessor.onError(ex.Message));
+            }
+
+        }
 
     }
 }
