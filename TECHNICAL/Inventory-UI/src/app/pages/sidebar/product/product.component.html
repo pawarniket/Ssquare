@@ -76,6 +76,9 @@
             <th (click)="sortTable('RackNumber')" style="cursor:pointer">
               Rack Number <i [ngClass]="getSortIcon('RackNumber')" class="ms-1"></i>
             </th>
+            <th (click)="sortTable('Status')" style="cursor:pointer">
+               Status <i [ngClass]="getSortIcon('Status')" class="ms-1"></i>
+            </th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -88,6 +91,13 @@
 
             <td>{{ product.StockQuantity }}</td>
             <td>{{ product.RackNumber }}</td>
+            <td>
+              <span 
+                class="badge" 
+                [ngClass]="product.StockQuantity === 0 ? 'bg-danger' : 'bg-success'">
+                {{ product.StockQuantity === 0 ? 'Sold Out' : 'Available' }}
+              </span>
+            </td>
             <td>
               <div class="d-flex justify-content-center gap-2">
                 <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addProductModal"

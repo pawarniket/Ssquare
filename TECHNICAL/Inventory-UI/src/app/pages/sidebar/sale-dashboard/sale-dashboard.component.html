@@ -149,7 +149,7 @@
                        <div class="d-flex align-items-top justify-content-between">
                            <div class="">
                                <p class="mb-0">Income</p>
-                               <h5>$ 98,7800 K</h5>
+                               <h5>{{ DashboardData[0]?.TotalAmount | currency:'INR':'symbol-narrow' }}</h5>
                            </div>
                            <div class="card-header-toolbar d-flex align-items-center">
                                <div class="dropdown">
@@ -175,7 +175,7 @@
                        <div class="d-flex align-items-top justify-content-between">
                            <div class="">
                                <p class="mb-0">Expenses</p>
-                               <h5>$ 45,8956 K</h5>
+                               <h5>{{ DashboardData[0]?.PurchasePrice | currency:'INR':'symbol-narrow' }}</h5>
                            </div>
                            <div class="card-header-toolbar d-flex align-items-center">
                                <div class="dropdown">
