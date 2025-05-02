@@ -25,3 +25,23 @@ table.dataTable {
   .sidebar-default .iq-sidebar-menu .iq-menu>li.active>a svg{
     color: #8c1818 !important;
   }
+  .status {
+    display: inline-block;
+    padding: 5px 16px;
+    border-radius: 20px;
+  }
+  
+  .Pending {
+    background-color: #fff4cc;
+    color: #f4a300 !important;
+  }
+  
+  .canceled {
+    background-color: #ffe5e5;
+    color: #d90000 !important;
+  }
+  
+  .Completed {
+    background-color: #ccf5cc;
+    color: #007f00 !important;
+  }

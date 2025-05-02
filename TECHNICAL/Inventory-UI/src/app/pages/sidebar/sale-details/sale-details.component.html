@@ -1,30 +1,30 @@
 <div class="page-wrapper">
   <div class="content">
-      <div class="page-header">
-          <div class="add-item d-flex justify-content-between align-items-center">
-              <div class="page-title">
-                  <h4 class="fw-bold">Sale Product</h4>
-                  <!-- <h6>Manage your Employee </h6> -->
-              </div>
-              
-              <div class="page-btn">
-                <a *ngIf="BillForm" class="btn btn-primary" (click)="saleProduct()">
-                  <i class="ti ti-circle-plus me-1"></i> Sale Product
-                </a>
-              
-                <a *ngIf="!BillForm" class="btn btn-primary" (click)="backToSaleProduct()">
-                  <i class="ti ti-arrow-left me-1"></i> Back
-                </a>
-              </div>
-              
-          </div>
+    <div class="page-header">
+      <div class="add-item d-flex justify-content-between align-items-center">
+        <div class="page-title">
+          <h4 class="fw-bold">Sale Product</h4>
+          <!-- <h6>Manage your Employee </h6> -->
+        </div>
 
+        <div class="page-btn">
+          <a *ngIf="BillForm" class="btn btn-primary" (click)="saleProduct()">
+            <i class="ti ti-circle-plus me-1"></i> Sale Product
+          </a>
+
+          <a *ngIf="!BillForm" class="btn btn-primary" (click)="backToSaleProduct()">
+            <i class="ti ti-arrow-left me-1"></i> Back
+          </a>
+        </div>
 
       </div>
 
+
+    </div>
+
   </div>
 </div>
-<div *ngIf="!salehistory" class="container bg-white rounded p-4 mt-4 shadow">
+<div *ngIf="!salehistory" class="lg-container bg-white rounded p-4 mt-4 shadow">
   <div class="row align-items-center justify-content-between mb-4">
     <!-- Title and Search -->
     <div class="col-md-3 d-flex align-items-center gap-3 mb-2">
@@ -32,27 +32,19 @@
 
       <form class="input-group w-100" role="search">
         <input type="search" class="form-control" placeholder="Search here" aria-label="Search bookings"
-         [(ngModel)]="salesearchtext" name="salesearchtext"
-          (input)="onSearch($event)" autocomplete="off" />
+          [(ngModel)]="salesearchtext" name="salesearchtext" (input)="onSearch($event)" autocomplete="off" />
         <span class="input-group-text">
-          <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/a2d24a7ceb684c1f468bdd9e1e90fbb04e0da74d9655bc2729b38bcacb6192d0"
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/a2d24a7ceb684c1f468bdd9e1e90fbb04e0da74d9655bc2729b38bcacb6192d0"
             alt="Search" style="width: 16px;" />
         </span>
       </form>
     </div>
     <div class="col-md-3 mb-2">
-      <input
-        type="date"
-        id="date"
-        class="form-control"
-        placeholder="YYYY-MM-DD"
-        [(ngModel)]="selecteddate"
-        (change)="applySearch()"
-        [max]="today"
-
-      />
+      <input type="date" id="date" class="form-control" placeholder="YYYY-MM-DD" [(ngModel)]="selecteddate"
+        (change)="applySearch()" [max]="today" />
     </div>
-    
+
     <div class="col-md-2 mb-2">
       <select class="form-control" [(ngModel)]="selectedPaymentStatus" (change)="applySearch()">
         <option value="">All Status</option>
@@ -60,16 +52,17 @@
         <option value="Completed">Completed</option>
       </select>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-2 mb-2">
       <button (click)="resetfilters()" class="btn btn-primary">
         Reset
       </button>
     </div>
-    
+
     <!-- Print Button -->
     <div class="col-md-2 text-end">
       <button (click)="printTable()" class="btn btn-black">
-        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/2c4cd31f4573b466716d0076623b4003b678b69f9e6f4b56e543f3956469a44c"
+        <img
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/2c4cd31f4573b466716d0076623b4003b678b69f9e6f4b56e543f3956469a44c"
           alt="Print" style="width: 16px;" />
         Print
       </button>
@@ -80,28 +73,28 @@
   <div class="table-responsive">
     <table class="table  text-center align-middle" id="bookinglisttable">
       <thead class="bg-black text-white">
-          <tr>
+        <tr>
           <th (click)="sortTable('ClientName')" style="cursor:pointer">
             Client Name <i [ngClass]="getSortIcon('ClientName')" class="ms-1"></i>
           </th>
           <th (click)="sortTable('Phone')" style="cursor:pointer">
-             Phone <i [ngClass]="getSortIcon('Phone')" class="ms-1"></i>
+            Phone <i [ngClass]="getSortIcon('Phone')" class="ms-1"></i>
           </th>
           <th (click)="sortTable('PaidAmount')" style="cursor:pointer">
-            Paid Amount  <i [ngClass]="getSortIcon('PaidAmount')" class="ms-1"></i>
+            Paid Amount <i [ngClass]="getSortIcon('PaidAmount')" class="ms-1"></i>
           </th>
-  
+
           <th (click)="sortTable('BalanceAmount')" style="cursor:pointer">
             Balance Amount <i [ngClass]="getSortIcon('BalanceAmount')" class="ms-1"></i>
           </th>
           <th (click)="sortTable('TotalAmount')" style="cursor:pointer">
-            Total Amount  <i [ngClass]="getSortIcon('TotalAmount')" class="ms-1"></i>
+            Total Amount <i [ngClass]="getSortIcon('TotalAmount')" class="ms-1"></i>
           </th>
           <th (click)="sortTable('SaleDate')" style="cursor:pointer">
-            Sale Date   <i [ngClass]="getSortIcon('SaleDate')" class="ms-1"></i>
+            Sale Date <i [ngClass]="getSortIcon('SaleDate')" class="ms-1"></i>
           </th>
           <th (click)="sortTable('PaymentStatus')" style="cursor:pointer">
-             Payment Status  <i [ngClass]="getSortIcon('PaymentStatus')" class="ms-1"></i>
+            Payment Status <i [ngClass]="getSortIcon('PaymentStatus')" class="ms-1"></i>
           </th>
           <th>Action</th>
         </tr>
@@ -115,26 +108,30 @@
 
           <td>{{ sale.TotalAmount || 0 }}</td>
           <td>{{ sale.SaleDate | date:'dd-MM-yyyy' }}</td>
-          <td [ngClass]="{
-            'fw-bold': true,
-            'text-warning': sale.PaymentStatus === 'Pending', 
-            'text-success': sale.PaymentStatus === 'Completed'
-          }">
-        {{ sale.PaymentStatus }}
-      </td>
-      
-          
-          
+          <td>
+            <label [ngClass]="{
+              'status': true,
+              'canceled': sale.PaymentStatus === 'Pending',
+              'Completed': sale.PaymentStatus === 'Completed'
+            }">
+              {{ sale.PaymentStatus }}
+            </label>
+          </td>
+
+
+
+
+
           <td>
             <div class="d-flex justify-content-center gap-2">
               <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addProductModal"
                 (click)="printSaleInvoice(sale)">
-                <i class="fas fa-file-invoice"></i> Invoice 
+                <i class="fas fa-file-invoice"></i> Invoice
               </button>
-              <button *ngIf="sale.PaymentStatus== 'Pending'" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addProductModal"
-                  (click)="editProduct(sale)">
-                  <i class="fas fa-edit"></i> Edit
-                </button>
+              <button *ngIf="sale.PaymentStatus== 'Pending'" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                data-bs-target="#addProductModal" (click)="editProduct(sale)">
+                <i class="fas fa-edit"></i> Edit
+              </button>
             </div>
           </td>
         </tr>
@@ -156,7 +153,7 @@
 
 
 <div *ngIf="!BillForm" class="container my-5">
-  <div  class="card p-3 mb-4 position-relative shadow-sm">
+  <div class="card p-3 mb-4 position-relative shadow-sm">
     <h5 class="mb-4 text-primary">Customer Info</h5>
     <div class="row">
       <!-- Customer Dropdown -->
@@ -169,20 +166,21 @@
           </option>
         </select>
       </div>
-  
+
       <!-- Add Customer Modal Trigger -->
       <div class="col-md-6">
-        <span
-          class="position-absolute top-0 end-0 me-4 mt-4 fs-4 text-success"
-          data-bs-toggle="modal"
-          data-bs-target="#ClientModel"
-          role="button">➕</span>
+        <span class="position-absolute top-0 end-0 me-4 mt-4 fs-4 text-success" data-bs-toggle="modal"
+          data-bs-target="#ClientModel" role="button"><span role="button" class="bi bi-person-plus-fill"
+            style="color: #8c1818; "></span>
+
+
+        </span>
       </div>
     </div>
-  
+
     <!-- Add Product Section -->
-    <div class="col-md-12 mt-4">
-      
+    <div *ngIf="!this.SaleID" class="col-md-12 mt-4 p-0">
+
       <h5 class="text-primary">Add Product</h5>
       <div class="row g-3">
         <!-- Product Dropdown -->
@@ -195,105 +193,113 @@
             </option>
           </select>
         </div>
-  
+
         <!-- Price Input -->
         <div class="col-md-3">
           <label class="form-label">Price (₹)</label>
-          <input type="number" id="price" class="form-control" [(ngModel)]="selectedPrice" placeholder="0" readonly />
+          <input type="number" id="price"  class="form-control" [(ngModel)]="selectedPrice" placeholder="0" readonly />
         </div>
-  
+
         <!-- Quantity Input -->
         <div class="col-md-3">
           <label class="form-label">Qty</label>
-          <input type="number" id="qty" class="form-control"  [(ngModel)]="quantity" (input)="checkQuantity()" placeholder="0" 
-          [ngClass]="{ 'is-invalid': quantity > Quntity }"
-
-          />
+          <input type="number" min="0" id="qty" class="form-control" [(ngModel)]="quantity" (input)="checkQuantity()"
+            placeholder="0" [ngClass]="{ 'is-invalid': quantity > Quntity }" />
           <div *ngIf="quantity > Quntity" class="invalid-feedback">
             Quantity cannot exceed available stock ({{ Quntity }}).
           </div>
         </div>
-  
+
         <!-- Total Price -->
         <div class="col-md-3">
           <label class="form-label">Total (₹)</label>
-          <input type="number" class="form-control" [(ngModel)]="selectedPrice" [value]="totalPrice" readonly 
-          
-          />
+          <input type="number" class="form-control" [(ngModel)]="selectedPrice" [value]="totalPrice" readonly />
         </div>
-  
+
         <!-- Add Button -->
         <div class="col-md-2">
-          <button class="btn btn-success w-100" (click)="addItem()">Add</button>
+          <button class="btn btn-primary w-100" (click)="addItem()">Add</button>
         </div>
       </div>
     </div>
-  
+
     <!-- Bill Summary -->
-     <div  id="printcontent">
-    <h5 class="mt-4 text-primary">🧾 Bill Summary</h5>
-    <div class="table-responsive">
-      <table class="table table-striped align-middle text-center">
-        <thead class="table-light">
-          <tr>
-            <th>Sr No</th>
-            <th>Product</th>
-            <th>Price</th>
-            <th>Qty</th>
-            <th>Total</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of billItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ item.ProductName }}</td>
-            <td>₹{{ item.Price }}</td>
-            <td>{{ item.Qty }}</td>
-            <td>₹{{ item.Total }}</td>
-            <td>
-              <button class="btn btn-danger btn-sm" (click)="removeItem(i)">🗑️</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  
-    <!-- Grand Total -->
-    <div class="text-end total-box mt-3 fw-bold">
-      <h4>Grand Total: ₹{{ grandTotal }}</h4>
-    </div>
-  </div>
-  <div class="row justify-content-end mt-3">
-    <div class="col-md-6">
-      <label class="form-label">Amount Paid (₹)</label>
-      <input type="number" class="form-control" [(ngModel)]="amountPaid" (input)="calculateBalance()" placeholder="Enter amount paid">
-    </div>
-    <div class="col-md-6">
-      <label class="form-label">Balance Payment (₹)</label>
-      <input type="number" class="form-control" [value]="balancePayment" readonly>
-    </div>
-  </div>
-  <div class="row justify-content-start mt-3">
-<!-- Payment Mode -->
-  <div class="col-md-6">  <h3 class="mb-3">Payment Mode</h3>
-  <select [(ngModel)]="PaymentMode" class="form-control">
-    <option value="">-- Select Payment Mode --</option>
-    <option *ngFor="let mode of paymentModes" [value]="mode">
-      {{ mode }}
-    </option>
-  </select>
+    <div id="printcontent">
+      <h5 class="mt-4 text-primary">🧾 Bill Summary</h5>
+      <div class="table-responsive">
+        <table class="table table-striped align-middle text-center">
+          <thead class="table-light">
+            <tr>
+              <th>Sr No</th>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Qty</th>
+              <th>Total</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of billItems; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ item.ProductName }}</td>
+              <td>₹{{ item.Price }}</td>
+              <td>{{ item.Qty }}</td>
+              <td>₹{{ item.Total }}</td>
+              <td>
+                <button class="btn btn-danger btn-sm" (click)="removeItem(i)"><i class="fas fa-trash"></i>Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-</div>
+      <!-- Grand Total -->
+      <div class="text-end total-box mt-3 fw-bold">
+        <h4>Grand Total: ₹{{ grandTotal }}</h4>
+      </div>
+    </div>
+    <div class="row justify-content-end mt-3">
+      <div class="col-md-6">
+        <label class="form-label">Amount Paid (₹)</label>
+        <input type="number" min="0" class="form-control" [(ngModel)]="amountPaid" (input)="calculateBalance()"
+          placeholder="Enter amount paid">
+      </div>
+      <div *ngIf="this.SaleID !==null" class="col-md-6">
+        <label class="form-label">Amount(₹)</label>
+        <input type="number" min="0" class="form-control" [(ngModel)]="amountPaidremaining" (input)="calculateBalance()"
+          placeholder="Enter amount ">
+      </div>
+      <div *ngIf="this.SaleID == null" class="col-md-6">
+        <label class="form-label">Balance Payment (₹)</label>
+        <input type="number" class="form-control" [value]="balancePayment" readonly>
+      </div>
+    </div>
+    <div class="row justify-content-start mt-3">
+      <div *ngIf="this.SaleID !=null" class="col-md-6">
+        <label class="form-label">Balance Payment (₹)</label>
+        <input type="number" min="" class="form-control" [value]="balancePayment" readonly>
+      </div>
+      <!-- Payment Mode -->     
+      <div class="col-md-6">
+        <label class="form-label">Payment Mode</label>
 
-  </div>
+        <select [(ngModel)]="PaymentMode" class="form-control">
+          <option value="" disabled selected>-- Select Payment Mode --</option>
+          <option *ngFor="let mode of paymentModes" [value]="mode">
+            {{ mode }}
+          </option>
+        </select>
+
+      </div>
+
+    </div>
     <!-- Submit Button -->
     <div class="text-end mt-4">
-      <button class="btn btn-primary px-4 py-2" (click)="logProducts()">Submit & Print</button>
+      <button class="btn btn-primary px-4 py-2" (click)="logProducts()">Submit</button>
     </div>
   </div>
-  
-    </div>
+
+</div>
 
 
 

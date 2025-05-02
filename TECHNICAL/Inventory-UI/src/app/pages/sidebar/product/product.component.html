@@ -188,7 +188,7 @@
                       </div>
                       <div class="col-sm-6 col-12 mb-3">
                         <label class="form-label fw-semibold text-muted">Purchase Price <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" formControlName="Price" placeholder="Enter Purchase price*">
+                        <input type="text" min="0" class="form-control" formControlName="Price" placeholder="Enter Purchase price*">
                         <div *ngIf="productform.get('Price')?.invalid && productform.get('Price')?.touched" class="text-danger text-sm mt-1">
                           Product Price is required.
                         </div>
@@ -206,7 +206,7 @@
                     </div>
                       <div class="col-sm-6 col-12 mb-3">
                         <label class="form-label fw-semibold text-muted">Quantity <span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" formControlName="Quantity" placeholder="Enter Quantity*">
+                        <input type="number"  min="1" class="form-control" formControlName="Quantity" placeholder="Enter Quantity*">
                         <div *ngIf="productform.get('Quantity')?.invalid && productform.get('Quantity')?.touched" class="text-danger text-sm mt-1">
                           Product Quantity is required.
                         </div>

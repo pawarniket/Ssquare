@@ -23,7 +23,7 @@ salesearchtext:any;
   Clientform!: FormGroup;
   BillForm = true;
   salehistory = false;
-  SaleID: any;
+  SaleID: any = null;
   productform!: FormGroup;
   selectedClient: string = '';
   errorMessage: string = '';
@@ -39,7 +39,7 @@ salesearchtext:any;
   saleInvoicelist: any = [];
 
   currentPage = 1;
-  itemsPerPage = 5;
+  itemsPerPage = 10;
   selectedProductID: any = '';
   paymentmethod: any = '';
 
@@ -49,10 +49,12 @@ salesearchtext:any;
   selectedProducts: any[] = [];  // Store selected products
   isSidebarVisible = false;      // Sidebar visibility
   amountPaid: number = 0;
+  amountPaidremaining: number = 0;
+
   balancePayment: number = 0;
   filterBookingData: any = [];
   paymentStatus: string = "";
-  PaymentMode: any;
+  PaymentMode: any="";
 
   constructor(private products: ProductService, private Clientservice: ClientService,
     private ProductcategoryService: ProductcategoryService,
@@ -88,9 +90,29 @@ salesearchtext:any;
   }
 
 
-  calculateBalance() {
-    this.balancePayment = (this.grandTotal || 0) - (this.amountPaid || 0);
+  // calculateBalance() {
+  //   this.balancePayment = (this.grandTotal || 0) - (this.amountPaid || 0);
+  //   this.balancePayment = (this.grandTotal || 0) - (this.amountPaidremaining || 0);
+
+  // }
+  calculateBalance(): void {
+    // Ensure valid values for amountPaid and amountPaidremaining
+    const paid = this.amountPaid || 0;
+    const remaining = this.SaleID ? this.amountPaidremaining || 0 : 0;
+  
+    // Calculate the total amount paid (paid + remaining)
+    const totalPaid = paid + remaining;
+  
+    // Calculate the balance payment and ensure it doesn't go negative
+    this.balancePayment = Math.max(0, this.grandTotal - totalPaid);
+      // Check if the entered amount exceeds the balance
+  if (this.amountPaidremaining > this.balancePayment) {
+    this.errorMessage = 'Entered amount exceeds the balance payment.';
+  } else {
+    this.errorMessage = ''; // Clear error message if the condition is met
   }
+  }
+  
 
   getclient() {
     const val = {
@@ -100,10 +122,13 @@ salesearchtext:any;
         console.log("response", response);
         this.ClientList = JSON.parse(response['message']);
         console.log("hii", this.ClientList);
-
+        this.ClientList.sort((a: { ClientName: string; }, b: { ClientName: string; }) =>
+          a.ClientName.toLowerCase().localeCompare(b.ClientName.toLowerCase())
+        );
         if (this.ClientList[0]?.Message === 'Data not found') {
           this.ClientList = [];
         }
+        
       });
   }
 
@@ -117,7 +142,9 @@ salesearchtext:any;
         console.log("response", response);
         let allProducts = JSON.parse(response['message']);
         this.StockList = allProducts.filter((p: any) => p.StockQuantity >= 1);
-
+        this.StockList.sort((a: { ProductName: string; }, b: { ProductName: string; }) =>
+          a.ProductName.toLowerCase().localeCompare(b.ProductName.toLowerCase())
+        );
         if (this.StockList[0]?.Message === 'Data not found') {
           this.StockList = [];
         }
@@ -165,12 +192,13 @@ salesearchtext:any;
     this.selectedPrice = 0;
     this.amountPaid = 0;
     this.balancePayment = 0;
-
     this.quantity = 1;
     this.totalPrice = 0;
     this.selectedClient = "";
     this.grandTotal = 0;
     this.billItems = [];
+    this.SaleID = null; 
+
   }
 
 
@@ -217,8 +245,8 @@ salesearchtext:any;
         SaleID: this.SaleID,
         ClientID: this.selectedClient,
         TotalAmount: this.grandTotal,
-        PaidAmount: this.amountPaid,
-        BalanceAmount: this.balancePayment,
+        PaidAmount: this.amountPaid +this.amountPaidremaining,
+        BalanceAmount: this.balancePayment ,
         PaymentStatus: this.paymentStatus,
         PaymentMode: this.PaymentMode
       }
@@ -232,6 +260,7 @@ salesearchtext:any;
           this.salehistory = false;
           this.getSales();
           this.Resetform()
+
         }
       });
     }
@@ -581,6 +610,7 @@ salesearchtext:any;
 
   sortTable(column: string): void {
 
+console.log("column",column);
 
     // Toggle sort direction if the same column is clicked
     if (this.sortColumn === column) {
@@ -592,16 +622,11 @@ salesearchtext:any;
     }
 
     // Sort bookings based on the column and direction
-    this.filterBookingData.sort((a: any, b: any) => {
+    this.salelistdata.sort((a: any, b: any) => {
       let valueA, valueB;
 
-      if (column === 'PrimaryGuestName') {
-        // Parse PrimaryGuestName and get the Username
-        valueA = a.PrimaryGuestName ? JSON.parse(a.PrimaryGuestName)?.Username || '' : '';
-        valueB = b.PrimaryGuestName ? JSON.parse(b.PrimaryGuestName)?.Username || '' : '';
-      }
 
-      else if (column === 'PaymentStatus') {
+       if (column === 'PaymentStatus') {
         // Parse PrimaryGuestName and get the Username
         valueA = a.PaymentStatus;
         valueB = b.PaymentStatus;
@@ -636,6 +661,8 @@ salesearchtext:any;
     return name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : '';
   }
   getSortIcon(column: string): string {
+    console.log("column",column);
+    
     if (this.sortColumn === column) {
       return this.sortDirection === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
     }
@@ -657,6 +684,8 @@ salesearchtext:any;
   backToSaleProduct() {
     this.salehistory = false;
     this.BillForm = true;
+    this.Resetform();
+    this.SaleID = null; 
 
   }
   ClientName: any;
@@ -686,12 +715,13 @@ salesearchtext:any;
           <td>${index + 1}</td>
           <td>${item.ProductName}</td>
           <td class="text-center">${item.Quantity}</td>
+          <td class="text-end">₹${item.Selling_Price}</td>
           <td class="text-end">₹${item.Price}</td>
-          <td class="text-end">₹${item.TotalAmount}</td>
         </tr>`;
       }).join('');
+console.log("hii",billRows);
 
-      const grandTotal = this.saleInvoicelist.reduce((sum: number, item: any) => sum + (item.TotalAmount || 0), 0);
+      const grandTotal = this.saleInvoicelist.reduce((sum: number, item: any) => sum + (item.Price || 0), 0);
 
       const logoPath = `${location.origin}/assets/images/ssquarelogo/namelogo.png`;
       const popupWin = window.open('', '_blank', 'width=800,height=600');

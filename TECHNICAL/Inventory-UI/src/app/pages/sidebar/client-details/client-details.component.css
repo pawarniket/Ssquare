@@ -60,3 +60,6 @@ table, th, td {
     left: 718.8px !important;
     transform: none !important;
   }
+  .nav-link{
+    color: #000000 !important;
+  }
