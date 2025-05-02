@@ -30,7 +30,8 @@
           <nav class="iq-sidebar-menu">
             <ul id="iq-sidebar-toggle" class="iq-menu">
               <li class="nav-item " *ngFor="let m of userPermissions;">
-  
+                <ng-container *ngIf="!(this.USerRole === 'User' && m.MenuHeaderCaption === 'Sale-Dashboard')">
+
                 <a class="svg-icon" style="text-decoration: none" *ngIf="m.MenuHeaderURL"
                   routerLink="{{m.MenuHeaderURL}}">
                   <div [innerHTML]="getSanitizedSvgPath(m.MenuIconPath)"></div>
@@ -71,6 +72,7 @@
                     </li>
                   </ul>
                 </div>
+                </ng-container>
               </li>
   
   

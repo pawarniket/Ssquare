@@ -96,6 +96,7 @@ export class LayoutComponent {
   UserName: any;
   profilePic: any;
   loading: any;
+  USerRole:any;
 constructor(private  user :UserService,private router :Router,    private sanitizer:DomSanitizer,
   private ToolService:ProductService){
 }
@@ -123,6 +124,16 @@ constructor(private  user :UserService,private router :Router,    private saniti
 
   }
   ngOnInit(): void {
+    const encrypted = localStorage.getItem('currentUser');
+    if (encrypted) {
+
+      const decrypted = this.user.decryptData(encrypted);
+      this.currentUser = JSON.parse(decrypted);
+    }
+   this.USerRole= this.currentUser.Role
+    
+    console.log("this.currentUser",this.currentUser.Role);
+    
     // Subscribe to the tools observable manually
     this.toolsSubscription = this.ToolService.remainingTools$.subscribe({
       next: (tools) => {

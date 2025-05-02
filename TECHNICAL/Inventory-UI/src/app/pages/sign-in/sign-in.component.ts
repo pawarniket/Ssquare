@@ -66,14 +66,21 @@ this.response = response;
 
 if(response.status_code == 100){
   this.UserList = JSON.parse(this.response['message'])[0];
+console.log("this.UserList.Role ",this.UserList.Role );
 
   localStorage.setItem(
     'currentUser',
     this.user.encryptData(JSON.stringify(this.UserList, this.replacer))
 );
 this.user.isAuthenticated = true;
-
+if( this.UserList.Role == "admin"){
       this.router.navigate(['/StockManagement/Saledashboard']); // Default fallback route
+}
+else{
+  this.router.navigate(['/StockManagement/Product']); // Default fallback route
+
+}
+
 }
 else{
   Popupdisplay("User Not Found");

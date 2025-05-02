@@ -23,7 +23,9 @@ const routes: Routes = [
     canActivate: [AuthGuard],
 
     children:[
-      { path: 'Saledashboard', component: SaleDashboardComponent , canActivate: [AuthGuard],},
+      { path: 'Saledashboard', component: SaleDashboardComponent , canActivate: [AuthGuard],
+        data: { role: 'admin' } 
+      },
 
       { path: 'Product', component: ProductComponent , canActivate: [AuthGuard],
 
