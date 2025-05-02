@@ -170,6 +170,7 @@ this.JobCardServices.removeAt(index);
       if(data.status_code===100){
         this.jobcardDetails=JSON.parse(data["message"]);
         this.allJobcardDetails = [...this.jobcardDetails];
+        console.log("allJobcardDetails",this.allJobcardDetails)
         
       }
       
@@ -192,6 +193,7 @@ this.JobCardServices.removeAt(index);
                       <Quantity>${product.Quantity}</Quantity>
                       <Price>${product.Price}</Price>
                       <Minus>${product.Minus?product.Minus:0}</Minus>
+                      <IsEqual>${product.IsEqual?product.IsEqual:0}</IsEqual>  
                     </Product>`;
     });
 
@@ -300,7 +302,12 @@ addServices(){
           </Product>`;
         }else if(vehicleQty == selectedQty){
           const productsFormArray = this.jobCardForm.get('products') as FormArray;
-          productsFormArray.at(index).get('Quantity')?.setValue(0);
+          const productGroup = productsFormArray.at(index) as FormGroup;
+          if (!productGroup.get('IsEqual')) {
+            productGroup.addControl('IsEqual', new FormControl(1));
+          } else {
+            productGroup.get('IsEqual')?.setValue(1);
+          }
           console.log("this.jobCardForm.value.products",this.jobCardForm.value.products)
         }else if(vehicleQty < selectedQty){
           const shortage = selectedQty - vehicleQty;
@@ -328,8 +335,15 @@ addServices(){
     })
     console.log(xmlString);
   }
+
+  console.log("  const selectedProducts = this.jobCardForm.value.products;", this.jobCardForm.value.products);
+  
     }
   save(): void {
+    console.log("GrandTotal",this.jobCardForm.value.GrandTotal);
+    console.log("AmountPaid",this.jobCardForm.value.AmountPaid);
+    console.log("BalancePayment",this.jobCardForm.value.BalancePayment);
+    
 //     const vehicleProducts = JSON.parse(this.vehicleDetails.ProductList); // Assuming it's a JSON string
 //     const selectedProducts = this.jobCardForm.value.products;
 //     vehicleProducts.forEach((vehicleProduct:any) => {
@@ -356,7 +370,6 @@ addServices(){
      const JobCardServiceXML=this.generateJobserviceXML(this.jobCardForm.value.JobCardServices);
      
       const ProductXML=this.generateXML(this.jobCardForm.value.products)// Send this.jobCardForm.value to backend
-      console.log("ProductXML",ProductXML);
       
       const val={
         JobCardID:this.vehicleDetails.JobCardID?this.vehicleDetails.JobCardID:0,
@@ -377,16 +390,19 @@ addServices(){
       }
       this.JobCardService.InsertJobCard(val).subscribe((data)=>{
         if(data.status_code===100){
-        this.StockQuantity=[];
-        this.products.clear();
-        this.JobCardServices.clear();
+          console.log("val1",val)
+          
         this.showToast('added successfully!', 'success');
-        this.vehicleDetails='';
         this.getJobCard();
         this.getproduct();
+        this.JobCardServices.clear();
+        this.vehicleDetails='';
+        this.StockQuantity=[];
+        this.products.clear();
         }
       })
-      
+      console.log("val2",val)
+      console.log("this.jobCardForm.value.BalancePayment",this.jobCardForm.value.BalancePayment)
     
     } else {
       

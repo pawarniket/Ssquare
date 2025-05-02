@@ -80,12 +80,12 @@
           
               <!-- Show error if quantity exceeds stock -->
               <span class="text-danger" *ngIf="products.at(i).get('Quantity')?.errors?.['max']">
-                {{ StockQuantity[i] || 0 }} left — Quantity cannot exceed available stock
+                (Max {{(StockQuantity[i] + databaseStockqty[i]) || 0}} You can use)
               </span>
           
               <!-- Otherwise show normal stock left -->
               <ng-container *ngIf="!products.at(i).get('Quantity')?.errors?.['max']">
-                <span class="text-muted">({{ StockQuantity[i] || 0 }} left)</span>
+                <span class="text-muted">  ({{databaseStockqty[i]}} You have already used) + ({{ StockQuantity[i] || 0 }} left)=(Max {{(StockQuantity[i] + databaseStockqty[i]) || 0}} You can use)</span>
               </ng-container>
             </label>
             <input type="number"  [max]="(StockQuantity[i] +databaseStockqty[i]) || 0" min="1" formControlName="Quantity" class="form-control" placeholder="Quantity" (input)="onQuantityChange(i)"  [ngClass]="{ 'is-invalid': isProductInvalid(i, 'Quantity') }">
@@ -96,7 +96,7 @@
             <input type="number" formControlName="Price" class="form-control" placeholder="Price" [readonly]="true">
           </div>
           <div class="col-md-2">
-            <button type="button" class="btn btn-primary btn-sm w-100" (click)="deleteProduct(i)">
+            <button type="button" class="btn btn-primary btn-sm w-100" style="margin-top: 7%;" (click)="deleteProduct(i)">
               <i class="fa-solid fa-trash"></i> Delete
             </button>
           </div>
