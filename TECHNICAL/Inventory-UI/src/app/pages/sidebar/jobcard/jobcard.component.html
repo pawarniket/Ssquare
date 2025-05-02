@@ -299,7 +299,7 @@
             <td>
               <div class="d-flex justify-content-center gap-2">
                 <button class="btn btn-primary btn-sm" 
-                (click)="printInvoice()">
+                (click)="printSaleInvoice(Clientlist)">
                 <i class="fas fa-file-invoice"></i> Invoice
               </button>
                 <button *ngIf="Clientlist.PaymentStatus !== 'Completed'" class="btn btn-primary btn-sm" 

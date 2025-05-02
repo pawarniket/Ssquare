@@ -984,4 +984,233 @@ markAllAsTouched() {
   });
 }
 
+
+ProductList:any=[];
+ServiceList:any=[];
+printSaleInvoice(sale: any): void {
+  console.log("Clientlist", sale);
+  this.ProductList = JSON.parse(sale.ProductList);
+  this.ServiceList = JSON.parse(sale.ServiceList);
+
+  setTimeout(() => {
+    if (!this.allJobcardDetails || this.allJobcardDetails.length === 0) {
+      alert('Sale invoice data not available.');
+      return;
+    }
+
+    const jobData = sale;
+    const clientPhone = jobData?.Phone || 'N/A';
+    const clientName = jobData?.ClientName || 'N/A';
+    const clientEmail = jobData?.Email || 'N/A';
+
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString('en-GB', {
+      day: '2-digit', month: 'short', year: 'numeric'
+    }).replace(/ /g, '-');
+
+    const invoiceNo = `INV-${currentDate.getFullYear()}${(currentDate.getMonth() + 1).toString().padStart(2, '0')}${currentDate.getDate().toString().padStart(2, '0')}`;
+    const jobCardNo = jobData?.JobCardID || 'N/A';
+    const logoPath = `${location.origin}/assets/images/ssquarelogo/namelogo.png`;
+
+    const Brand = jobData?.Brand || 'N/A';
+    const vehicleModel = jobData?.Model || 'N/A';
+    const VehicleNumber = jobData?.VehicleNumber || 'N/A';
+    const Color = jobData?.Color || 'N/A';
+
+    const billRows = this.ProductList.map((item: any) => `
+      <tr>
+        <td>${item.ProductName}</td>
+        <td>${item.Quantity}</td>
+        <td>₹${item.Selling_Price}</td>
+        <td>₹${item.Selling_Price * item.Quantity}</td>
+      </tr>
+    `).join('');
+
+    const serviceRows = this.ServiceList.map((service: any) => `
+      <tr>
+        <td>${service.ServiceName}</td>
+        <td>-</td>
+        <td>₹${service.ServiceCost}</td>
+        <td>₹${service.ServiceCost}</td>
+      </tr>
+    `).join('');
+
+    const grandTotal = sale.TotalAmount;
+    const balanceAmount = jobData?.BalanceAmount || 0;
+    const paidAmount = jobData?.PaidAmount || 0;
+    const paymentMode = jobData?.PaymentMode || 'N/A';
+
+    const popupWin = window.open('', '_blank', 'width=900,height=700');
+
+    if (popupWin) {
+      const htmlContent = `
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <title>Sale Invoice</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            :root { --primary-brown: #6a2c1a; }
+
+          body {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              background-color: #f4f7fc;
+              color: #333;
+          }
+          .invoice-container {
+              background-color: #fff;
+              border-radius: 8px;
+              padding: 30px;
+              max-width: 900px;
+              margin: 0 auto;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+          }
+          .invoice-header {
+              text-align: center;
+              margin-bottom: 30px;
+          }
+          .invoice-header h1 {
+              font-size: 36px;
+              color: #6a2c1a;
+          }
+          .section-title {
+              font-size: 20px;
+              margin-top: 20px;
+              color: #6a2c1a;
+              border-bottom: 2px solid #6a2c1a;
+              padding-bottom: 5px;
+              font-weight: bold;
+          }
+          .invoice-table th,
+          .invoice-table td {
+              text-align: left;
+              padding: 10px;
+              font-size: 16px;
+          }
+          .invoice-table th {
+              background-color: #f7e6d5;
+              color: #6a2c1a;
+          }
+          .total-row {
+              font-size: 18px;
+              font-weight: bold;
+              color: #6a2c1a;
+          }
+          .footer {
+              margin-top: 40px;
+              text-align: center;
+              font-size: 16px;
+              color: #6a2c1a;
+          }
+               . btn-primary {
+                background-color: var(--primary-brown);
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                font-size: 14px;
+                border-radius: 4px;
+              }
+              @media print {
+                .print-btn {
+                  display: none !important;
+                }
+        </style>
+      </head>
+      <body>
+        <div class="container mt-5">
+          <div class="invoice-container">
+          <div class="text-end mb-3">
+        <div class="print-btn text-right">
+  <button class="btn btn-primary"style="
+    background: #8c1818;
+" onclick="window.print()">Print Invoice</button>
+</div>
+            </div>
+            <div class="invoice-header">
+                  <img src="${logoPath}" class="logo" alt="Ssquare Logo" style="
+    width: 405px;
+    height: 77px;
+">
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Invoice Number:</strong> ${invoiceNo}</p>
+                <p><strong>Date of Issue:</strong> ${formattedDate}</p>
+                <p><strong>Job Card Number:</strong> ${jobCardNo}</p>
+              </div>
+              <div class="col-md-6 text-right">
+                <p><strong>Customer Name:</strong> ${clientName}</p>
+                <p><strong>Contact Number:</strong> ${clientPhone}</p>
+                <p><strong>Email:</strong> ${clientEmail}</p>
+              </div>
+            </div>
+
+            <div class="section-title">Vehicle Information</div>
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Brand:</strong> ${Brand}</p>
+                <p><strong>Model:</strong> ${vehicleModel}</p>
+                <p><strong>Vehicle Number:</strong> ${VehicleNumber}</p>
+                <p><strong>Vehicle Color:</strong> ${Color}</p>
+              </div>
+            </div>
+
+            <div class="section-title">Job Details</div>
+            <table class="table table-bordered invoice-table">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Quantity</th>
+                  <th>Unit Price</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${billRows}
+                ${serviceRows}
+              </tbody>
+            </table>
+
+            <table class="table table-bordered">
+              <tr class="total-row">
+                <td>Subtotal</td>
+                <td>₹${grandTotal.toFixed(2)}</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total Amount</td>
+                <td>₹${grandTotal.toFixed(2)}</td>
+              </tr>
+            </table>
+
+            <div class="section-title">Payment Information</div>
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Payment Method:</strong> ${paymentMode}</p>
+                <p><strong>Amount Paid:</strong> ₹${paidAmount}</p>
+              </div>
+              <div class="col-md-6 text-right">
+                <p><strong>Balance Due:</strong> ₹${balanceAmount}</p>
+              </div>
+            </div>
+
+            <div class="footer">
+              <p><strong>Thank you for choosing SSquare by Salvi Services!</strong></p>
+              <p>We look forward to serving you again.</p>
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>`;
+
+      popupWin.document.open();
+      popupWin.document.write(htmlContent);
+      popupWin.document.close();
+    }
+  }, 500);
+}
+
+
+
+
 }
