@@ -140,3 +140,14 @@ table, th, td {
 
 
 
+  .custom-print-btn {
+    background-color: transparent;
+ color: #000000;
+    padding: 5px 10px;
+  }
+  
+  .custom-print-btn:hover {
+    background-color: transparent;
+    color: black;
+  }
+  

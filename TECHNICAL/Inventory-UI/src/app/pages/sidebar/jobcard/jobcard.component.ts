@@ -10,6 +10,10 @@ import { UserService } from './../../../core/service/user/user.service';
   styleUrl: './jobcard.component.css'
 })
 export class JobcardComponent {
+  today: string = new Date().toISOString().split('T')[0]; // Formats as 'YYYY-MM-DD'
+  selecteddate:any;
+  selectedPaymentStatus: string = ''; // Store selected payment status
+
   isJobCard=false;
   toastVisible = false;
   toastMessage = '';
@@ -24,8 +28,9 @@ export class JobcardComponent {
   filterBookingData: any;
   mechanicList :any= [];
   currentPage = 1;
-  itemsPerPage = 5;
+  itemsPerPage = 10;
   searchText: any;
+  salesearchtext:any;
 
   statusList = ['In Process', 'Completed'];
   paymentModes = ['Cash', 'Card', 'UPI', 'Net Banking'];
@@ -608,24 +613,55 @@ isDisabled: selectedProductIDs.includes(product.ProductID)
   
 
   onSearch(event: any) {
-    this.searchText = event.target.value;
+    this.salesearchtext = event.target.value;
+    console.log("salesearchtext",this.salesearchtext);
+    
     this.applySearch();
   }
 
 
   
-  applySearch() {
-    const searchValue = this.searchText?.trim().toLowerCase();
+  // applySearch() {
+  //   const searchValue = this.searchText?.trim().toLowerCase();
+  //   const selectedDate = this.selecteddate ? new Date(this.selecteddate) : null;
+
+  //   if (!searchValue) {
+  //     this.jobcardDetails = [...this.allJobcardDetails]; // Reset to original
+  //   } else {
+  //     this.jobcardDetails = this.allJobcardDetails.filter((jobcard: any) => {
+
+  //       const matchesDate =
+  //       !selectedDate || new Date(jobcard.JobCardDate).toDateString() === selectedDate.toDateString();
   
-    if (!searchValue) {
-      this.jobcardDetails = [...this.allJobcardDetails]; // Reset to original
-    } else {
-      this.jobcardDetails = this.allJobcardDetails.filter((jobcard: any) => {
-        return Object.values(jobcard).some((val) =>
+  //       return Object.values(jobcard).some((val) =>
+  //         String(val).toLowerCase().includes(searchValue)
+  //       );
+  //     });
+
+
+  //   }
+  // }
+  
+  applySearch() {
+    const searchValue = this.salesearchtext?.trim().toLowerCase();
+    const selectedDate = this.selecteddate ? new Date(this.selecteddate) : null;
+    const selectedStatus = this.selectedPaymentStatus;
+  
+    this.jobcardDetails = this.jobcardDetails.filter((jobcard: any) => {
+      const matchesDate =
+        !selectedDate || new Date(jobcard.JobCardDate).toDateString() === selectedDate.toDateString();
+  
+      const matchesSearch =
+        !searchValue ||
+        Object.values(jobcard).some((val) =>
           String(val).toLowerCase().includes(searchValue)
         );
-      });
-    }
+  
+      const matchesStatus =
+        !selectedStatus || jobcard.PaymentStatus === selectedStatus;
+  
+      return matchesDate && matchesSearch && matchesStatus;
+    });
   }
   
   
@@ -1189,10 +1225,7 @@ printSaleInvoice(sale: any): void {
             </table>
 
             <table class="table table-bordered">
-              <tr class="total-row">
-                <td>Subtotal</td>
-                <td>₹${grandTotal.toFixed(2)}</td>
-              </tr>
+     
               <tr class="total-row">
                 <td>Total Amount</td>
                 <td>₹${grandTotal.toFixed(2)}</td>
@@ -1227,6 +1260,112 @@ printSaleInvoice(sale: any): void {
 }
 
 
+resetfilters(): void {
+  this.selectedPaymentStatus = '';
+  this.selecteddate = '';
+  this.salesearchtext = '';
+  this.jobcardDetails = [...this.allJobcardDetails]; // Reset to full original list
+}
+
+
+printTable() {
+  const formatDates = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = date.toLocaleString('en-US', { month: 'short' });
+    const year = date.getFullYear();
+    const hours = date.getHours() % 12 || 12;
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+    return `${day} ${month} ${year}, ${hours}:${minutes} ${ampm}`;
+  };
+
+  const printContent = document.createElement('div');
+  printContent.id = 'printableStockTable';
+  printContent.innerHTML = `
+    <h2><strong>Product Stock List</strong></h2>
+    <br>
+    <table>
+    <thead>
+      <tr>
+        <th>JobCardID</th>
+        <th>Client Name</th>
+        <th>Phone Number</th>
+        <th>Mechanic Name</th>
+        <th>Paid Amount</th>
+        <th>Balance Amount</th>
+        <th>Total Amount</th>
+        <th>Sale Date</th>
+        <th>Payment Mode</th>
+        <th>Payment Status</th>
+
+      </tr>
+    </thead>
+      <tbody>
+        ${this.allJobcardDetails.map((item: any) => `
+          <tr>
+          
+            <td>${item.JobCardID || '-'}</td>          
+            <td>${item.ClientName || '-'}</td>
+            <td>${item.Phone || '-'}</td>
+            <td>${item.MechanicName || '-'}</td>
+            <td>${item.PaidAmount ? item.PaidAmount + ' ' : '0'}</td>
+            <td>${item.BalanceAmount ? item.BalanceAmount + ' ' : '0'}</td>
+            <td>${item.TotalAmount ? item.TotalAmount + ' ' : '0'}</td>
+            <td>${item.SaleDate ? item.SaleDate + ' ' : '-'}</td>     
+            <td>${item.PaymentMode ? item.PaymentMode + ' ' : '-'}</td>        
+            <td>${item.PaymentStatus ? item.PaymentStatus + ' ' : '-'}</td>
+
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+
+  document.body.appendChild(printContent);
+
+  const printStyles = document.createElement('style');
+  printStyles.innerHTML = `
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printableStockTable, #printableStockTable * {
+        visibility: visible;
+      }
+      #printableStockTable {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+      h2 {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+      th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2 !important;
+      }
+    }
+  `;
+
+  document.head.appendChild(printStyles);
+
+  window.print();
+
+  document.body.removeChild(printContent);
+  document.head.removeChild(printStyles);
+}
 
 
 }
