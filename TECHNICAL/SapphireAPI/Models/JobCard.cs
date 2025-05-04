@@ -5,6 +5,7 @@ namespace MS.SSquare.API.Models
     public class JobCard
     {
         public int? JobCardID { get; set; }
+        public int? ProductID { get; set; }
         public int? VehicleID { get; set; }
         public int? ClientID { get; set; }
         public int? KmReading { get; set; }

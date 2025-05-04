@@ -163,7 +163,7 @@ namespace MS.SSquare.API.Controllers
 
 
 
-        [Route("jobcard/update")]
+            [Route("jobcard/update")]
             [HttpPost]
             public IActionResult vehicleUpdate(JobCard jobcard)
             {
@@ -205,6 +205,34 @@ namespace MS.SSquare.API.Controllers
                 }
             }
 
+
+
+        [Route("jobcardproduct/delete")]
+        [HttpPost]
+        public IActionResult DeleteJobCardProduct(JobCard jobcard)
+        {
+
+
+            try
+            {
+                DBUtility oDBUtility = new DBUtility(_configurationIG);
+
+               
+                    oDBUtility.AddParameters("@JobCardID", DBUtilDBType.Integer, DBUtilDirection.In, 100, jobcard.JobCardID);
+               
+                    oDBUtility.AddParameters("@ProductID", DBUtilDBType.Integer, DBUtilDirection.In, 100, jobcard.ProductID);
+
+                DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_Delete_JobCardProduct");
+                oServiceRequestProcessor = new ServiceRequestProcessor();
+                return Ok(oServiceRequestProcessor.ProcessRequest(ds));
+
+            }
+            catch (Exception ex)
+            {
+                oServiceRequestProcessor = new ServiceRequestProcessor();
+                return BadRequest(oServiceRequestProcessor.onError(ex.Message));
+            }
         }
+    }
     
 }

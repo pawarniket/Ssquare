@@ -68,7 +68,7 @@
         <div class="col-md-12 form-row align-items-center">
           <div class="col-md-4">
             <label for="SelectProduct">Select Product:</label>
-            <select formControlName="ProductID" class="form-control" (change)="onProductSelect(i)"  [ngClass]="{ 'is-invalid': isProductInvalid(i, 'ProductID') }">
+            <select formControlName="ProductID" class="form-control" (change)="onProductSelect(i)" >
               <option [ngValue]="0">-- Select Product --</option>
               <option *ngFor="let product of productList" [value]="product.ProductID" [disabled]="product.isDisabled">{{ product.ProductName }}</option>
             </select>
@@ -85,10 +85,10 @@
           
               <!-- Otherwise show normal stock left -->
               <ng-container *ngIf="!products.at(i).get('Quantity')?.errors?.['max']">
-                <span class="text-muted">  ({{databaseStockqty[i]}} You have already used) + ({{ StockQuantity[i] || 0 }} left)=(Max {{(StockQuantity[i] + databaseStockqty[i]) || 0}} You can use)</span>
+                <span class="text-muted">  ({{databaseStockqty[i]||0}} You have already used) + ({{ StockQuantity[i] || 0 }} left)=(Max {{(StockQuantity[i] + (databaseStockqty[i]||0)) || 0}} You can use)</span>
               </ng-container>
             </label>
-            <input type="number"  [max]="(StockQuantity[i] +databaseStockqty[i]) || 0" min="1" formControlName="Quantity" class="form-control" placeholder="Quantity" (input)="onQuantityChange(i)"  [ngClass]="{ 'is-invalid': isProductInvalid(i, 'Quantity') }">
+            <input type="number"  [max]="(StockQuantity[i] + (databaseStockqty[i]||0)) || 0" min="1" formControlName="Quantity" class="form-control" placeholder="Quantity" (input)="onQuantityChange(i)"  [ngClass]="{ 'is-invalid': isProductInvalid(i, 'Quantity') }">
           </div>
           
           <div class="col-md-2">

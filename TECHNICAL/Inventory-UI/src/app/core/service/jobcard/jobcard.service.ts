@@ -20,6 +20,8 @@ export class JobcardService {
    }
    UpdateJobCard(val: any) {
      return this.masterService.post(environment.api + APIConstant.JobCard.UpdateJobCard, val)
- 
    }
+   JobcardProductDelete(val: any) {
+    return this.masterService.post(environment.api + APIConstant.JobCard.DeleteJobCardProduct, val)
+  }
 }

@@ -11,67 +11,40 @@ import { UserService } from './../../../core/service/user/user.service';
 })
 export class JobcardComponent {
   today: string = new Date().toISOString().split('T')[0]; // Formats as 'YYYY-MM-DD'
-  selecteddate:any;
+  selecteddate: any;
   selectedPaymentStatus: string = ''; // Store selected payment status
-
-  isJobCard=false;
+  isProduct = false;
+  isJobCard = false;
   toastVisible = false;
   toastMessage = '';
   toastColor: 'primary' | 'success' | 'danger' | 'warning' | 'info' = 'primary';
   jobCardForm: FormGroup;
   vehicleDetails: any;
-  productList :any= [];
+  productList: any = [];
   productAmounts: number[] = [];
-  jobcardDetails:any;
+  jobcardDetails: any;
   sortDirection: 'asc' | 'desc' | 'none' = 'none';
   sortColumn: string = ''; // Column being sorted
   filterBookingData: any;
-  mechanicList :any= [];
+  mechanicList: any = [];
   currentPage = 1;
   itemsPerPage = 10;
   searchText: any;
-  salesearchtext:any;
+  salesearchtext: any;
 
   statusList = ['In Process', 'Completed'];
   paymentModes = ['Cash', 'Card', 'UPI', 'Net Banking'];
   grandTotal: any;
-  StockQuantity: any=[];
-  databaseStockqty:any=[];
+  StockQuantity: any = [];
+  databaseStockqty: any = [];
   allJobcardDetails: any;
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
-    private JobCardService :JobcardService,
-    private ProductService:ProductService,
-    private UserService:UserService,
-  private router: Router) {
-    // this.jobCardForm = this.fb.group({
-    //   customer: this.fb.group({
-    //     name: ['', Validators.required],
-    //     phone: ['', Validators.required]
-    //   }),
-    //   vehicle: this.fb.group({
-    //     number: ['', Validators.required],
-    //     model: ['', Validators.required],
-    //     color: ['', Validators.required],
-    //     kmReading: ['', Validators.required],
-    //   }),
-    //   service: this.fb.group({
-    //     work: ['', Validators.required]
-    //   }),
-    //   products: this.fb.array([
-    //     this.createProduct()
-    //   ]),
-    //   JobCardServices:this.fb.array([
-    //     this.createJobCardServices()
-    //   ]),
-    //   remarks: [''],
-    //   mechanicName: ['',Validators.required], 
-    //   status: ['',Validators.required],           
-    //   paymentMode: ['',Validators.required],
-    //   AmountPaid: [0,Validators.required],
-    //   BalancePayment: [0,Validators.required],
-    //   GrandTotal: [0,Validators.required] 
-    // });
+    private JobCardService: JobcardService,
+    private ProductService: ProductService,
+    private UserService: UserService,
+    private router: Router) {
+
     this.jobCardForm = this.fb.group({
       customer: this.fb.group({
         name: ['', Validators.required],
@@ -92,7 +65,7 @@ export class JobcardComponent {
       JobCardServices: this.fb.array([
         this.createJobCardServices()
       ]),
-      remarks: ['',Validators.required], // Optional field
+      remarks: ['', Validators.required], // Optional field
       mechanicName: [0, Validators.required],
       status: ['', Validators.required],
       paymentMode: ['', Validators.required],
@@ -100,86 +73,79 @@ export class JobcardComponent {
       BalancePayment: [0, [Validators.required, Validators.min(0)]],
       GrandTotal: [0, [Validators.required, Validators.min(0)]]
     });
-    
+
   }
   ngOnInit() {
     this.setupFormValueChangeListeners();
-    const role={Role:"User"}
-    this.UserService.getuser(role).subscribe((data:any)=>{
-      if(data.status_code===100){
-        this.mechanicList=JSON.parse(data["message"])
-        
+    const role = { Role: "User" }
+    this.UserService.getuser(role).subscribe((data: any) => {
+      if (data.status_code === 100) {
+        this.mechanicList = JSON.parse(data["message"])
+
       }
     })
-    this.route.queryParams.subscribe((params:any) => {
-      if(params && params.ClientName &&params.Phone&&params.VehicleNumber&&params.Model&&params.Color){
+    this.route.queryParams.subscribe((params: any) => {
+      if (params && params.ClientName && params.Phone && params.VehicleNumber && params.Model && params.Color) {
         this.vehicleDetails = params;
         ;
         this.jobCardForm.patchValue({
           customer: {
-            name:  this.vehicleDetails.ClientName,
-            phone:  this.vehicleDetails.Phone
+            name: this.vehicleDetails.ClientName,
+            phone: this.vehicleDetails.Phone
           },
           vehicle: {
-            number:  this.vehicleDetails.VehicleNumber,
-            model:  this.vehicleDetails.Model,
-            color:  this.vehicleDetails.Color
+            number: this.vehicleDetails.VehicleNumber,
+            model: this.vehicleDetails.Model,
+            color: this.vehicleDetails.Color
           }
         });
-      }else{
-        this.vehicleDetails='';
-       this.getJobCard();
+      } else {
+        this.vehicleDetails = '';
+        this.getJobCard();
       }
-     
-      
+
+
     });
-  //   const val={}
-  //   this.ProductService.getProduct(val).subscribe((data)=>{
-  //     if(data.status_code===100){
-  //       this.productList=JSON.parse(data["message"]);
-  //       this.productList=this.productList.filter((item: any) => item.StockQuantity != 0);
-        
-  //     }
-  // })
-  this.getproduct();
+
+    this.getproduct();
   }
-getproduct(){
-  const val={}
-    this.ProductService.getProduct(val).subscribe((data)=>{
-      if(data.status_code===100){
-        this.productList=JSON.parse(data["message"]);
-        console.log("this.productList",this.productList);
-        
-        this.productList=this.productList.filter((item: any) => item.StockQuantity != 0);
-        
+  getproduct() {
+    const val = {}
+    this.ProductService.getProduct(val).subscribe((data) => {
+      if (data.status_code === 100) {
+        this.productList = JSON.parse(data["message"]);
+        console.log("this.productList", this.productList);
+
+        this.productList = this.productList.filter((item: any) => item.StockQuantity != 0);
+
       }
-  })
-}
-  deleteService(index: number){
-
-if (index===0 ){
-  this.JobCardServices.at(0).reset({
-    JobCardServiceName: '',
-    Amount: ''
-  });
-  return ;
-}
-else{
-
-this.JobCardServices.removeAt(index);
-}
+    })
   }
-  getJobCard(){
-    const val={}
-    this.JobCardService.GetJobCard(val).subscribe((data)=>{
-      if(data.status_code===100){
-        this.jobcardDetails=JSON.parse(data["message"]);
+  deleteService(index: number) {
+
+    if (index === 0) {
+      this.JobCardServices.at(0).reset({
+        JobCardServiceName: '',
+        Amount: ''
+      });
+      return;
+    }
+    else {
+
+      this.JobCardServices.removeAt(index);
+    }
+  }
+  getJobCard() {
+    const val = {}
+    this.JobCardService.GetJobCard(val).subscribe((data) => {
+      if (data.status_code === 100) {
+        this.jobcardDetails = JSON.parse(data["message"]);
         this.allJobcardDetails = [...this.jobcardDetails];
-        console.log("allJobcardDetails",this.allJobcardDetails)
-        
+        console.log("allJobcardDetails", this.allJobcardDetails)
+
       }
-      
-  })
+
+    })
   }
   back() {
     if (this.isJobCard) {
@@ -188,17 +154,17 @@ this.JobCardServices.removeAt(index);
       this.router.navigate(['/StockManagement/ClientDetails']);
     }
   }
-  
+
   generateXML(products: any): string {
     let xmlString = '<Products>';
 
-    products.forEach((product:any) => {
+    products.forEach((product: any) => {
       xmlString += `<Product>
                       <ProductID>${product.ProductID}</ProductID>
                       <Quantity>${product.Quantity}</Quantity>
                       <Price>${product.Price}</Price>
-                      <Minus>${product.Minus?product.Minus:0}</Minus>
-                      <IsEqual>${product.IsEqual?product.IsEqual:0}</IsEqual>  
+                      <Minus>${product.Minus ? product.Minus : 0}</Minus>
+                      <IsEqual>${product.IsEqual ? product.IsEqual : 0}</IsEqual>  
                     </Product>`;
     });
 
@@ -209,7 +175,7 @@ this.JobCardServices.removeAt(index);
   generateJobserviceXML(JobCardServices: any): string {
     let xmlString = '<JobCardServices>';
 
-    JobCardServices.forEach((JobCardService:any) => {
+    JobCardServices.forEach((JobCardService: any) => {
       xmlString += `<JobCardService>
                       <ServiceName>${JobCardService.JobCardServiceName}</ServiceName>
                       <ServiceCost>${JobCardService.Amount}</ServiceCost>
@@ -222,9 +188,9 @@ this.JobCardServices.removeAt(index);
   }
   createProduct(): FormGroup {
     return this.fb.group({
-      ProductID: [0, Validators.required],
-      Quantity: [1, [Validators.required, Validators.min(1)]],
-      Price: [0, Validators.required]
+      ProductID: [0],
+      Quantity: [0],
+      Price: [0]
     });
   }
   createJobCardServices(): FormGroup {
@@ -233,7 +199,7 @@ this.JobCardServices.removeAt(index);
       Amount: [0, [Validators.required, Validators.min(0)]]
     });
   }
-  
+
 
   get products(): FormArray {
     return this.jobCardForm.get('products') as FormArray;
@@ -246,66 +212,77 @@ this.JobCardServices.removeAt(index);
   addProduct(): void {
     const lastProduct = this.products.at(this.products.length - 1);
     const selectedProductIDs = this.products.controls
-    .map(control => control.get('ProductID')?.value)
-    .filter(id => id); // filter out empty or null values
+      .map(control => control.get('ProductID')?.value)
+      .filter(id => id); // filter out empty or null values
 
-  this.productList = this.productList.map((product:any) => ({
-    ...product,
-    isDisabled: selectedProductIDs.includes(product.ProductID)
-  }));
-    
+    this.productList = this.productList.map((product: any) => ({
+      ...product,
+      isDisabled: selectedProductIDs.includes(product.ProductID)
+    }));
+
     if (lastProduct && lastProduct.invalid) {
       this.showToast('Please fill required fields!', 'danger');
-      return; 
-    }else{
-    this.products.push(this.createProduct());
+      return;
+    } else {
+      this.products.push(this.createProduct());
+    }
   }
-}
 
-addServices(){
-  const lastProduct = this.JobCardServices.at(this.JobCardServices.length - 1);
-  if (lastProduct && lastProduct.invalid) {
-    this.showToast('Please fill required fields!', 'danger');
-    return; 
-  }else{
-  this.JobCardServices.push(this.createJobCardServices());
-}
-}
+  addServices() {
+    const lastProduct = this.JobCardServices.at(this.JobCardServices.length - 1);
+    if (lastProduct && lastProduct.invalid) {
+      this.showToast('Please fill required fields!', 'danger');
+      return;
+    } else {
+      this.JobCardServices.push(this.createJobCardServices());
+    }
+  }
   deleteProduct(index: number): void {
-    if (index===0 ){
+    const productToDelete = this.products.at(index).value;
+    if (productToDelete.ProductID > 0) {
+      const val = {
+        JobCardID: this.vehicleDetails.JobCardID ? this.vehicleDetails.JobCardID : 0,
+        ProductID: productToDelete.ProductID ? productToDelete.ProductID : 0
+      }
+      this.JobCardService.JobcardProductDelete(val).subscribe((data: any) => {
+        console.log("JobcardProductDelete", data)
+      })
+    }
+    console.log("Deleting product at index:", index, "=>", productToDelete);
+    this.databaseStockqty = [];
+    this.StockQuantity[index] = [];
+    if (index === 0) {
       this.products.at(0).reset({
         ProductID: '',
         Quantity: ''
       });
-      return ;
-    }
-    else{
-
-    this.products.removeAt(index);
+    } else {
+      this.products.removeAt(index);
     }
   }
-  generateShortageXml(){
+
+  generateShortageXml() {
     const vehicleProducts = JSON.parse(this.vehicleDetails.ProductList); // JSON string to array
     const selectedProducts = this.jobCardForm.value.products;
-    console.log("selectedProducts",selectedProducts)
+    console.log("selectedProducts", selectedProducts)
     let xmlString = '<Products>';
     let hasShortage = false;
-    vehicleProducts.forEach((vehicleProduct: any,index:any) => {
+    vehicleProducts.forEach((vehicleProduct: any, index: any) => {
       const matchedProduct = selectedProducts.find((p: any) => p.ProductID === vehicleProduct.ProductID);
-    
+
       if (matchedProduct) {
         const vehicleQty = vehicleProduct.Quantity || 0;
         const selectedQty = matchedProduct.Quantity || 0;
-    
+
         if (vehicleQty > selectedQty) {
-           hasShortage = true;
+          hasShortage = true;
           const Extra = vehicleQty - selectedQty; // Positive value if there's a shortage
           console.log(`Product ID ${vehicleProduct.ProductID} is short by ${Extra}`);
           xmlString += `<Product>
             <ProductID>${vehicleProduct.ProductID}</ProductID>
             <StockQuantity>${Extra}</StockQuantity>
           </Product>`;
-        }else if(vehicleQty == selectedQty){
+        } else if (vehicleQty == selectedQty) {
           const productsFormArray = this.jobCardForm.get('products') as FormArray;
           const productGroup = productsFormArray.at(index) as FormGroup;
           if (!productGroup.get('IsEqual')) {
@@ -313,8 +290,8 @@ addServices(){
           } else {
             productGroup.get('IsEqual')?.setValue(1);
           }
-          console.log("this.jobCardForm.value.products",this.jobCardForm.value.products)
-        }else if(vehicleQty < selectedQty){
+          console.log("this.jobCardForm.value.products", this.jobCardForm.value.products)
+        } else if (vehicleQty < selectedQty) {
           const shortage = selectedQty - vehicleQty;
           const productsFormArray = this.jobCardForm.get('products') as FormArray;
           const productGroup = productsFormArray.at(index) as FormGroup;
@@ -324,93 +301,78 @@ addServices(){
             productGroup.get('Minus')?.setValue(shortage);
           }
           console.log(`Product ID ${vehicleProduct.ProductID} is short by ${shortage}`);
-          console.log("this.jobCardForm.value.products",this.jobCardForm.value.products)
+          console.log("this.jobCardForm.value.products", this.jobCardForm.value.products)
         }
       }
     });
-    
+
     xmlString += '</Products>';
-   // Final XML output
-  if(hasShortage){
-    const val={
-      ProductXML:xmlString
+    // Final XML output
+    if (hasShortage) {
+      const val = {
+        ProductXML: xmlString
+      }
+      this.ProductService.Productstockupdate(val).subscribe((data) => {
+        console.log("Productstockupdate", data)
+      })
+      console.log(xmlString);
     }
-    this.ProductService.Productstockupdate(val).subscribe((data)=>{
-      console.log("Productstockupdate",data)
-    })
-    console.log(xmlString);
+
+    console.log("  const selectedProducts = this.jobCardForm.value.products;", this.jobCardForm.value.products);
+
   }
 
-  console.log("  const selectedProducts = this.jobCardForm.value.products;", this.jobCardForm.value.products);
   
-    }
   save(): void {
-    console.log("GrandTotal",this.jobCardForm.value.GrandTotal);
-    console.log("AmountPaid",this.jobCardForm.value.AmountPaid);
-    console.log("BalancePayment",this.jobCardForm.value.BalancePayment);
-    
-//     const vehicleProducts = JSON.parse(this.vehicleDetails.ProductList); // Assuming it's a JSON string
-//     const selectedProducts = this.jobCardForm.value.products;
-//     vehicleProducts.forEach((vehicleProduct:any) => {
-//     const matchedProduct = selectedProducts.find((p:any) => p.ProductID === vehicleProduct.ProductID);
-
-//   if (matchedProduct) {
-//     const vehicleQty = vehicleProduct.Quantity || 0;
-//     const selectedQty = matchedProduct.Quantity || 0;
-//     if (vehicleQty > selectedQty) {
-//       const shortage = vehicleQty - selectedQty; // Negative value
-//       let xmlString = '<Products>';
-      
-//       console.log(`Product ID ${vehicleProduct.ProductID} is short by ${shortage}`);
-//     }
-//   }
-// });
-
     if (this.jobCardForm.valid) {
-      if(this.jobCardForm.value.products && this.vehicleDetails.ProductList){
+      if (this.jobCardForm.value.products && this.vehicleDetails.ProductList) {
         this.generateShortageXml();
+        console.log("generateShortageXml() got called")
       }
-   
-   
-     const JobCardServiceXML=this.generateJobserviceXML(this.jobCardForm.value.JobCardServices);
-     
-      const ProductXML=this.generateXML(this.jobCardForm.value.products)// Send this.jobCardForm.value to backend
-      
-      const val={
-        JobCardID:this.vehicleDetails.JobCardID?this.vehicleDetails.JobCardID:0,
+
+
+      const JobCardServiceXML = this.generateJobserviceXML(this.jobCardForm.value.JobCardServices);
+
+      const ProductXML = this.generateXML(this.jobCardForm.value.products)// Send this.jobCardForm.value to backend
+      console.log("ProductXML",ProductXML)
+
+      const val = {
+        JobCardID: this.vehicleDetails.JobCardID ? this.vehicleDetails.JobCardID : 0,
         VehicleID: this.vehicleDetails.VehicleID,
         ClientID: this.vehicleDetails.ClientID,
-        WorkDescription:this.jobCardForm.value.service.work,
-        Remarks:this.jobCardForm.value.remarks,
-        ProductsXML:ProductXML,
-        PaymentMode:this.jobCardForm.value.paymentMode,
-        Status:this.jobCardForm.value.status,
-        MechanicUserID:parseInt(this.jobCardForm.value.mechanicName),
-        KmReading:this.jobCardForm.value.vehicle.kmReading,
-        ServiceXML:JobCardServiceXML,
-        TotalAmount:this.jobCardForm.value.GrandTotal,
-        BalanceAmount:this.jobCardForm.value.BalancePayment,
-        PaidAmount:this.jobCardForm.value.AmountPaid,
+        WorkDescription: this.jobCardForm.value.service.work,
+        Remarks: this.jobCardForm.value.remarks,
+        ProductsXML: ProductXML,
+        PaymentMode: this.jobCardForm.value.paymentMode,
+        Status: this.jobCardForm.value.status,
+        MechanicUserID: parseInt(this.jobCardForm.value.mechanicName),
+        KmReading: this.jobCardForm.value.vehicle.kmReading,
+        ServiceXML: JobCardServiceXML,
+        TotalAmount: this.jobCardForm.value.GrandTotal,
+        BalanceAmount: this.jobCardForm.value.BalancePayment,
+        PaidAmount: this.jobCardForm.value.AmountPaid,
         PaymentStatus: (+this.jobCardForm.value.BalancePayment || 0) === 0 ? 'Completed' : 'Pending'
       }
-      this.JobCardService.InsertJobCard(val).subscribe((data)=>{
-        if(data.status_code===100){
-          console.log("val1",val)
-          
-        this.showToast('added successfully!', 'success');
-        this.getJobCard();
-        this.getproduct();
-        this.JobCardServices.clear();
-        this.vehicleDetails='';
-        this.StockQuantity=[];
-        this.products.clear();
+      this.JobCardService.InsertJobCard(val).subscribe((data) => {
+        if (data.status_code === 100) {
+          console.log("val1", val)
+
+          this.showToast('added successfully!', 'success');
+          this.getJobCard();
+          this.getproduct();
+          this.JobCardServices.clear();
+          this.vehicleDetails = '';
+          this.StockQuantity = [];
+          this.products.clear();
+          this.databaseStockqty = [];
+          this.isProduct = false;
         }
       })
-      console.log("val2",val)
-      console.log("this.jobCardForm.value.BalancePayment",this.jobCardForm.value.BalancePayment)
-    
+      console.log("val2", val)
+      console.log("this.jobCardForm.value.BalancePayment", this.jobCardForm.value.BalancePayment)
+
     } else {
-      
+
       this.showToast('Please fill all the form!', 'danger');
       this.jobCardForm.markAllAsTouched();
       this.products.controls.forEach(c => c.markAllAsTouched());
@@ -425,21 +387,21 @@ addServices(){
       this.sortColumn = column;
       this.sortDirection = 'asc';
     }
-  
+
     this.jobcardDetails.sort((a: any, b: any) => {
       let valueA = a[column];
       let valueB = b[column];
-  
+
       if (valueA == null || valueB == null) {
         return 0;
       }
-  
+
       // Convert dates if the column is a date
       if (column.toLowerCase().includes('date')) {
         valueA = new Date(valueA);
         valueB = new Date(valueB);
       }
-  
+
       if (typeof valueA === 'string') {
         return this.sortDirection === 'asc'
           ? valueA.localeCompare(valueB)
@@ -451,60 +413,8 @@ addServices(){
       }
     });
   }
-  
-  // sortTable(column: string): void {
 
-    
-  //   // Toggle sort direction if the same column is clicked
-  //   if (this.sortColumn === column) {
-  //     this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-  //   } else {
-  //     // Set the new column and default to ascending
-  //     this.sortColumn = column;
-  //     this.sortDirection = 'asc';
-  //   }
 
-  //   // Sort bookings based on the column and direction
-  //   this.filterBookingData.sort((a: any, b: any) => {
-  //     let valueA, valueB;
-
-  //     if (column === 'PrimaryGuestName') {
-  //       // Parse PrimaryGuestName and get the Username
-  //       valueA = a.PrimaryGuestName ? JSON.parse(a.PrimaryGuestName)?.Username || '' : '';
-  //       valueB = b.PrimaryGuestName ? JSON.parse(b.PrimaryGuestName)?.Username || '' : '';
-  //     } 
-      
-  //    else if (column === 'PaymentStatus') {
-  //       // Parse PrimaryGuestName and get the Username
-  //       valueA = a.PaymentStatus  ;
-  //       valueB = b.PaymentStatus ;
-  //     } 
-      
-  //     else if (column === 'OrderDate') {
-  //       // Parse PrimaryGuestName and get the Username
-  //       valueA = a.OrderDate ? new Date(a.OrderDate) : new Date(0); // Handle null values
-  //       valueB = b.OrderDate ? new Date(b.OrderDate) : new Date(0);
-  //     }
-  //     else {
-  //       // Handle other fields
-  //       valueA = a[column];
-  //       valueB = b[column];
-  //     }
-  //     if (valueA == null || valueB == null) {
-  //       return 0; // Handle null/undefined values
-  //     }
-
-  //     if (typeof valueA === 'string') {
-  //       return this.sortDirection === 'asc'
-  //         ? valueA.localeCompare(valueB)
-  //         : valueB.localeCompare(valueA);
-  //     } else {
-  //       return this.sortDirection === 'asc'
-  //         ? valueA - valueB
-  //         : valueB - valueA;
-  //     }
-  //   });
-  // }
   getSortIcon(column: string): string {
     if (this.sortColumn === column) {
       return this.sortDirection === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
@@ -516,18 +426,18 @@ addServices(){
     return this.jobcardDetails.slice(startIndex, startIndex + this.itemsPerPage);
   }
 
-  selectJob(selectJob:any, anytrue:boolean){
-    this.vehicleDetails=selectJob;
-   this.patchJobCard(selectJob);
-this.isJobCard=anytrue;
-const selectedProductIDs = this.products.controls
-.map(control => control.get('ProductID')?.value)
-.filter(id => id); // filter out empty or null values
+  selectJob(selectJob: any, anytrue: boolean) {
+    this.vehicleDetails = selectJob;
+    this.patchJobCard(selectJob);
+    this.isJobCard = anytrue;
+    const selectedProductIDs = this.products.controls
+      .map(control => control.get('ProductID')?.value)
+      .filter(id => id); // filter out empty or null values
 
-this.productList = this.productList.map((product:any) => ({
-...product,
-isDisabled: selectedProductIDs.includes(product.ProductID)
-}));
+    this.productList = this.productList.map((product: any) => ({
+      ...product,
+      isDisabled: selectedProductIDs.includes(product.ProductID)
+    }));
   }
   patchJobCard(jobCardData: any) {
     // Patch basic fields
@@ -540,35 +450,25 @@ isDisabled: selectedProductIDs.includes(product.ProductID)
         number: jobCardData.VehicleNumber,
         model: jobCardData.Model,
         color: jobCardData.Color,
-        kmReading:jobCardData.KmReading
+        kmReading: jobCardData.KmReading
       },
       service: {
         work: jobCardData.WorkDescription
       },
       remarks: jobCardData.Remarks,
-      paymentMode:jobCardData.PaymentMode,
-      status:jobCardData.Status,
-      mechanicName:jobCardData.MechanicUserID,
-      AmountPaid:jobCardData.PaidAmount
+      paymentMode: jobCardData.PaymentMode,
+      status: jobCardData.Status,
+      mechanicName: jobCardData.MechanicUserID,
+      AmountPaid: jobCardData.PaidAmount
     });
-  
+
     // Clear existing products
     this.products.clear();
     this.JobCardServices.clear();
-    // Parse and patch products
-    // const productList = JSON.parse(jobCardData.ProductList);
-    // productList.forEach((product: any) => {
-    //   this.products.push(
-    //     this.fb.group({
-    //       ProductID: [product.ProductID],
-    //       Quantity: [product.Quantity],
-    //       Price:[product.Price || 0]
-    //     })
-    //   );
-    // });
+
     const productList = JSON.parse(jobCardData.ProductList || '[]');
-    productList.forEach((product: any,index:number) => {
-      const matchedProduct = this.productList.find((p:any) => p.ProductID === parseInt(product.ProductID));
+    productList.forEach((product: any, index: number) => {
+      const matchedProduct = this.productList.find((p: any) => p.ProductID === parseInt(product.ProductID));
       const unitPrice = matchedProduct?.Selling_Price || 0;
       const totalPrice = unitPrice * product.Quantity;
       const stockQty = matchedProduct?.StockQuantity || 0;
@@ -579,9 +479,9 @@ isDisabled: selectedProductIDs.includes(product.ProductID)
           Price: [product.Price]
         })
       );
-      this.StockQuantity[index]=stockQty;
-      this.databaseStockqty[index]=product.Quantity;
-    
+      this.StockQuantity[index] = stockQty;
+      this.databaseStockqty[index] = product.Quantity || 0;
+      this.isProduct = true;
     });
 
     const serviceList = JSON.parse(jobCardData.ServiceList);
@@ -610,62 +510,43 @@ isDisabled: selectedProductIDs.includes(product.ProductID)
       this.currentPage--;
     }
   }
-  
+
 
   onSearch(event: any) {
     this.salesearchtext = event.target.value;
-    console.log("salesearchtext",this.salesearchtext);
-    
+    console.log("salesearchtext", this.salesearchtext);
+
     this.applySearch();
   }
 
 
-  
-  // applySearch() {
-  //   const searchValue = this.searchText?.trim().toLowerCase();
-  //   const selectedDate = this.selecteddate ? new Date(this.selecteddate) : null;
-
-  //   if (!searchValue) {
-  //     this.jobcardDetails = [...this.allJobcardDetails]; // Reset to original
-  //   } else {
-  //     this.jobcardDetails = this.allJobcardDetails.filter((jobcard: any) => {
-
-  //       const matchesDate =
-  //       !selectedDate || new Date(jobcard.JobCardDate).toDateString() === selectedDate.toDateString();
-  
-  //       return Object.values(jobcard).some((val) =>
-  //         String(val).toLowerCase().includes(searchValue)
-  //       );
-  //     });
 
 
-  //   }
-  // }
-  
+
   applySearch() {
     const searchValue = this.salesearchtext?.trim().toLowerCase();
     const selectedDate = this.selecteddate ? new Date(this.selecteddate) : null;
     const selectedStatus = this.selectedPaymentStatus;
-  
+
     this.jobcardDetails = this.jobcardDetails.filter((jobcard: any) => {
       const matchesDate =
         !selectedDate || new Date(jobcard.JobCardDate).toDateString() === selectedDate.toDateString();
-  
+
       const matchesSearch =
         !searchValue ||
         Object.values(jobcard).some((val) =>
           String(val).toLowerCase().includes(searchValue)
         );
-  
+
       const matchesStatus =
         !selectedStatus || jobcard.PaymentStatus === selectedStatus;
-  
+
       return matchesDate && matchesSearch && matchesStatus;
     });
   }
-  
-  
-  
+
+
+
   showToast(message: string, color: 'primary' | 'success' | 'danger' | 'warning' | 'info' = 'primary') {
     this.toastMessage = message;
     this.toastColor = color;
@@ -681,35 +562,25 @@ isDisabled: selectedProductIDs.includes(product.ProductID)
   }
 
   printInvoice(): void {
-  const printContents = document.getElementById('printcontent')?.innerHTML;
-  if (!printContents) {
-    alert('No content available to print.');
-    return;
-  }
-  // const clientPhone = this.selectedClientName?.Phone || 'N/A';
-  // const clientName = this.selectedClientName?.ClientName || 'N/A';
-  const currentDate = new Date();
-  const formattedDate = currentDate.toLocaleDateString('en-GB', {
-    day: '2-digit', month: 'short', year: 'numeric'
-  }).replace(/ /g, '-');
-  const invoiceNo = `INV-${currentDate.getFullYear()}${(currentDate.getMonth() + 1).toString().padStart(2, '0')}${currentDate.getDate().toString().padStart(2, '0')}`;
+    const printContents = document.getElementById('printcontent')?.innerHTML;
+    if (!printContents) {
+      alert('No content available to print.');
+      return;
+    }
 
-  // const billRows = this.billItems.map((item: any) => `
-  //   <tr>
-  //     <td>${item.ProductName}</td>
-  //     <td>${item.Qty}</td>
-  //     <td>₹${item.Price}</td>
-  //     <td>₹${item.Total}</td>
-  //   </tr>
-  // `).join('');
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString('en-GB', {
+      day: '2-digit', month: 'short', year: 'numeric'
+    }).replace(/ /g, '-');
+    const invoiceNo = `INV-${currentDate.getFullYear()}${(currentDate.getMonth() + 1).toString().padStart(2, '0')}${currentDate.getDate().toString().padStart(2, '0')}`;
 
-  // const grandTotal = this.grandTotal;
-  const logoPath = `${location.origin}/assets/images/ssquarelogo/namelogo.png`; // If you want to keep logo
 
-  const popupWin = window.open('', '_blank', 'width=800,height=600');
+    const logoPath = `${location.origin}/assets/images/ssquarelogo/namelogo.png`; // If you want to keep logo
 
-  if (popupWin) {
-    const htmlContent = `
+    const popupWin = window.open('', '_blank', 'width=800,height=600');
+
+    if (popupWin) {
+      const htmlContent = `
       <!DOCTYPE html>
       <html lang="en">
       <head>
@@ -847,229 +718,167 @@ isDisabled: selectedProductIDs.includes(product.ProductID)
       </html>
     `;
 
-    popupWin.document.open();
-    popupWin.document.write(htmlContent);
-    popupWin.document.close();
+      popupWin.document.open();
+      popupWin.document.write(htmlContent);
+      popupWin.document.close();
 
-    popupWin.onload = () => {
-      popupWin.focus();
-      popupWin.print();
-      popupWin.close();
-    };
+      popupWin.onload = () => {
+        popupWin.focus();
+        popupWin.print();
+        popupWin.close();
+      };
+    }
   }
-}
-quantities: number[] = [];
-
-// onQuantityChange(index: number) {
-//   const control = this.products.at(index).get('Quantity');
-//   this.quantities[index] = control?.value || 0;
-//   this.quantities.forEach((quantity,index)=>{
-//     
-//   })
-//   // this.jobCardForm.value.products.forEach((Prod: any, i: number) => {
-//   //   ;
-//   //   const ProductID = Prod.ProductID;
-//   //   // Get the matched product from productList using ProductID
-//   //   const matchedProduct = this.productList.find((item: any) => item.ProductID === ProductID);
-//   //   if (matchedProduct) {
-//   //     ;
-//   //     // Example: get price or amount if available
-//   //     const amount = matchedProduct.Price || 0;
-//   //     this.productAmount=amount*Prod.Quantity
-//   //     ;
-//   //   } else {
-//   //     ;
-//   //   }
-//   // });
-//   this.jobCardForm.value.products.forEach((Prod: any, i: number) => {
-//     const ProductID = Prod.ProductID;
-//     const Quantity = Prod.Quantity;
-  
-//     const matchedProduct = this.productList.find((item: any) => item.ProductID === ProductID);
-//     const price = matchedProduct?.Price || 0;
-//     const control = this.products.at(i);
-    
-//     const value = Quantity * price;
-//     control.patchValue({ Price: value });
-//   });
-  
-//   
-// }
-
-// Unified method to update price based on ProductID and Quantity
-updateProductPrice(index: number) {
-  const control = this.products.at(index);
-  const productId = control.get('ProductID')?.value;
-  const quantity = control.get('Quantity')?.value || 0;
-
-  // Find the selected product
-  const selectedProduct = this.productList.find((p:any) => p.ProductID === parseInt(productId));
-  this.StockQuantity[index]=selectedProduct.StockQuantity;
-  const unitPrice = selectedProduct?.Selling_Price || 0;
-
-  // Calculate total price
-  const totalPrice = quantity * unitPrice;
-
-  // Update the Price field
-  control.patchValue({ Price: totalPrice }, { emitEvent: false });
-}
-
-// Called when a product is selected
-onProductSelect(index: number) {
-  this.updateProductPrice(index);
-}
-
-// Called when quantity is changed
-onQuantityChange(index: number) {
-  this.updateProductPrice(index);
-}
-
-setupFormValueChangeListeners() {
-  this.products.valueChanges.subscribe(() => {
-    this.recalculateProductPrices();
-    this.calculateTotal();
-  });
-  this.jobCardForm.get('AmountPaid')?.valueChanges.subscribe(() => {
-    this.calculateTotal();
-  });
-  this.JobCardServices.valueChanges.subscribe(() => {
-    this.calculateTotal();
-  });
-}
-// calculateTotal() {
-//   let productTotal = 0;
-//   let serviceTotal = 0;
-
-//   this.products.controls.forEach(ctrl => {
-//     productTotal += +ctrl.get('Price')?.value || 0;
-//   });
-
-//   this.JobCardServices.controls.forEach(ctrl => {
-//     serviceTotal += +ctrl.get('Amount')?.value || 0;
-//   });
-
-//   const grandTotal = productTotal + serviceTotal;
-//   ;
-
-//   // Optional: store/display this somewhere
-//   this.grandTotal = grandTotal;
-//   
-// }
-calculateTotal() {
-  let totalProductAmount = 0;
-  let totalServiceAmount = 0;
-
-  this.products.controls.forEach(ctrl => {
-    totalProductAmount += +ctrl.get('Price')?.value || 0;
-  });
-
-  this.JobCardServices.controls.forEach(ctrl => {
-    totalServiceAmount += +ctrl.get('Amount')?.value || 0;
-  });
-
-  const grandTotal = totalProductAmount + totalServiceAmount;
-  const amountPaid = +this.jobCardForm.get('AmountPaid')?.value || 0;
-  const balancePayment = grandTotal - amountPaid;
-
-  this.jobCardForm.patchValue({
-    GrandTotal: grandTotal,
-    BalancePayment: balancePayment
-  }, { emitEvent: false });
-}
+  quantities: number[] = [];
 
 
-recalculateProductPrices() {
-  this.products.controls.forEach((productGroup: AbstractControl, index: number) => {
-    const productId = productGroup.get('ProductID')?.value;
-    const quantity = +productGroup.get('Quantity')?.value || 0;
+  // Unified method to update price based on ProductID and Quantity
+  updateProductPrice(index: number) {
+    const control = this.products.at(index);
+    const productId = control.get('ProductID')?.value;
+    const quantity = control.get('Quantity')?.value || 0;
 
-    const matchedProduct = this.productList.find((p:any) => p.ProductID === parseInt(productId));
-    const pricePerUnit = matchedProduct?.Selling_Price || 0;
+    // Find the selected product
+    const selectedProduct = this.productList.find((p: any) => p.ProductID === parseInt(productId));
+    this.StockQuantity[index] = selectedProduct.StockQuantity;
+    const unitPrice = selectedProduct?.Selling_Price || 0;
 
-    const total = quantity * pricePerUnit;
-    productGroup.patchValue({ Price: total }, { emitEvent: false }); // prevent infinite loop
+    // Calculate total price
+    const totalPrice = quantity * unitPrice;
 
-  });
-}
-// isInvalid(path: string): boolean {
-//   const control = this.jobCardForm.get(path);
-//   return !!(control && control.invalid && (control.touched || control.dirty));
-// }
-isInvalid(path: string): boolean {
-  const control = this.jobCardForm.get(path);
-  // Check if the control is invalid, touched, and if its value is 0 (default option)
-  return !!(control && control.invalid && (control.touched || control.dirty) || control?.value === 0);
-}
-// isProductInvalid(index: number, controlName: string): boolean {
-//   const control = this.products.at(index).get(controlName);
-//   return !!(control && control.invalid && (control.touched || control.dirty));
-// }
-isProductInvalid(index: number, controlName: string): boolean {
-  const control = this.products.at(index).get(controlName);
-  
-  // Check if the control is invalid, touched, or dirty, and for ProductID value '0'
-  if (controlName === 'ProductID' && control?.value === 0) {
-    return true;  // Consider this invalid if the value is 0
+    // Update the Price field
+    control.patchValue({ Price: totalPrice }, { emitEvent: false });
   }
 
-  return !!(control && control.invalid && (control.touched || control.dirty));
-}
-// isServiceInvalid(index: number, controlName: string): boolean {
-//   const control = this.JobCardServices.at(index).get(controlName);
-//   return !!(control && control.invalid && (control.touched || control.dirty));
-// }
-isServiceInvalid(index: number, controlName: string): boolean {
-  const control = this.JobCardServices.at(index).get(controlName);
-  return !!(control && control.invalid && (control.touched || control.dirty) || control?.value === 0);
-}
+  // Called when a product is selected
+  onProductSelect(index: number) {
+    this.updateProductPrice(index);
+  }
 
-markAllAsTouched() {
-  Object.keys(this.jobCardForm.controls).forEach(field => {
-    const control = this.jobCardForm.get(field);
-    if (control instanceof FormGroup) {
-      Object.keys(control.controls).forEach(subField => {
-        control.get(subField)?.markAsTouched();
-      });
-    } else {
-      control?.markAsTouched();
+  // Called when quantity is changed
+  onQuantityChange(index: number) {
+    this.updateProductPrice(index);
+  }
+
+  setupFormValueChangeListeners() {
+    this.products.valueChanges.subscribe(() => {
+      this.recalculateProductPrices();
+      this.calculateTotal();
+    });
+    this.jobCardForm.get('AmountPaid')?.valueChanges.subscribe(() => {
+      this.calculateTotal();
+    });
+    this.JobCardServices.valueChanges.subscribe(() => {
+      this.calculateTotal();
+    });
+  }
+
+  calculateTotal() {
+    let totalProductAmount = 0;
+    let totalServiceAmount = 0;
+
+    this.products.controls.forEach(ctrl => {
+      totalProductAmount += +ctrl.get('Price')?.value || 0;
+    });
+
+    this.JobCardServices.controls.forEach(ctrl => {
+      totalServiceAmount += +ctrl.get('Amount')?.value || 0;
+    });
+
+    const grandTotal = totalProductAmount + totalServiceAmount;
+    const amountPaid = +this.jobCardForm.get('AmountPaid')?.value || 0;
+    const balancePayment = grandTotal - amountPaid;
+
+    this.jobCardForm.patchValue({
+      GrandTotal: grandTotal,
+      BalancePayment: balancePayment
+    }, { emitEvent: false });
+  }
+
+
+  recalculateProductPrices() {
+    this.products.controls.forEach((productGroup: AbstractControl, index: number) => {
+      const productId = productGroup.get('ProductID')?.value;
+      const quantity = +productGroup.get('Quantity')?.value || 0;
+
+      const matchedProduct = this.productList.find((p: any) => p.ProductID === parseInt(productId));
+      const pricePerUnit = matchedProduct?.Selling_Price || 0;
+
+      const total = quantity * pricePerUnit;
+      productGroup.patchValue({ Price: total }, { emitEvent: false }); // prevent infinite loop
+
+    });
+  }
+
+  isInvalid(path: string): boolean {
+    const control = this.jobCardForm.get(path);
+    // Check if the control is invalid, touched, and if its value is 0 (default option)
+    return !!(control && control.invalid && (control.touched || control.dirty) || control?.value === 0);
+  }
+
+  isProductInvalid(index: number, controlName: string): boolean {
+    const control = this.products.at(index).get(controlName);
+
+    // Check if the control is invalid, touched, or dirty, and for ProductID value '0'
+    if (controlName === 'ProductID' && control?.value === 0) {
+      return true;  // Consider this invalid if the value is 0
     }
-  });
-}
+
+    return !!(control && control.invalid && (control.touched || control.dirty));
+  }
+
+  isServiceInvalid(index: number, controlName: string): boolean {
+    const control = this.JobCardServices.at(index).get(controlName);
+    return !!(control && control.invalid && (control.touched || control.dirty) || control?.value === 0);
+  }
+
+  markAllAsTouched() {
+    Object.keys(this.jobCardForm.controls).forEach(field => {
+      const control = this.jobCardForm.get(field);
+      if (control instanceof FormGroup) {
+        Object.keys(control.controls).forEach(subField => {
+          control.get(subField)?.markAsTouched();
+        });
+      } else {
+        control?.markAsTouched();
+      }
+    });
+  }
 
 
-ProductList:any=[];
-ServiceList:any=[];
-printSaleInvoice(sale: any): void {
-  console.log("Clientlist", sale);
-  this.ProductList = JSON.parse(sale.ProductList);
-  this.ServiceList = JSON.parse(sale.ServiceList);
+  ProductList: any = [];
+  ServiceList: any = [];
+  printSaleInvoice(sale: any): void {
+    console.log("Clientlist", sale);
+    this.ProductList = JSON.parse(sale.ProductList);
+    this.ServiceList = JSON.parse(sale.ServiceList);
 
-  setTimeout(() => {
-    if (!this.allJobcardDetails || this.allJobcardDetails.length === 0) {
-      alert('Sale invoice data not available.');
-      return;
-    }
+    setTimeout(() => {
+      if (!this.allJobcardDetails || this.allJobcardDetails.length === 0) {
+        alert('Sale invoice data not available.');
+        return;
+      }
 
-    const jobData = sale;
-    const clientPhone = jobData?.Phone || 'N/A';
-    const clientName = jobData?.ClientName || 'N/A';
-    const clientEmail = jobData?.Email || 'N/A';
+      const jobData = sale;
+      const clientPhone = jobData?.Phone || 'N/A';
+      const clientName = jobData?.ClientName || 'N/A';
+      const clientEmail = jobData?.Email || 'N/A';
 
-    const currentDate = new Date();
-    const formattedDate = currentDate.toLocaleDateString('en-GB', {
-      day: '2-digit', month: 'short', year: 'numeric'
-    }).replace(/ /g, '-');
+      const currentDate = new Date();
+      const formattedDate = currentDate.toLocaleDateString('en-GB', {
+        day: '2-digit', month: 'short', year: 'numeric'
+      }).replace(/ /g, '-');
 
-    const invoiceNo = `INV-${currentDate.getFullYear()}${(currentDate.getMonth() + 1).toString().padStart(2, '0')}${currentDate.getDate().toString().padStart(2, '0')}`;
-    const jobCardNo = jobData?.JobCardID || 'N/A';
-    const logoPath = `${location.origin}/assets/images/ssquarelogo/namelogo.png`;
+      const invoiceNo = `INV-${currentDate.getFullYear()}${(currentDate.getMonth() + 1).toString().padStart(2, '0')}${currentDate.getDate().toString().padStart(2, '0')}`;
+      const jobCardNo = jobData?.JobCardID || 'N/A';
+      const logoPath = `${location.origin}/assets/images/ssquarelogo/namelogo.png`;
 
-    const Brand = jobData?.Brand || 'N/A';
-    const vehicleModel = jobData?.Model || 'N/A';
-    const VehicleNumber = jobData?.VehicleNumber || 'N/A';
-    const Color = jobData?.Color || 'N/A';
+      const Brand = jobData?.Brand || 'N/A';
+      const vehicleModel = jobData?.Model || 'N/A';
+      const VehicleNumber = jobData?.VehicleNumber || 'N/A';
+      const Color = jobData?.Color || 'N/A';
 
-    const billRows = this.ProductList.map((item: any) => `
+      const billRows = this.ProductList.map((item: any) => `
       <tr>
         <td>${item.ProductName}</td>
         <td>${item.Quantity}</td>
@@ -1078,7 +887,7 @@ printSaleInvoice(sale: any): void {
       </tr>
     `).join('');
 
-    const serviceRows = this.ServiceList.map((service: any) => `
+      const serviceRows = this.ServiceList.map((service: any) => `
       <tr>
         <td>${service.ServiceName}</td>
         <td>-</td>
@@ -1087,15 +896,15 @@ printSaleInvoice(sale: any): void {
       </tr>
     `).join('');
 
-    const grandTotal = sale.TotalAmount;
-    const balanceAmount = jobData?.BalanceAmount || 0;
-    const paidAmount = jobData?.PaidAmount || 0;
-    const paymentMode = jobData?.PaymentMode || 'N/A';
+      const grandTotal = sale.TotalAmount;
+      const balanceAmount = jobData?.BalanceAmount || 0;
+      const paidAmount = jobData?.PaidAmount || 0;
+      const paymentMode = jobData?.PaymentMode || 'N/A';
 
-    const popupWin = window.open('', '_blank', 'width=900,height=700');
+      const popupWin = window.open('', '_blank', 'width=900,height=700');
 
-    if (popupWin) {
-      const htmlContent = `
+      if (popupWin) {
+        const htmlContent = `
       <html lang="en">
       <head>
         <meta charset="UTF-8">
@@ -1252,37 +1061,37 @@ printSaleInvoice(sale: any): void {
       </body>
       </html>`;
 
-      popupWin.document.open();
-      popupWin.document.write(htmlContent);
-      popupWin.document.close();
-    }
-  }, 500);
-}
+        popupWin.document.open();
+        popupWin.document.write(htmlContent);
+        popupWin.document.close();
+      }
+    }, 500);
+  }
 
 
-resetfilters(): void {
-  this.selectedPaymentStatus = '';
-  this.selecteddate = '';
-  this.salesearchtext = '';
-  this.jobcardDetails = [...this.allJobcardDetails]; // Reset to full original list
-}
+  resetfilters(): void {
+    this.selectedPaymentStatus = '';
+    this.selecteddate = '';
+    this.salesearchtext = '';
+    this.jobcardDetails = [...this.allJobcardDetails]; // Reset to full original list
+  }
 
 
-printTable() {
-  const formatDates = (dateString: string) => {
-    const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = date.toLocaleString('en-US', { month: 'short' });
-    const year = date.getFullYear();
-    const hours = date.getHours() % 12 || 12;
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
-    return `${day} ${month} ${year}, ${hours}:${minutes} ${ampm}`;
-  };
+  printTable() {
+    const formatDates = (dateString: string) => {
+      const date = new Date(dateString);
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = date.toLocaleString('en-US', { month: 'short' });
+      const year = date.getFullYear();
+      const hours = date.getHours() % 12 || 12;
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+      return `${day} ${month} ${year}, ${hours}:${minutes} ${ampm}`;
+    };
 
-  const printContent = document.createElement('div');
-  printContent.id = 'printableStockTable';
-  printContent.innerHTML = `
+    const printContent = document.createElement('div');
+    printContent.id = 'printableStockTable';
+    printContent.innerHTML = `
     <h2><strong>Product Stock List</strong></h2>
     <br>
     <table>
@@ -1322,10 +1131,10 @@ printTable() {
     </table>
   `;
 
-  document.body.appendChild(printContent);
+    document.body.appendChild(printContent);
 
-  const printStyles = document.createElement('style');
-  printStyles.innerHTML = `
+    const printStyles = document.createElement('style');
+    printStyles.innerHTML = `
     @media print {
       body * {
         visibility: hidden;
@@ -1359,13 +1168,13 @@ printTable() {
     }
   `;
 
-  document.head.appendChild(printStyles);
+    document.head.appendChild(printStyles);
 
-  window.print();
+    window.print();
 
-  document.body.removeChild(printContent);
-  document.head.removeChild(printStyles);
-}
+    document.body.removeChild(printContent);
+    document.head.removeChild(printStyles);
+  }
 
 
 }
