@@ -7,13 +7,14 @@ import {
   HttpHeaders
 } from '@angular/common/http';
 import { finalize, Observable } from 'rxjs';
-import { LoadingService } from '../service/Loader/loading.service';
+// import { LoadingService } from '../service/Loader/loading.service';
+import { LoaderService } from '../service/Loader/loader.service';
 
 @Injectable()
 export class NetworkInterceptor implements HttpInterceptor {
   TotalRequest = 0;
   CompleteRequest = 0;
-  constructor(private Loader :LoadingService) { }
+  constructor(private Loader :LoaderService) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     this.Loader.show();

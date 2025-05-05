@@ -19,7 +19,7 @@
                                    </div>
                                    <div>
                                        <p class="mb-2">Total Income</p>
-                                       <h4>{{ DashboardData[0]?.TotalAmount | currency:'INR':'symbol-narrow' }}</h4>
+                                       <h4>{{ this.Income| currency:'INR':'symbol-narrow' }}</h4>
                                     </div>
                                </div>                                
                          
@@ -35,7 +35,7 @@
                                    </div>
                                    <div>
                                        <p class="mb-2">Total Expenses</p>
-                                       <h4>{{ DashboardData[0]?.PurchasePrice | currency:'INR':'symbol-narrow' }}</h4>
+                                       <h4>{{this.Expence | currency:'INR':'symbol-narrow' }}</h4>
 
                                    </div>
                                </div>
@@ -52,7 +52,7 @@
                                    </div>
                                    <div>
                                        <p class="mb-2">Product Sold</p>
-                                       <!-- <h4>{{this.DashboardData[0].SoldStock}}</h4> -->
+                                       <h4>{{this.Soldstock}}</h4>
                                    </div>
                                </div>
                     
@@ -71,13 +71,15 @@
                            <div class="dropdown">
                                <span class="dropdown-toggle dropdown-bg btn" id="dropdownMenuButton001"
                                    data-toggle="dropdown">
-                                   This Month<i class="ri-arrow-down-s-line ml-1"></i>
+                                  {{this.selectedPeriod}}<i class="ri-arrow-down-s-line ml-1"></i>
                                </span>
                                <div class="dropdown-menu dropdown-menu-right shadow-none"
                                aria-labelledby="dropdownMenuButton003">
-                               <a class="dropdown-item"  (click)="onPeriodChange('Year')">Year</a>
-                               <a class="dropdown-item" (click)="onPeriodChange('Month')">Month</a>
+                               <a class="dropdown-item"  (click)="onPeriodChange('Today')">Today</a>
                                <a class="dropdown-item"  (click)="onPeriodChange('Week')">Week</a>
+                               <a class="dropdown-item" (click)="onPeriodChange('Month')">Month</a>
+                               <a class="dropdown-item"  (click)="onPeriodChange('Year')">Year</a>
+
                            </div>
                            </div>
                        </div>
@@ -87,6 +89,7 @@
                         <canvas baseChart
                         [data]="chartData"
                         [options]="chartOptions"
+
                         [type]="'bar'">
                       </canvas>
         </div>
@@ -149,8 +152,8 @@
                        <div class="d-flex align-items-top justify-content-between">
                            <div class="">
                                <p class="mb-0">Income</p>
-                               <h5>{{ DashboardData[0]?.TotalAmount | currency:'INR':'symbol-narrow' }}</h5>
-                           </div>
+                               <h4>{{ this.Income| currency:'INR':'symbol-narrow' }}</h4>
+                            </div>
                            <div class="card-header-toolbar d-flex align-items-center">
                                <div class="dropdown">
                                    <span class="dropdown-toggle dropdown-bg btn" id="dropdownMenuButton003"
@@ -175,8 +178,8 @@
                        <div class="d-flex align-items-top justify-content-between">
                            <div class="">
                                <p class="mb-0">Expenses</p>
-                               <h5>{{ DashboardData[0]?.PurchasePrice | currency:'INR':'symbol-narrow' }}</h5>
-                           </div>
+                               <h4>{{ this.Expence| currency:'INR':'symbol-narrow' }}</h4>
+                            </div>
                            <div class="card-header-toolbar d-flex align-items-center">
                                <div class="dropdown">
                                    <span class="dropdown-toggle dropdown-bg btn" id="dropdownMenuButton004"
