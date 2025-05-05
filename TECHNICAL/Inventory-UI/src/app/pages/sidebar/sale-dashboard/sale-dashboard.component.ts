@@ -62,9 +62,7 @@ setGreeting(): void {
       response => {
         console.log("response", response);
         this.StockList = JSON.parse(response['message']);
-        console.log("this.StockList",this.StockList.StockQuantity>5);
         const StockQuantity = this.StockList.filter((item: any) => item.StockQuantity <=5 && item.StockQuantity !== 0);
-        console.log("StockQuantity",StockQuantity);
 
         this.filterBookingData = StockQuantity;
         if (this.filterBookingData[0]?.Message === 'Data not found') {
@@ -73,67 +71,92 @@ setGreeting(): void {
       });
   }
   getDashboard() {
-    const val = {
-    }
+    const val = {};
     this.saledetails.getDashboard(val).subscribe(
       response => {
         console.log("response", response);
-        this.Dashboard = JSON.parse(response['message']);
-        this.DashboardData = this.Dashboard;
-        console.log("this.DashboardData",this.DashboardData);
-        
-        this.setChartData(this.selectedPeriod);
-        this.setChartOptions();
-        
-        if (this.DashboardData[0]?.Message === 'Data not found') {
-          this.DashboardData = [];
+        const Dashboard = response; // Assuming response is the object you're working with.
+  
+        // Ensure that Table1 and Table exist in the response
+        if (Dashboard.Table && Dashboard.Table1) {
+          console.log("Dashboard", Dashboard.Table);
+          console.log("Dashboard1", Dashboard.Table1);
+  
+          this.DashboardData = Dashboard;
+  
+          console.log("this.DashboardData", this.DashboardData.Table1);
+  
+          // Check for 'Data not found' message
+          if (this.DashboardData.Table1[0]?.Message === 'Data not found') {
+            this.DashboardData = { Table1: [], Table: [] }; // Reset to empty data
+          }
+        } else {
+          console.error("Missing data in response:", Dashboard);
         }
-      });
+      },
+      error => {
+        console.error("Error fetching dashboard data", error);
+      }
+    );
   }
+  
   setChartData(period: string): void {
-
-  switch (period) {
-    case 'Year':
+    let tableData: any[] = [];
+  
+    // Define chart colors
+    const chartColors = {
+      totalAmount: '#FFA726', // Month chart color
+      weeklyAmount: '#AB47BC', // Week chart color
+      yearAmount: '#26C6DA'   // Year chart color
+    };
+  
+    if (period === 'Month') {
+      tableData = this.DashboardData?.Table1 || []; // Safely access Table1
       this.chartData = {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+        labels: tableData.map(row => row.Month),
         datasets: [
           {
-            label: 'Yearly Sales',
-            data: [120, 150, 180, 200, 170, 160, 190, 220],
-            backgroundColor: '#42A5F5'
+            label: 'Total Amount',
+            data: tableData.map(row => row.TotalAmount),
+            backgroundColor: chartColors.totalAmount
           }
         ]
       };
-      break;
-
-    case 'Week':
+  
+    } else if (period === 'Week') {
+      tableData = this.DashboardData?.Table2 || []; // Safely access Table2
       this.chartData = {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        labels: tableData.map(row => row.WeekName),
         datasets: [
           {
-            label: 'Weekly Sales',
-            data: [30, 40, 35, 50, 49, 60, 70],
-            backgroundColor: '#66BB6A'
-          }
+            label: 'Weekly Total Amount',
+            data: tableData.map(row => row.TotalAmount),
+            backgroundColor: chartColors.weeklyAmount
+          },
         ]
       };
-      break;
-
-    case 'Month':
-    default:
+  
+    } else if (period === 'Year') {
+      tableData = this.DashboardData?.Table3 || []; // Safely access Table3
       this.chartData = {
-        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        labels: tableData.map(row => row.YearName),
         datasets: [
           {
-            label: 'Monthly Sales',
-            data: [65, 59, 80, 81],
-            backgroundColor: '#FFA726'
-          }
+            label: 'Yearly Total Amount',
+            data: tableData.map(row => row.TotalAmount),
+            backgroundColor: chartColors.yearAmount
+          },
         ]
       };
-      break;
+  
+    } else {
+      // Default empty chart
+      this.chartData = { labels: [], datasets: [] };
+    }
   }
-}
+  
+  
+  
 
 setChartOptions(): void {
   this.chartOptions = {

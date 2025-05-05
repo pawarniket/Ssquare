@@ -41,10 +41,11 @@ namespace MS.SSquare.API.Controllers
 
 
                 DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_Get_Dashboard");
+                return new JsonResult(ds);
 
-                oServiceRequestProcessor = new ServiceRequestProcessor();
-                return Ok(oServiceRequestProcessor.ProcessRequest(ds));
-                
+                //oServiceRequestProcessor = new ServiceRequestProcessor();
+                //return Ok(oServiceRequestProcessor.ProcessRequest(ds));
+
             }
             catch (Exception ex)
             {
