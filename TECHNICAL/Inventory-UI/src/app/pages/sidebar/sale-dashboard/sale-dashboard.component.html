@@ -98,61 +98,59 @@
            </div>
            <div class="col-lg-6">
             <div class="card card-block card-stretch card-height">
-                <div class="card-header d-flex align-items-center justify-content-between">
-                    <div class="header-title">
-                        <h4 class="card-title">Low Stock Products</h4>
-                    </div>
-                    <div class="card-header-toolbar d-flex align-items-center">
-                        <!-- <div class="dropdown mr-2">
-                            <span class="dropdown-toggle dropdown-bg btn" id="lowStockDropdown"
-                                  data-toggle="dropdown">
-                                Filter<i class="ri-arrow-down-s-line ml-1"></i>
-                            </span>
-                            <div class="dropdown-menu dropdown-menu-right shadow-none"
-                                 aria-labelledby="lowStockDropdown">
-                                <a class="dropdown-item" href="#">All</a>
-                                <a class="dropdown-item" href="#">Critical</a>
-                                <a class="dropdown-item" href="#">Low</a>
-                            </div>
-                        </div> -->
-                        <button  class="btn btn-sm btn-primary" (click)="Lowstock()">View All</button>
-                    </div>
+              <div class="card-header d-flex align-items-center justify-content-between">
+                <div class="header-title">
+                  <h4 class="card-title">Low Stock Products</h4>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive" style="max-height: 360px; overflow-y: auto;">
-                        <table class="table mb-0 table-hover">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Product Name</th>
-                                    <th>Stock</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let item of filterBookingData">
-                                    <td>{{ item.ProductName }}</td>
-                                    <td>{{ item.StockQuantity }}</td>
-                         
-                                </tr>
-                                <tr *ngIf="filterBookingData.length === 0">
-                                    <td colspan="3" class="text-center">No low stock products found.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="card-header-toolbar d-flex align-items-center">
+                  <button class="btn btn-sm btn-primary" (click)="Lowstock()">View All</button>
                 </div>
-            </div>
-        </div>
-        
-        
+              </div>
+              <div class="card-body">
+                <div 
+                  class="table-responsive" 
+               [ngStyle]="{
+                'max-height': filterBookingData.length >= 5 ? '260px' : 'auto',
+                'overflow-y': filterBookingData.length >= 5 ? 'auto' : 'unset'
+                  }">
+                  <table class="table mb-0 table-hover">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Product Name</th>
+                        <th>Stock</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Actual data rows -->
+                      <tr *ngFor="let item of filterBookingData">
+                        <td>{{ item.ProductName }}</td>
+                        <td>{{ item.StockQuantity }}</td>
+                      </tr>
           
-                
-           <div class="col-lg-4">  
+                      <!-- Blank rows to make total 6 -->
+                      <tr *ngFor="let blank of createBlankRows(6 - filterBookingData.length)">
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>
+          
+                      <!-- No data message -->
+                      <tr *ngIf="filterBookingData.length === 0">
+                        <td colspan="2" class="text-center text-muted">No low stock products found.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+           <div class="col-lg-3">  
                <div class="card card-block card-stretch card-height-helf">
                    <div class="card-body">
                        <div class="d-flex align-items-top justify-content-between">
                            <div class="">
                                <p class="mb-0">Income</p>
-                               <h4>{{ this.Income| currency:'INR':'symbol-narrow' }}</h4>
+                               <h4>{{ this.Incomefilterwise| currency:'INR':'symbol-narrow' }}</h4>
                             </div>
                            <div class="card-header-toolbar d-flex align-items-center">
                                <div class="dropdown">
@@ -162,9 +160,10 @@
                                    </span>
                                    <div class="dropdown-menu dropdown-menu-right shadow-none"
                                        aria-labelledby="dropdownMenuButton003">
-                                       <a class="dropdown-item"  (click)="onPeriodChange('Year')">Year</a>
-                                       <a class="dropdown-item" (click)="onPeriodChange('Month')">Month</a>
-                                       <a class="dropdown-item"  (click)="onPeriodChange('Week')">Week</a>
+                                       <a class="dropdown-item"  (click)="onPeriodChangeincome('Today')">Today</a>
+                                       <a class="dropdown-item"  (click)="onPeriodChangeincome('Week')">Week</a>
+                                       <a class="dropdown-item" (click)="onPeriodChangeincome('Month')">Month</a>
+                                       <a class="dropdown-item"  (click)="onPeriodChangeincome('Year')">Year</a>
                                    </div>
                                </div>
                            </div>
@@ -199,66 +198,111 @@
                    </div>
                </div>
            </div>
-           <div class="col-lg-8">  
-               <div class="card card-block card-stretch card-height">
-                   <div class="card-header d-flex justify-content-between">
-                       <div class="header-title">
-                           <h4 class="card-title">Order Summary</h4>
-                       </div>                        
-                       <div class="card-header-toolbar d-flex align-items-center">
-                           <div class="dropdown">
-                               <span class="dropdown-toggle dropdown-bg btn" id="dropdownMenuButton005"
-                                   data-toggle="dropdown">
-                                   This Month<i class="ri-arrow-down-s-line ml-1"></i>
-                               </span>
-                               <div class="dropdown-menu dropdown-menu-right shadow-none"
-                                   aria-labelledby="dropdownMenuButton005">
-                                   <a class="dropdown-item" href="#">Year</a>
-                                   <a class="dropdown-item" href="#">Month</a>
-                                   <a class="dropdown-item" href="#">Week</a>
-                               </div>
-                           </div>
-                       </div>
-                   </div> 
-                   <div class="card-body">
-                       <div class="d-flex flex-wrap align-items-center mt-2">
-                           <div class="d-flex align-items-center progress-order-left">
-                               <div class="progress progress-round m-0 orange conversation-bar" data-percent="46">
-                                   <span class="progress-left">
-                                       <span class="progress-bar"></span>
-                                   </span>
-                                   <span class="progress-right">
-                                       <span class="progress-bar"></span>
-                                   </span>
-                                   <div class="progress-value text-secondary">46%</div>
-                               </div>
-                               <div class="progress-value ml-3 pr-5 border-right">
-                                   <h5>$12,6598</h5>
-                                   <p class="mb-0">Average Orders</p>
-                               </div>
-                           </div>
-                           <div class="d-flex align-items-center ml-5 progress-order-right">
-                               <div class="progress progress-round m-0 primary conversation-bar" data-percent="46">
-                                   <span class="progress-left">
-                                       <span class="progress-bar"></span>
-                                   </span>
-                                   <span class="progress-right">
-                                       <span class="progress-bar"></span>
-                                   </span>
-                                   <div class="progress-value text-primary">46%</div>
-                               </div>
-                               <div class="progress-value ml-3">
-                                   <h5>$59,8478</h5>
-                                   <p class="mb-0">Top Orders</p>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-                   <div class="card-body pt-0">
-                       <div id="layout1-chart-5"></div>
-                   </div>
-               </div>
-           </div>
-       </div>
+           <div class="col-lg-9">  
+            <div class="card card-block card-stretch card-height">
+              <div class="card-header d-flex align-items-center justify-content-between">
+                <div class="header-title">
+                  <h4 class="card-title">Balance Payment List </h4>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                  <table class="table table-bordered table-hover mb-0">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Client</th>
+                        <th>Phone</th>
+                        <th>PaidAmount</th>
+                        <th>BalanceAmount</th>
+                        <th>Amount</th>
+                        <th>PaymentStatus/th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of getPaginatedData()">
+                        <td>{{ item.TransactionDate | date: 'shortDate' }}</td>
+                        <td>{{ item.Source }}</td>
+                        <td>{{ item.ClientName }}</td>
+                        <td>{{ item.Phone }}</td>
+                        <td>{{ item.PaidAmount || 0 | currency:'INR':'symbol-narrow'  }}</td>
+                        <td>{{ item.BalanceAmount  || 0 | currency:'INR':'symbol-narrow' }}</td>
+                        <td>{{ item.TotalAmount || 0  | currency:'INR':'symbol-narrow' }}</td>
+                        <td>
+                            <label [ngClass]="{
+                              'status': true,
+                              'canceled': item.PaymentStatus === 'Pending',
+                              'Completed': item.PaymentStatus === 'Completed'
+                            }">
+                              {{ item.PaymentStatus }}
+                            </label>
+                          </td>
+                      </tr>
+                      <!-- <tr *ngIf="incomeExpenseList.length === 0">
+                        <td colspan="4" class="text-center text-muted">No records found.</td>
+                      </tr> -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-12">  
+            <div class="card card-block card-stretch card-height">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Data Overview for the Last Six Months</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                        <table class="table table-bordered table-hover mb-0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Client</th>
+                                    <th>Phone</th>
+                                    <th>PaidAmount</th>
+                                    <th>BalanceAmount</th>
+                                    <th>Amount</th>
+                                    <th>PaymentStatus</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Loop through items -->
+                                <tr *ngFor="let item of getSixmonthPaginatedData()">
+                                    <td>{{ item.TransactionDate | date: 'shortDate' }}</td>
+                                    <td>{{ item.Source }}</td>
+                                    <td>{{ item.ClientName }}</td>
+                                    <td>{{ item.Phone }}</td>
+                                    <td>{{ item.PaidAmount || 0 | currency:'INR':'symbol-narrow' }}</td>
+                                    <td>{{ item.BalanceAmount || 0 | currency:'INR':'symbol-narrow' }}</td>
+                                    <td>{{ item.TotalAmount || 0 | currency:'INR':'symbol-narrow' }}</td>
+                                    <td>
+                                        <label [ngClass]="{
+                                            'status': true,
+                                            'canceled': item.PaymentStatus === 'Pending',
+                                            'Completed': item.PaymentStatus === 'Completed'
+                                        }">
+                                            {{ item.PaymentStatus }}
+                                        </label>
+                                    </td>
+                                </tr>
+        
+                                <!-- Display no records message if no data found -->
+                                <tr *ngIf="getSixmonthPaginatedData().length === 0">
+                                    <td colspan="8" class="text-center text-muted">No records found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
        <!-- Page end  -->
    </div>
