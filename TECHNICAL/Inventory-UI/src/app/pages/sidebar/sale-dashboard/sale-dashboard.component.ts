@@ -22,6 +22,8 @@ export class SaleDashboardComponent {
   chartData: any;
   chartOptions: ChartConfiguration['options'];
   selectedPeriod: string = 'Today'; // Default period
+  selectedPeriodIncome: string = 'Today'; // Default period
+
   Income: any;
   Expence: any;
   Soldstock: any;
@@ -231,7 +233,7 @@ export class SaleDashboardComponent {
 
   }
   onPeriodChangeincome(period: string): void {
-    this.selectedPeriod = period;
+    this.selectedPeriodIncome = period;
     this.updateIncomeAndExpenses();
 
   }
@@ -327,7 +329,7 @@ console.log("column",column);
     }
     return 'fas fa-sort';
   }
-  
+
   getPaginatedData() {
     return this.DashboardData.Table6.filter((item: { PaymentStatus: string; }) => item.PaymentStatus === 'Pending');
   }
