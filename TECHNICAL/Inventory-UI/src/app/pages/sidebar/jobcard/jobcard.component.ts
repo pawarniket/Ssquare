@@ -242,7 +242,8 @@ export class JobcardComponent {
     if (productToDelete.ProductID > 0) {
       const val = {
         JobCardID: this.vehicleDetails.JobCardID ? this.vehicleDetails.JobCardID : 0,
-        ProductID: productToDelete.ProductID ? productToDelete.ProductID : 0
+        ProductID: productToDelete.ProductID ? productToDelete.ProductID : 0,
+        Quantity: productToDelete.Quantity ? productToDelete.Quantity : 0
       }
       this.JobCardService.JobcardProductDelete(val).subscribe((data: any) => {
         console.log("JobcardProductDelete", data)
@@ -322,7 +323,7 @@ export class JobcardComponent {
 
   }
 
-  
+
   save(): void {
     if (this.jobCardForm.valid) {
       if (this.jobCardForm.value.products && this.vehicleDetails.ProductList) {
@@ -330,11 +331,18 @@ export class JobcardComponent {
         console.log("generateShortageXml() got called")
       }
 
+      if (!this.vehicleDetails.JobCardID) {
+        const Productlist = this.jobCardForm.value.products;
+        Productlist.forEach((product: any) => {
+          product.Minus = product.Quantity;
+        })
+        console.log("!this.vehicleDetails.JobCardID", Productlist);
 
+      }
       const JobCardServiceXML = this.generateJobserviceXML(this.jobCardForm.value.JobCardServices);
 
       const ProductXML = this.generateXML(this.jobCardForm.value.products)// Send this.jobCardForm.value to backend
-      console.log("ProductXML",ProductXML)
+      console.log("ProductXML", ProductXML)
 
       const val = {
         JobCardID: this.vehicleDetails.JobCardID ? this.vehicleDetails.JobCardID : 0,

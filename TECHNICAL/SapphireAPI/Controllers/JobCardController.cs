@@ -222,6 +222,8 @@ namespace MS.SSquare.API.Controllers
                
                     oDBUtility.AddParameters("@ProductID", DBUtilDBType.Integer, DBUtilDirection.In, 100, jobcard.ProductID);
 
+                    oDBUtility.AddParameters("@Quantity", DBUtilDBType.Integer, DBUtilDirection.In, 100, jobcard.Quantity);
+
                 DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_Delete_JobCardProduct");
                 oServiceRequestProcessor = new ServiceRequestProcessor();
                 return Ok(oServiceRequestProcessor.ProcessRequest(ds));
