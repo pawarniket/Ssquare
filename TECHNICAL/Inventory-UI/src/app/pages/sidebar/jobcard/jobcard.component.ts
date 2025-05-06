@@ -31,6 +31,7 @@ export class JobcardComponent {
   itemsPerPage = 10;
   searchText: any;
   salesearchtext: any;
+  previousPaidAmount:any;
 
   statusList = ['In Process', 'Completed'];
   paymentModes = ['Cash', 'Card', 'UPI', 'Net Banking'];
@@ -358,13 +359,12 @@ export class JobcardComponent {
         ServiceXML: JobCardServiceXML,
         TotalAmount: this.jobCardForm.value.GrandTotal,
         BalanceAmount: this.jobCardForm.value.BalancePayment,
-        PaidAmount: this.jobCardForm.value.AmountPaid,
+        PaidAmount: (Number(this.jobCardForm.value.AmountPaid) || 0) + (Number(this.vehicleDetails.PaidAmount) || 0),
         PaymentStatus: (+this.jobCardForm.value.BalancePayment || 0) === 0 ? 'Completed' : 'Pending'
       }
       this.JobCardService.InsertJobCard(val).subscribe((data) => {
         if (data.status_code === 100) {
-          console.log("val1", val)
-
+          this.jobCardForm.get('AmountPaid')?.reset(0);
           this.showToast('added successfully!', 'success');
           this.getJobCard();
           this.getproduct();
@@ -467,9 +467,9 @@ export class JobcardComponent {
       paymentMode: jobCardData.PaymentMode,
       status: jobCardData.Status,
       mechanicName: jobCardData.MechanicUserID,
-      AmountPaid: jobCardData.PaidAmount
+      // AmountPaid: jobCardData.PaidAmount
     });
-
+    this.previousPaidAmount=jobCardData.PaidAmount||0;
     // Clear existing products
     this.products.clear();
     this.JobCardServices.clear();
@@ -794,7 +794,15 @@ export class JobcardComponent {
     });
 
     const grandTotal = totalProductAmount + totalServiceAmount;
-    const amountPaid = +this.jobCardForm.get('AmountPaid')?.value || 0;
+    let amountPaid = 0;
+
+
+    if (this.vehicleDetails.JobCardID) {
+      amountPaid = (this.jobCardForm.get('AmountPaid')?.value || 0) + (this.vehicleDetails.PaidAmount || 0);
+
+    }else{
+      amountPaid = +this.jobCardForm.get('AmountPaid')?.value || 0;
+    }
     const balancePayment = grandTotal - amountPaid;
 
     this.jobCardForm.patchValue({
