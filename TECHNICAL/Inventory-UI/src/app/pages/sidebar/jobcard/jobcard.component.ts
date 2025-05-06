@@ -536,7 +536,7 @@ export class JobcardComponent {
     const selectedDate = this.selecteddate ? new Date(this.selecteddate) : null;
     const selectedStatus = this.selectedPaymentStatus;
 
-    this.jobcardDetails = this.jobcardDetails.filter((jobcard: any) => {
+    this.jobcardDetails = this.allJobcardDetails.filter((jobcard: any) => {
       const matchesDate =
         !selectedDate || new Date(jobcard.JobCardDate).toDateString() === selectedDate.toDateString();
 
