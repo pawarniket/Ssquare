@@ -423,8 +423,9 @@ salesearchtext:any;
             <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
               <div>
                 <img src="${logoPath}" class="logo" alt="Ssquare Logo">
-                <p class="text-small mt-2">123 Main Street, Pune, MH - 411001<br>
-                  Phone: +91-98765 43210<br>Email: support@ssquaregarage.com
+                <p class="text-small mt-2">Shop no.8,Ground Floor,<br>
+                  Near Hakoba Mill,Kalachowki-33 <br>
+                  Phone: +91-9819504650<br>Email: support@ssquaregarage.com
                 </p>
               </div>
               <div class="text-end">
@@ -800,9 +801,10 @@ console.log("hii",billRows);
               <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
                 <div>
                   <img src="${logoPath}" class="logo" alt="Ssquare Logo">
-                  <p class="text-small mt-2">123 Main Street, Pune, MH - 411001<br>
-                    Phone: +91-98765 43210<br>Email: support@ssquaregarage.com
-                  </p>
+                  <p class="text-small mt-2">Shop no.8,Ground Floor,<br>
+                  Near Hakoba Mill,Kalachowki-33 <br>
+                  Phone: +91-9819504650<br>Email: support@ssquaregarage.com
+                </p>
                 </div>
                 <div class="text-end">
                   <h5 class="fw-bold" style="color: var(--primary-brown);">Invoice</h5>
