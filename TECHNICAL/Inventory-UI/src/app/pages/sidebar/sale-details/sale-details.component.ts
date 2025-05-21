@@ -803,7 +803,7 @@ console.log("hii",billRows);
                   <img src="${logoPath}" class="logo" alt="Ssquare Logo">
                   <p class="text-small mt-2">Shop no.8,Ground Floor,<br>
                   Near Hakoba Mill,Kalachowki-33 <br>
-                  Phone: +91-9819504650<br>Email: support@ssquaregarage.com
+                  Phone: +91-9819504650<br>Email: ssquarebysalviservices@gamil.com
                 </p>
                 </div>
                 <div class="text-end">
