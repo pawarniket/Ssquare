@@ -14,6 +14,7 @@ using System.Net.Mail;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using System.Net;
+using System.IO;
 
 
 namespace MS.SSquare.API.Controllers
@@ -239,6 +240,52 @@ namespace MS.SSquare.API.Controllers
             }
         }
 
+
+        [Route("users/adhar")]
+        [HttpPost]
+        public JsonResult SaveFile()
+        {
+            try
+            {
+                var httpRequest = Request.Form;
+
+                var postedFile = httpRequest.Files[0];
+                string originalFileName = Path.GetFileNameWithoutExtension(postedFile.FileName);
+                string extension = Path.GetExtension(postedFile.FileName);
+
+                // Add timestamp
+                string timestamp = DateTime.Now.ToString("yyyyMMddHHmmssfff");
+                string newFileName = originalFileName + "_" + timestamp + extension;
+
+                // Get user-defined path (e.g., Photos/MasterProductImage)
+                //string basePath = httpRequest["basepath"];
+                //if (string.IsNullOrEmpty(basePath))
+                //{
+                //    basePath = "Images/Adhar"; // default fallback
+                //}
+                string basePath = "Images/Adhar";
+                // Combine path
+                string fullFolderPath = Path.Combine(_env.ContentRootPath, basePath);
+                if (!Directory.Exists(fullFolderPath))
+                {
+                    Directory.CreateDirectory(fullFolderPath);
+                }
+
+                string fullPath = Path.Combine(fullFolderPath, newFileName);
+
+                // Save file
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    postedFile.CopyTo(stream);
+                }
+
+                return new JsonResult(newFileName); // Return only filename
+            }
+            catch (Exception)
+            {
+                return new JsonResult("anonymous.png");
+            }
+        }
 
     }
 

@@ -46,6 +46,7 @@
   <ItemGroup>
     <Folder Include="Connected Services\" />
     <Folder Include="DAL\" />
+    <Folder Include="Images\Adhar\" />
     <Folder Include="Images\Response\" />
   </ItemGroup>
 

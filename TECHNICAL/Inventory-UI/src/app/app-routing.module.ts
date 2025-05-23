@@ -53,7 +53,7 @@ const routes: Routes = [
        }
     ]
    },
-
+{ path: '**', redirectTo: '/StockManagement/Product' }
 ];
 
 @NgModule({
