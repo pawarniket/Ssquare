@@ -32,3 +32,9 @@ height: 32px !important;
 .iq-top-navbar {
 min-height: 40px !important;
 } */
+
+@media (max-width: 479px){
+    .navbar-list li>a{
+        line-height: 39px !important;
+    }
+}

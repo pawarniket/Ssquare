@@ -153,7 +153,7 @@
             class="iq-navbar-logo d-flex align-items-center justify-content-between"
           >
             <i class="ri-menu-line wrapper-menu"></i>
-            <a href="/bo/Home" class="header-logo">
+            <a href="/StockManagement/Product" class="header-logo">
               <!-- <img
                 src="assets/images/logo.png"
                 class="img-fluid rounded-normal"
@@ -163,110 +163,97 @@
             </a>
           </div>
   
-          <div class="d-flex align-items-center">
-            <button
-              class="navbar-toggler"
-              type="button"
-              data-toggle="collapse"
-              data-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-label="Toggle navigation"
-            >
-              <i class="ri-menu-3-line"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav ml-auto navbar-list align-items-center">
-                <li class="nav-item nav-icon dropdown caption-content" style="height: 55px;">
-                  <!-- Bell Icon with Badge for Out of Stock Notification -->
-                  <a
-                    href="#"
-                    class="search-toggle dropdown-toggle"
-                    id="outOfStock" 
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <div class="position-relative mr-3">
-                      <i class="bi bi-bell" style="font-size: 1.5rem;"></i>
-                      <!-- Badge with Count -->
-                      <span class="position-absolute top-50 start-100 
-                       translate-middle badge rounded-pill bg-danger">
-                        {{ lowStockQuantity }}
-                      </span>
-                    </div>
-                  </a>
+          <div class="d-flex align-items-center justify-content-between">
+          <!-- Toggler button removed -->
+
+          <!-- Make navbarSupportedContent always visible -->
+          <!-- <div class="navbar-collapse" id="navbarSupportedContent"> -->
+            <ul class="navbar-nav ml-auto navbar-list align-items-center">
               
-                  <!-- Out of Stock Notification Dropdown -->
-                  <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="outOfStock">
-                    <div class="card shadow-none m-0">
-                      <div class="card-body p-0">
-                        <a
-                          *ngFor="let tool of stocktools; let i = index"
-                          [routerLink]="['/StockManagement/LowStock']"
-                          class="dropdown-item d-flex align-items-start text-dark text-decoration-none"
-                        >
-                          <div class="flex-grow-1">
-                            <div class="fw-bold">{{ tool.ProductName }}</div>
-                            <small class="text-danger">Stock: {{ tool.StockQuantity }}</small>
-                          </div>
-                        </a>
-                      </div>
+              <!-- Notification Dropdown -->
+              <li class="nav-item nav-icon dropdown caption-content" style="height: 55px;">
+                <a
+                  href="#"
+                  class="search-toggle dropdown-toggle"
+                  id="outOfStock" 
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <div class="position-relative mr-3">
+                    <i class="bi bi-bell" style="font-size: 1.5rem;"></i>
+                    <span class="position-absolute top-50 start-100 translate-middle badge rounded-pill bg-danger">
+                      {{ lowStockQuantity }}
+                    </span>
+                  </div>
+                </a>
+
+                <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="outOfStock">
+                  <div class="card shadow-none m-0">
+                    <div class="card-body p-0">
+                      <a
+                        *ngFor="let tool of stocktools; let i = index"
+                        [routerLink]="['/StockManagement/LowStock']"
+                        class="dropdown-item d-flex align-items-start text-dark text-decoration-none"
+                      >
+                        <div class="flex-grow-1">
+                          <div class="fw-bold">{{ tool.ProductName }}</div>
+                          <small class="text-danger">Stock: {{ tool.StockQuantity }}</small>
+                        </div>
+                      </a>
                     </div>
                   </div>
-                  
-                  
-                </li>
-              
-                <!-- User Profile Dropdown -->
-                <li class="nav-item nav-icon dropdown caption-content" style="height: 55px;">
-                  <a
-                    href="#"
-                    class="search-toggle dropdown-toggle"
-                    id="dropdownMenuButton4"  
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <img
-                      src="assets/images/user.png"
-                      class="img-fluid rounded"
-                      alt="user"
-                    />
-                  </a>
-              
-                  <!-- User Profile Dropdown Menu -->
-                  <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton4">
-                    <div class="card shadow-none m-0">
-                      <div class="card-body p-0 text-center">
-                        <!-- Profile Image and Background -->
-                        <div class="media-body profile-detail text-center">
-                          <img
-                            src="assets/images/page-img/profile-bg.jpg"
-                            alt="profile-bg"
-                            class="rounded-top img-fluid mb-4"
-                          />
-                          <img
-                            src="assets/images/user.png"
-                            alt="profile-img"
-                            class="rounded profile-img img-fluid avatar-70"
-                          />
-                        </div>
-                        
-                        <!-- User Info and Sign Out Button -->
-                        <div class="p-3">
-                          <h5 class="mb-1">{{ UserName }}</h5>
-                          <div class="d-flex align-items-center justify-content-center mt-3">
-                            <a (click)="SignOut()" class="btn border">Sign Out</a>
-                          </div>
+                </div>
+              </li>
+
+              <!-- User Dropdown -->
+              <li class="nav-item nav-icon dropdown caption-content" style="height: 55px;">
+                <a
+                  href="#"
+                  class="search-toggle dropdown-toggle"
+                  id="dropdownMenuButton4"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <img
+                    src="assets/images/user.png"
+                    class="img-fluid rounded"
+                    alt="user"
+                  />
+                </a>
+
+                <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton4">
+                  <div class="card shadow-none m-0">
+                    <div class="card-body p-0 text-center">
+                      <div class="media-body profile-detail text-center">
+                        <img
+                          src="assets/images/page-img/profile-bg.jpg"
+                          alt="profile-bg"
+                          class="rounded-top img-fluid mb-4"
+                        />
+                        <img
+                          src="assets/images/user.png"
+                          alt="profile-img"
+                          class="rounded profile-img img-fluid avatar-70"
+                        />
+                      </div>
+
+                      <div class="p-3">
+                        <h5 class="mb-1">{{ UserName }}</h5>
+                        <div class="d-flex align-items-center justify-content-center mt-3">
+                          <a (click)="SignOut()" class="btn border">Sign Out</a>
                         </div>
                       </div>
                     </div>
                   </div>
-                </li>
-              </ul>
-              
-            </div>
-          </div>
+                </div>
+              </li>
+
+            </ul>
+          <!-- </div> -->
+        </div>
+
         </nav>
       </div>
     </div>

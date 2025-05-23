@@ -259,10 +259,21 @@ Index Of Script
   /*---------------------------------------------------------------------
         Page Menu
         -----------------------------------------------------------------------*/
-  jQuery(document).on("click", ".wrapper-menu", function () {
-    jQuery(this).toggleClass("open");
-  });
+  // jQuery(document).on("click", ".wrapper-menu", function () {
+  //   jQuery(this).toggleClass("open");
+  // });
 
+  jQuery(document).on("click", ".nav-item", function () {
+     var isDesktop = window.innerWidth >= 1024; // Adjust breakpoint as needed
+
+    if (isDesktop) {
+        // Add class only on desktop
+        jQuery("body").addClass("sidebar-main");
+    } else {
+        // Remove class on tablet/mobile
+        jQuery("body").removeClass("sidebar-main");
+    }
+  });
   jQuery(document).on("click", ".wrapper-menu", function () {
     jQuery("body").toggleClass("sidebar-main");
   });
