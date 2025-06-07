@@ -19,7 +19,9 @@
                                    </div>
                                    <div>
                                        <p class="mb-2">Total Income</p>
-                                       <h4>{{ this.Income| currency:'INR':'symbol-narrow' }}</h4>
+                                       <!-- <h4>{{ this.Income| currency:'INR':'symbol-narrow' || 0 }}</h4> -->
+                                       <h4>{{ (this.Income || 0) | currency:'INR':'symbol-narrow' }}</h4>
+
                                     </div>
                                </div>                                
                          
@@ -35,7 +37,7 @@
                                    </div>
                                    <div>
                                        <p class="mb-2">Total Expenses</p>
-                                       <h4>{{this.Expence | currency:'INR':'symbol-narrow' }}</h4>
+                                       <h4>{{(this.Expence || 0) | currency:'INR':'symbol-narrow' }}</h4>
 
                                    </div>
                                </div>
@@ -52,7 +54,7 @@
                                    </div>
                                    <div>
                                        <p class="mb-2">Product Sold</p>
-                                       <h4>{{this.Soldstock}}</h4>
+                                       <h4>{{this.Soldstock || 0}}</h4>
                                    </div>
                                </div>
                     
@@ -217,7 +219,7 @@
                         <th>PaidAmount</th>
                         <th>BalanceAmount</th>
                         <th>Amount</th>
-                        <th>PaymentStatus/th>
+                        <th>PaymentStatus</th>
 
                       </tr>
                     </thead>

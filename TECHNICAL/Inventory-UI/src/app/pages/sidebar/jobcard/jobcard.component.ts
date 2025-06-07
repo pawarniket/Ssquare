@@ -864,7 +864,226 @@ export class JobcardComponent {
 
   ProductList: any = [];
   ServiceList: any = [];
-  printSaleInvoice(sale: any): void {
+//   printSaleInvoice(sale: any): void {
+//     console.log("Clientlist", sale);
+//     this.ProductList = JSON.parse(sale.ProductList);
+//     this.ServiceList = JSON.parse(sale.ServiceList);
+
+//     setTimeout(() => {
+//       if (!this.allJobcardDetails || this.allJobcardDetails.length === 0) {
+//         alert('Sale invoice data not available.');
+//         return;
+//       }
+
+//       const jobData = sale;
+//       const clientPhone = jobData?.Phone || 'N/A';
+//       const clientName = jobData?.ClientName || 'N/A';
+//       const clientEmail = jobData?.Email || 'N/A';
+
+//       const currentDate = new Date();
+//       const formattedDate = currentDate.toLocaleDateString('en-GB', {
+//         day: '2-digit', month: 'short', year: 'numeric'
+//       }).replace(/ /g, '-');
+
+//       const invoiceNo = `INV-${currentDate.getFullYear()}${(currentDate.getMonth() + 1).toString().padStart(2, '0')}${currentDate.getDate().toString().padStart(2, '0')}`;
+//       const jobCardNo = jobData?.JobCardID || 'N/A';
+//       const logoPath = `${location.origin}/assets/images/ssquarelogo/namelogo.png`;
+
+//       const Brand = jobData?.Brand || 'N/A';
+//       const vehicleModel = jobData?.Model || 'N/A';
+//       const VehicleNumber = jobData?.VehicleNumber || 'N/A';
+//       const Color = jobData?.Color || 'N/A';
+
+//       const billRows = this.ProductList.map((item: any) => `
+//       <tr>
+//         <td>${item.ProductName}</td>
+//         <td>${item.Quantity}</td>
+//         <td>₹${item.Selling_Price}</td>
+//         <td>₹${item.Selling_Price * item.Quantity}</td>
+//       </tr>
+//     `).join('');
+
+//       const serviceRows = this.ServiceList.map((service: any) => `
+//       <tr>
+//         <td>${service.ServiceName}</td>
+//         <td>-</td>
+//         <td>₹${service.ServiceCost}</td>
+//         <td>₹${service.ServiceCost}</td>
+//       </tr>
+//     `).join('');
+
+//       const grandTotal = sale.TotalAmount;
+//       const balanceAmount = jobData?.BalanceAmount || 0;
+//       const paidAmount = jobData?.PaidAmount || 0;
+//       const paymentMode = jobData?.PaymentMode || 'N/A';
+
+//       const popupWin = window.open('', '_blank', 'width=900,height=700');
+
+//       if (popupWin) {
+//         const htmlContent = `
+//       <html lang="en">
+//       <head>
+//         <meta charset="UTF-8">
+//         <title>Sale Invoice</title>
+//         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+//         <style>
+//             :root { --primary-brown: #6a2c1a; }
+
+//           body {
+//               font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+//               background-color: #f4f7fc;
+//               color: #333;
+//           }
+//           .invoice-container {
+//               background-color: #fff;
+//               border-radius: 8px;
+//               padding: 30px;
+//               max-width: 900px;
+//               margin: 0 auto;
+//               box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+//           }
+//           .invoice-header {
+//               text-align: center;
+//               margin-bottom: 30px;
+//           }
+//           .invoice-header h1 {
+//               font-size: 36px;
+//               color: #6a2c1a;
+//           }
+//           .section-title {
+//               font-size: 20px;
+//               margin-top: 20px;
+//               color: #6a2c1a;
+//               border-bottom: 2px solid #6a2c1a;
+//               padding-bottom: 5px;
+//               font-weight: bold;
+//           }
+//           .invoice-table th,
+//           .invoice-table td {
+//               text-align: left;
+//               padding: 10px;
+//               font-size: 16px;
+//           }
+//           .invoice-table th {
+//               background-color: #f7e6d5;
+//               color: #6a2c1a;
+//           }
+//           .total-row {
+//               font-size: 18px;
+//               font-weight: bold;
+//               color: #6a2c1a;
+//           }
+//           .footer {
+//               margin-top: 40px;
+//               text-align: center;
+//               font-size: 16px;
+//               color: #6a2c1a;
+//           }
+//                . btn-primary {
+//                 background-color: var(--primary-brown);
+//                 color: white;
+//                 border: none;
+//                 padding: 8px 16px;
+//                 font-size: 14px;
+//                 border-radius: 4px;
+//               }
+//               @media print {
+//                 .print-btn {
+//                   display: none !important;
+//                 }
+//         </style>
+//       </head>
+//       <body>
+//         <div class="container mt-5">
+//           <div class="invoice-container">
+//           <div class="text-end mb-3">
+//         <div class="print-btn text-right">
+//   <button class="btn btn-primary"style="
+//     background: #8c1818;
+// " onclick="window.print()">Print Invoice</button>
+// </div>
+//             </div>
+//             <div class="invoice-header">
+//                   <img src="${logoPath}" class="logo" alt="Ssquare Logo" style="
+//     width: 405px;
+//     height: 77px;
+// ">
+//             </div>
+
+//             <div class="row">
+//               <div class="col-md-6">
+//                 <p><strong>Invoice Number:</strong> ${invoiceNo}</p>
+//                 <p><strong>Date of Issue:</strong> ${formattedDate}</p>
+//                 <p><strong>Job Card Number:</strong> ${jobCardNo}</p>
+//               </div>
+//               <div class="col-md-6 text-right">
+//                 <p><strong>Customer Name:</strong> ${clientName}</p>
+//                 <p><strong>Contact Number:</strong> ${clientPhone}</p>
+//                 <p><strong>Email:</strong> ${clientEmail}</p>
+//               </div>
+//             </div>
+
+//             <div class="section-title">Vehicle Information</div>
+//             <div class="row">
+//               <div class="col-md-6">
+//                 <p><strong>Brand:</strong> ${Brand}</p>
+//                 <p><strong>Model:</strong> ${vehicleModel}</p>
+//                 <p><strong>Vehicle Number:</strong> ${VehicleNumber}</p>
+//                 <p><strong>Vehicle Color:</strong> ${Color}</p>
+//               </div>
+//             </div>
+
+//             <div class="section-title">Job Details</div>
+//             <table class="table table-bordered invoice-table">
+//               <thead>
+//                 <tr>
+//                   <th>Description</th>
+//                   <th>Quantity</th>
+//                   <th>Unit Price</th>
+//                   <th>Total</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 ${billRows}
+//                 ${serviceRows}
+//               </tbody>
+//             </table>
+
+//             <table class="table table-bordered">
+     
+//               <tr class="total-row">
+//                 <td>Total Amount</td>
+//                 <td>₹${grandTotal.toFixed(2)}</td>
+//               </tr>
+//             </table>
+
+//             <div class="section-title">Payment Information</div>
+//             <div class="row">
+//               <div class="col-md-6">
+//                 <p><strong>Payment Method:</strong> ${paymentMode}</p>
+//                 <p><strong>Amount Paid:</strong> ₹${paidAmount}</p>
+//               </div>
+//               <div class="col-md-6 text-right">
+//                 <p><strong>Balance Due:</strong> ₹${balanceAmount}</p>
+//               </div>
+//             </div>
+
+//             <div class="footer">
+//               <p><strong>Thank you for choosing SSquare by Salvi Services!</strong></p>
+//               <p>We look forward to serving you again.</p>
+//             </div>
+//           </div>
+//         </div>
+//       </body>
+//       </html>`;
+
+//         popupWin.document.open();
+//         popupWin.document.write(htmlContent);
+//         popupWin.document.close();
+//       }
+//     }, 500);
+//   }
+printSaleInvoice(sale: any): void {
     console.log("Clientlist", sale);
     this.ProductList = JSON.parse(sale.ProductList);
     this.ServiceList = JSON.parse(sale.ServiceList);
@@ -879,209 +1098,585 @@ export class JobcardComponent {
       const clientPhone = jobData?.Phone || 'N/A';
       const clientName = jobData?.ClientName || 'N/A';
       const clientEmail = jobData?.Email || 'N/A';
+      const clientAddress = jobData?.Address || 'N/A';
+      const clientGSTIN = jobData?.GSTIN || 'N/A';
 
-      const currentDate = new Date();
-      const formattedDate = currentDate.toLocaleDateString('en-GB', {
-        day: '2-digit', month: 'short', year: 'numeric'
-      }).replace(/ /g, '-');
+      // Example invoice and date/time from the image
+      const invoiceNo = `2025/WA/630`;
+      const invoiceDateTime = `2025-06-03 at 14.43.30`; // Assuming fixed for matching image
 
-      const invoiceNo = `INV-${currentDate.getFullYear()}${(currentDate.getMonth() + 1).toString().padStart(2, '0')}${currentDate.getDate().toString().padStart(2, '0')}`;
       const jobCardNo = jobData?.JobCardID || 'N/A';
-      const logoPath = `${location.origin}/assets/images/ssquarelogo/namelogo.png`;
-
       const Brand = jobData?.Brand || 'N/A';
       const vehicleModel = jobData?.Model || 'N/A';
       const VehicleNumber = jobData?.VehicleNumber || 'N/A';
       const Color = jobData?.Color || 'N/A';
+      const MechanicName = jobData?.MechanicName || 'N/A';
+      const chassisNo = jobData?.ChassisNo || 'N/A';
+      const kmsReading = jobData?.KmReading || 'N/A';
 
-      const billRows = this.ProductList.map((item: any) => `
-      <tr>
-        <td>${item.ProductName}</td>
-        <td>${item.Quantity}</td>
-        <td>₹${item.Selling_Price}</td>
-        <td>₹${item.Selling_Price * item.Quantity}</td>
-      </tr>
-    `).join('');
+      // Combine products and services into a single list for the "Particulars" section
+      const combinedItems: any[] = [];
+      let sNo = 1;
 
-      const serviceRows = this.ServiceList.map((service: any) => `
-      <tr>
-        <td>${service.ServiceName}</td>
-        <td>-</td>
-        <td>₹${service.ServiceCost}</td>
-        <td>₹${service.ServiceCost}</td>
-      </tr>
-    `).join('');
+      let totalParticularsTaxableValue = 0;
+      let totalParticularsDiscount = 0;
+      let totalParticularsCGSTAmt = 0;
+      let totalParticularsSGSTAmt = 0;
+      let totalParticularsIGSTAmt = 0;
+      let totalParticularsGrandTotal = 0;
 
-      const grandTotal = sale.TotalAmount;
-      const balanceAmount = jobData?.BalanceAmount || 0;
+
+      this.ProductList.forEach((item: any) => {
+        const taxableValue = item.Selling_Price * item.Quantity;
+        const total = taxableValue - (item.Discount || 0) + (item.CGST_Amount || 0) + (item.SGST_Amount || 0) + (item.IGST_Amount || 0);
+
+        combinedItems.push({
+          sNo: sNo++,
+          description: item.ProductName,
+          hsnSac: item.HSN_SAC || '',
+          qty: item.Quantity,
+          rate: item.Selling_Price,
+          taxableValue: taxableValue,
+          disc: item.Discount || 0,
+          cgstPer: item.CGST_Percentage || 0,
+          cgstAmt: item.CGST_Amount || 0,
+          sgstPer: item.SGST_Percentage || 0,
+          sgstAmt: item.SGST_Amount || 0,
+          igstPer: item.IGST_Percentage || 0,
+          igstAmt: item.IGST_Amount || 0,
+          total: total
+        });
+        totalParticularsTaxableValue += taxableValue;
+        totalParticularsDiscount += (item.Discount || 0);
+        totalParticularsCGSTAmt += (item.CGST_Amount || 0);
+        totalParticularsSGSTAmt += (item.SGST_Amount || 0);
+        totalParticularsIGSTAmt += (item.IGST_Amount || 0);
+        totalParticularsGrandTotal += total;
+      });
+
+      this.ServiceList.forEach((service: any) => {
+        const taxableValue = service.ServiceCost;
+        const total = service.ServiceCost - (service.Discount || 0) + (service.CGST_Amount || 0) + (service.SGST_Amount || 0) + (service.IGST_Amount || 0);
+
+        combinedItems.push({
+          sNo: sNo++,
+          description: service.ServiceName,
+          hsnSac: service.HSN_SAC || '',
+          qty: 1,
+          rate: service.ServiceCost,
+          taxableValue: taxableValue,
+          disc: service.Discount || 0,
+          cgstPer: service.CGST_Percentage || 0,
+          cgstAmt: service.CGST_Amount || 0,
+          sgstPer: service.SGST_Percentage || 0,
+          sgstAmt: service.SGST_Amount || 0,
+          igstPer: service.IGST_Percentage || 0,
+          igstAmt: service.IGST_Amount || 0,
+          total: total
+        });
+        totalParticularsTaxableValue += taxableValue;
+        totalParticularsDiscount += (service.Discount || 0);
+        totalParticularsCGSTAmt += (service.CGST_Amount || 0);
+        totalParticularsSGSTAmt += (service.SGST_Amount || 0);
+        totalParticularsIGSTAmt += (service.IGST_Amount || 0);
+        totalParticularsGrandTotal += total;
+      });
+
+
+      const billRows = combinedItems.map((item: any) => `
+        <tr>
+          <td class="text-center">${item.sNo}</td>
+          <td class="text-left">${item.description}</td>
+          <td>${item.hsnSac}</td>
+          <td>${item.qty.toFixed(2)}</td>
+          <td>${item.rate.toFixed(2)}</td>
+          <td>${item.taxableValue.toFixed(2)}</td>
+          <td>${item.disc.toFixed(2)}</td>
+          <td>${item.cgstPer.toFixed(2)}</td>
+          <td>${item.cgstAmt.toFixed(2)}</td>
+          <td>${item.sgstPer.toFixed(2)}</td>
+          <td>${item.sgstAmt.toFixed(2)}</td>
+          <td>${item.igstPer.toFixed(2)}</td>
+          <td>${item.igstAmt.toFixed(2)}</td>
+          <td>${item.total.toFixed(2)}</td>
+        </tr>
+      `).join('');
+
+      // Summary Totals (from image)
+      const totalPartsValue = this.ProductList.reduce((sum: number, item: any) => sum + (item.Selling_Price * item.Quantity), 0);
+      const totalLabourValue = this.ServiceList.reduce((sum: number, service: any) => sum + service.ServiceCost, 0);
+      const otherCharges = 0.00; // From image
+      const roundOff = -0.43; // From image
+
+      const summaryTotalValue = totalPartsValue + totalLabourValue + otherCharges;
+      const summaryTotalDiscount = totalParticularsDiscount;
+      const summaryTotalTaxableVal = totalParticularsTaxableValue;
+      const summaryTotalGST = totalParticularsCGSTAmt + totalParticularsSGSTAmt + totalParticularsIGSTAmt;
+      const summaryGrandTotal = sale.TotalAmount; // Use the provided GrandTotal from sale data
+
       const paidAmount = jobData?.PaidAmount || 0;
+      const balanceAmount = jobData?.BalanceAmount || 0;
       const paymentMode = jobData?.PaymentMode || 'N/A';
 
-      const popupWin = window.open('', '_blank', 'width=900,height=700');
+      const popupWin = window.open('', '_blank', 'width=800,height=900,scrollbars=yes');
 
       if (popupWin) {
         const htmlContent = `
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <title>Sale Invoice</title>
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-        <style>
-            :root { --primary-brown: #6a2c1a; }
-
-          body {
-              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-              background-color: #f4f7fc;
-              color: #333;
-          }
-          .invoice-container {
-              background-color: #fff;
-              border-radius: 8px;
-              padding: 30px;
-              max-width: 900px;
-              margin: 0 auto;
-              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-          }
-          .invoice-header {
-              text-align: center;
-              margin-bottom: 30px;
-          }
-          .invoice-header h1 {
-              font-size: 36px;
-              color: #6a2c1a;
-          }
-          .section-title {
-              font-size: 20px;
-              margin-top: 20px;
-              color: #6a2c1a;
-              border-bottom: 2px solid #6a2c1a;
-              padding-bottom: 5px;
-              font-weight: bold;
-          }
-          .invoice-table th,
-          .invoice-table td {
-              text-align: left;
-              padding: 10px;
-              font-size: 16px;
-          }
-          .invoice-table th {
-              background-color: #f7e6d5;
-              color: #6a2c1a;
-          }
-          .total-row {
-              font-size: 18px;
-              font-weight: bold;
-              color: #6a2c1a;
-          }
-          .footer {
-              margin-top: 40px;
-              text-align: center;
-              font-size: 16px;
-              color: #6a2c1a;
-          }
-               . btn-primary {
-                background-color: var(--primary-brown);
-                color: white;
-                border: none;
-                padding: 8px 16px;
-                font-size: 14px;
-                border-radius: 4px;
-              }
-              @media print {
-                .print-btn {
-                  display: none !important;
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>Bajaj Service Bill</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif; /* Bajaj bill looks like Arial/Helvetica */
+                    margin: 0;
+                    padding: 0;
+                    background-color: #f8f8f8;
+                    font-size: 10px; /* Base font size, will adjust for specific elements */
                 }
-        </style>
-      </head>
-      <body>
-        <div class="container mt-5">
-          <div class="invoice-container">
-          <div class="text-end mb-3">
-        <div class="print-btn text-right">
-  <button class="btn btn-primary"style="
-    background: #8c1818;
-" onclick="window.print()">Print Invoice</button>
-</div>
-            </div>
-            <div class="invoice-header">
-                  <img src="${logoPath}" class="logo" alt="Ssquare Logo" style="
-    width: 405px;
-    height: 77px;
-">
-            </div>
+                .invoice-container {
+                    width: 794px; /* A4 width in pixels at 96dpi for better print scale */
+                    margin: 10px auto; /* Reduced margin */
+                    border: 1px solid #000; /* All borders black */
+                    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+                    background-color: #fff;
+                    padding: 10px; /* Smaller overall padding */
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                td, th {
+                    padding: 2px 5px; /* Smaller padding for cells */
+                    vertical-align: top;
+                    font-size: 10px;
+                }
+                .text-center { text-align: center; }
+                .text-right { text-align: right; }
+                .text-left { text-align: left; }
+                .font-bold { font-weight: bold; }
+                .border-bottom { border-bottom: 1px solid #000; }
+                .border-top { border-top: 1px solid #000; }
+                .border-left { border-left: 1px solid #000; }
+                .border-right { border-right: 1px solid #000; }
+                .border-all, .table-bordered td, .table-bordered th {
+                    border: 1px solid #000 !important; /* Specific black border for tables */
+                }
+                .dash-line {
+                    border-top: 1px dashed #000;
+                    margin: 5px 0;
+                }
 
-            <div class="row">
-              <div class="col-md-6">
-                <p><strong>Invoice Number:</strong> ${invoiceNo}</p>
-                <p><strong>Date of Issue:</strong> ${formattedDate}</p>
-                <p><strong>Job Card Number:</strong> ${jobCardNo}</p>
-              </div>
-              <div class="col-md-6 text-right">
-                <p><strong>Customer Name:</strong> ${clientName}</p>
-                <p><strong>Contact Number:</strong> ${clientPhone}</p>
-                <p><strong>Email:</strong> ${clientEmail}</p>
-              </div>
+                /* Header Specifics */
+                .company-header td {
+                    padding: 0;
+                }
+                .company-name {
+                    font-size: 14px;
+                    font-weight: bold;
+                }
+                .company-tagline {
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+                .company-address {
+                    font-size: 9px;
+                }
+                .document-type {
+                    font-size: 14px;
+                    font-weight: bold;
+                    text-decoration: underline;
+                }
+
+                /* Details section (Invoice, Customer, Vehicle) */
+                .details-table td {
+                    padding: 2px 5px;
+                    font-size: 10px;
+                }
+                .details-table .label {
+                    font-weight: bold;
+                }
+
+                /* Particulars Table */
+                .particulars-table th, .particulars-table td {
+                    border: 1px solid #000;
+                    padding: 3px 5px;
+                    font-size: 9px;
+                    text-align: right; /* Most numeric columns are right-aligned */
+                }
+                .particulars-table th {
+                    background-color: #e0e0e0; /* Light grey background for headers */
+                    font-weight: bold;
+                    text-align: center; /* Headers are centered */
+                }
+                /* Specific alignment for Particulars table content */
+                .particulars-table td:nth-child(1) { text-align: center; } /* Sr No. */
+                .particulars-table td:nth-child(2) { text-align: left; } /* Particulars */
+                .particulars-table td:nth-child(3) { text-align: center; } /* HSN/SAC */
+
+
+                /* Summary Table */
+                .summary-table td {
+                    border: 1px solid #000;
+                    padding: 3px 5px;
+                    font-size: 9px;
+                    text-align: right;
+                }
+                .summary-table .label-col {
+                    text-align: left;
+                    font-weight: bold;
+                }
+                .summary-table .total-label {
+                    font-size: 10px;
+                    font-weight: bold;
+                }
+                .signature-section {
+                    margin-top: 20px;
+                    text-align: right;
+                    font-size: 10px;
+                }
+                .terms-conditions {
+                    margin-top: 15px;
+                    font-size: 8px;
+                    text-align: justify;
+                }
+                .terms-conditions ul {
+                    list-style: none;
+                    padding-left: 0;
+                    margin-bottom: 5px;
+                }
+                .terms-conditions ul li {
+                    margin-bottom: 2px;
+                }
+                .footer-line {
+                    border-top: 1px solid #000;
+                    margin-top: 10px;
+                    padding-top: 5px;
+                    text-align: center;
+                    font-size: 9px;
+                }
+                .print-btn {
+                    position: fixed; /* Keep print button visible during scroll */
+                    top: 10px;
+                    right: 10px;
+                    z-index: 1000;
+                    background-color: #8c1818;
+                    color: white;
+                    border: none;
+                    padding: 8px 16px;
+                    font-size: 14px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+                @media print {
+                    .print-btn {
+                        display: none;
+                    }
+                    .invoice-container {
+                        border: none;
+                        box-shadow: none;
+                        margin: 0;
+                        padding: 0;
+                        width: 100%; /* For full page print */
+                    }
+                    body {
+                        background-color: #fff;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <button class="print-btn" onclick="window.print()">Print Invoice</button>
+
+            <div class="invoice-container">
+                <table class="company-header">
+                    <tr>
+                        <td class="text-center" colspan="2">
+<div class="company-name">
+  <img src="/assets/images/ssquarelogo/logoname.png" alt="Company Logo" style="height: 60px;" />
+</div>                            <div class="company-address">Shop No. 8, Ground Floor,Near Hakoba Mill, Kalachowki-33</div>
+                            <div class="company-address">PH NO:- +91 9819504650</div>
+                            <div class="company-address">EMAIL:-  ssquarebysalviservices@gmail.com</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-left font-bold" style="width: 50%;">
+                           INVOICE NUMBER : ${invoiceNo}<br>
+
+                        </td>
+                        <td class="text-right font-bold" style="width: 50%;">
+                            INVOICE DT/TIME : ${invoiceDateTime}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-center">
+                            <div class="document-type">CASH/CREDIT BILL</div>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="dash-line"></div>
+
+                <table class="details-table">
+                    <tr>
+                        <td style="width: 50%;">
+                            <div class="font-bold border-bottom">DETAILS OF RECEIVER (Billed to)</div><br>
+                            <span class="font-bold">${clientName} </span><br>
+                          <div  style="width: 200px;" > ${clientAddress.replace(/\n/g, '<br>')}</div> 
+                            Mobile Number: ${clientPhone}<br>
+                        </td>
+
+                    </tr>
+                </table>
+
+                <div class="dash-line"></div>
+
+                <table class="details-table">
+                    <tr>
+                        <td style="width: 25%;" class="label">Job Card No</td>
+                        <td style="width: 25%;">${jobCardNo}</td>
+                          <td class="label">Vehicle  No</td>
+                        <td>${VehicleNumber}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Brand</td>
+                        <td>${Brand}</td>
+                        <td class="label">KMS CV  </td>
+                        <td>${kmsReading} KM</td>
+                    </tr>
+                    <tr>
+                       <td class="label">Model Name</td>
+                        <td>${vehicleModel}</td>
+                         <td class="label">Mechanic Name</td>
+                        <td>${MechanicName}</td>
+                    </tr>
+                     <tr>
+                       <td class="label">Color</td>
+                        <td>${Color}</td>
+                        <td class="label"></td>
+                        <td></td>
+                    </tr>
+                     <tr>
+                        <td class="label"></td>
+                        <td></td>
+                        <td class="label"></td>
+                        <td></td>
+                    </tr>
+          
+                </table>
+
+                <div class="dash-line"></div>
+
+                <table class="particulars-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 3%;">Sr No.</th>
+                            <th style="width: 20%;">Particulars</th>
+                            <th style="width: 8%;">HSN/SAC Code</th>
+                            <th style="width: 5%;">Qty</th>
+                            <th style="width: 7%;">Rate</th>
+                            <th style="width: 8%;">Taxable Value</th>
+                            <th style="width: 5%;">Disc (%)</th>
+                            <th style="width: 6%;">CGST (%)</th>
+                            <th style="width: 7%;">CGST Amt</th>
+                            <th style="width: 6%;">SGST (%)</th>
+                            <th style="width: 7%;">SGST Amt</th>
+                            <th style="width: 6%;">IGST (%)</th>
+                            <th style="width: 7%;">IGST Amt</th>
+                            <th style="width: 7%;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${billRows}
+                        <tr>
+                            <td colspan="5" class="font-bold text-right">Total</td>
+                            <td>${totalParticularsTaxableValue.toFixed(2)}</td>
+                            <td>${totalParticularsDiscount.toFixed(2)}</td>
+                            <td colspan="2">${totalParticularsCGSTAmt.toFixed(2)}</td>
+                            <td colspan="2">${totalParticularsSGSTAmt.toFixed(2)}</td>
+                            <td colspan="2">${totalParticularsIGSTAmt.toFixed(2)}</td>
+                            <td>${totalParticularsGrandTotal.toFixed(2)}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="dash-line"></div>
+
+                <table class="summary-table">
+                    <tr>
+                        <td class="label-col" style="width: 20%;">Particulars</td>
+                        <td class="label-col" style="width: 10%;">Value</td>
+                        <td class="label-col" style="width: 10%;">Discount</td>
+                        <td class="label-col" style="width: 15%;">Taxable Val</td>
+                        <td class="label-col" style="width: 10%;">GST</td>
+                        <td class="label-col" style="width: 15%;">Total</td>
+                    </tr>
+                    <tr>
+                        <td class="label-col">Parts Total</td>
+                        <td>${totalPartsValue.toFixed(2)}</td>
+                        <td>0.00</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="label-col">Labour Total</td>
+                        <td>${totalLabourValue.toFixed(2)}</td>
+                        <td>0.00</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="label-col">Other Charges</td>
+                        <td>${otherCharges.toFixed(2)}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+        
+                    <tr class="font-bold">
+                        <td class="label-col total-label">Grand Total</td>
+                        <td>${summaryTotalValue.toFixed(2)}</td>
+                        <td>${summaryTotalDiscount.toFixed(2)}</td>
+                        <td>${summaryTotalTaxableVal.toFixed(2)}</td>
+                        <td>${summaryTotalGST.toFixed(2)}</td>
+                        <td>${summaryGrandTotal.toFixed(2)}</td>
+                    </tr>
+                </table>
+                <br>
+                <div class="font-bold">Invoice Total (In Words) : Rupees ${this.convertNumberToWords(summaryGrandTotal)} Only</div>
+
+                <div class="dash-line"></div>
+
+                <table class="details-table">
+                    <tr>
+                        <td style="width: 50%;">
+                            <div class="font-bold">Payment Mode: ${paymentMode}</div>
+                            <div class="font-bold">Amount Paid: ${paidAmount.toFixed(2)}</div>
+                            <div class="font-bold">Balance Due: ${balanceAmount.toFixed(2)}</div>
+                        </td>
+                        <td style="width: 50%;" class="text-right">
+                            <div style="height: 40px;"></div> <div class="font-bold border-top" style="display: inline-block; padding-top: 5px; width: 60%;">For S_SQUARE_BY_SALVISERVICES</div>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="dash-line"></div>
+
+                <div class="terms-conditions">
+                    <div class="font-bold">Terms & Conditions:</div>
+                    <ul>
+                        <li>1. No cash refund on parts once sold.</li>
+                        <li>2. Goods once sold will be taken back only if returned within 7 days, unused, in saleable condition & with original cash memo.</li>
+                        <li>3. Goods are sent at owner's risk.</li>
+                        <li>4. We are not responsible for any delay caused by shortage of material or unforeseen circumstances.</li>
+                        <li>5. Warranty for parts as per company norms.</li>
+                        <li>6. All disputes subject to Mumbai Jurisdiction.</li>
+                    </ul>
+                </div>
+
+                <div class="footer-line">
+                    This is a Computer Generated Invoice and does not require signature.
+                </div>
             </div>
-
-            <div class="section-title">Vehicle Information</div>
-            <div class="row">
-              <div class="col-md-6">
-                <p><strong>Brand:</strong> ${Brand}</p>
-                <p><strong>Model:</strong> ${vehicleModel}</p>
-                <p><strong>Vehicle Number:</strong> ${VehicleNumber}</p>
-                <p><strong>Vehicle Color:</strong> ${Color}</p>
-              </div>
-            </div>
-
-            <div class="section-title">Job Details</div>
-            <table class="table table-bordered invoice-table">
-              <thead>
-                <tr>
-                  <th>Description</th>
-                  <th>Quantity</th>
-                  <th>Unit Price</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${billRows}
-                ${serviceRows}
-              </tbody>
-            </table>
-
-            <table class="table table-bordered">
-     
-              <tr class="total-row">
-                <td>Total Amount</td>
-                <td>₹${grandTotal.toFixed(2)}</td>
-              </tr>
-            </table>
-
-            <div class="section-title">Payment Information</div>
-            <div class="row">
-              <div class="col-md-6">
-                <p><strong>Payment Method:</strong> ${paymentMode}</p>
-                <p><strong>Amount Paid:</strong> ₹${paidAmount}</p>
-              </div>
-              <div class="col-md-6 text-right">
-                <p><strong>Balance Due:</strong> ₹${balanceAmount}</p>
-              </div>
-            </div>
-
-            <div class="footer">
-              <p><strong>Thank you for choosing SSquare by Salvi Services!</strong></p>
-              <p>We look forward to serving you again.</p>
-            </div>
-          </div>
-        </div>
-      </body>
-      </html>`;
+        </body>
+        </html>
+        `;
 
         popupWin.document.open();
         popupWin.document.write(htmlContent);
         popupWin.document.close();
       }
     }, 500);
+  }
+
+  // Helper function to convert number to words (basic implementation)
+  private convertNumberToWords(num: number): string {
+    const a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
+    const b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+    const numString = num.toFixed(2); // Handle decimals for paise
+    const [integerPart, decimalPart] = numString.split('.');
+
+    let words = '';
+    let n = parseInt(integerPart);
+
+    if (n === 0) {
+      words = 'zero';
+    } else {
+      if (n >= 10000000) {
+        words += this.convertHundreds(Math.floor(n / 10000000)) + 'crore ';
+        n %= 10000000;
+      }
+      if (n >= 100000) {
+        words += this.convertHundreds(Math.floor(n / 100000)) + 'lakh ';
+        n %= 100000;
+      }
+      if (n >= 1000) {
+        words += this.convertHundreds(Math.floor(n / 1000)) + 'thousand ';
+        n %= 1000;
+      }
+      if (n >= 100) {
+        words += this.convertHundreds(Math.floor(n / 100)) + 'hundred ';
+        n %= 100;
+      }
+      if (n > 0) {
+        if (words !== '') {
+          words += 'and ';
+        }
+        if (n < 20) {
+          words += a[n];
+        } else {
+          words += b[Math.floor(n / 10)];
+          if (n % 10 > 0) {
+            words += ' ' + a[n % 10];
+          }
+        }
+      }
+    }
+
+    if (parseInt(decimalPart) > 0) {
+      let paiseWords = '';
+      let p = parseInt(decimalPart);
+      if (p < 20) {
+        paiseWords += a[p];
+      } else {
+        paiseWords += b[Math.floor(p / 10)];
+        if (p % 10 > 0) {
+          paiseWords += ' ' + a[p % 10];
+        }
+      }
+      words += `and ${paiseWords.trim()} Paise `;
+    }
+
+    return words.trim();
+  }
+
+  private convertHundreds(num: number): string {
+    const a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
+    const b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    let words = '';
+    if (num >= 100) {
+      words += a[Math.floor(num / 100)] + 'hundred ';
+      num %= 100;
+    }
+    if (num > 0) {
+      if (words !== '') {
+        words += 'and ';
+      }
+      if (num < 20) {
+        words += a[num];
+      } else {
+        words += b[Math.floor(num / 10)];
+        if (num % 10 > 0) {
+          words += ' ' + a[num % 10];
+        }
+      }
+    }
+    return words;
   }
 
 
