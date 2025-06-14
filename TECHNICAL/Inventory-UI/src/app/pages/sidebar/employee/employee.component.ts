@@ -30,7 +30,8 @@ export class EmployeeComponent {
       LastName: ['', Validators.required],
       EmployeeRole: [{ value: 'User', disabled: true }, Validators.required],
       email: [''],
-      Phone: ['', Validators.required]
+      Phone: ['', Validators.required],
+      Adhar:[null]
 
 
     });
@@ -44,59 +45,74 @@ employee(){
     return
   }
   const formvalue = this.employeeform.value;
-    if (formvalue.UserID) {
-      const val = {
-        UserID: formvalue.UserID,
-        FullName: formvalue.FirstName + ' ' + formvalue.LastName,
-        Role: "User",
-        email: formvalue.email,
-        Phone: formvalue.Phone
+  const file = this.employeeform.get('Adhar')?.value;
 
-      }
-      this.UserService.updateuser(val).subscribe(
-        response => {
-          console.log("response", response);
-          // this.closePopup("addProductModal");
-          this.employeeform.reset();
-          this.getemployee();
-          this.closePopup();
+  if (file instanceof File) {
+    const formData = new FormData();
+    formData.append('file', file); // "file" matches what backend expects
 
-          Popupdisplay('Employee Upated Successfully');
+    this.UserService.insertAdharPhoto(formData).subscribe((data) => {
+      console.log("worked", data);
+      this.addUpdateEmployee(formvalue,data)
+    });
+  } else {
+    console.error('No file selected!');
+  }
+    // if (formvalue.UserID) {
+    //   const val = {
+    //     UserID: formvalue.UserID,
+    //     FullName: formvalue.FirstName + ' ' + formvalue.LastName,
+    //     Role: "User",
+    //     email: formvalue.email,
+    //     Phone: formvalue.Phone
 
-        });
+    //   }
+    //   // this.UserService.updateuser(val).subscribe(
+    //   //   response => {
+    //   //     console.log("response", response);
+    //   //     // this.closePopup("addProductModal");
+    //   //     this.employeeform.reset();
+    //   //     this.getemployee();
+    //   //     this.closePopup();
 
-    }
-    else {
+    //   //     Popupdisplay('Employee Upated Successfully');
 
-      console.log("Product is created");
-      const val = {
-        FullName: formvalue.FirstName + ' ' + formvalue.LastName,
-        Role: "User",
-        Email: formvalue.email,
-        Phone: formvalue.Phone
-      }
-      console.log("val", val);
+    //   //   });
+    //   console.log("updated",formvalue.Adhar)
+    // }
+    // else {
 
-      this.UserService.insertuser(val).subscribe(
-        response => {
-          console.log("response", response);
-          this.closePopup();
-          this.employeeform.reset();
-          this.getemployee();
-          Popupdisplay('Employee Added Successfully');
+    //   console.log("Product is created");
+    //   const val = {
+    //     FullName: formvalue.FirstName + ' ' + formvalue.LastName,
+    //     Role: "User",
+    //     Email: formvalue.email,
+    //     Phone: formvalue.Phone
+    //   }
+    //   console.log("val", val);
 
-        });
-    }
+    //   this.UserService.insertuser(val).subscribe(
+    //     response => {
+    //       console.log("response", response);
+    //       this.closePopup();
+    //       this.employeeform.reset();
+    //       this.getemployee();
+    //       Popupdisplay('Employee Added Successfully');
+
+    //     });
+    // }
 }
 
 editemployee(emp: any) {
+  console.log("emp",emp)
   this.employeeform.patchValue({
     UserID:emp.UserID,
     FirstName: emp.FullName.split(' ')[0],
     LastName: emp.FullName.trim().split(' ').slice(-1)[0],
     EmployeeRole:"User",
     email: emp.Email,
-    Phone: emp.Phone
+    Phone: emp.Phone,
+    Adhar:emp.AdharPhotoUrl
   });
 
 
@@ -266,4 +282,58 @@ closePopup() {
       this.currentPage--;
     }
   }
+
+  onFileSelected(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files.length > 0) {
+    const file = input.files[0];
+    this.employeeform.patchValue({ Adhar: file });
+  }
+}
+
+addUpdateEmployee(emp:any,photourl:string){
+ if (emp.UserID) {
+      const val = {
+        UserID: emp.UserID,
+        FullName: emp.FirstName + ' ' + emp.LastName,
+        Role: "User",
+        email: emp.email,
+        Phone: emp.Phone
+
+      }
+      this.UserService.updateuser(val).subscribe(
+        response => {
+          console.log("response", response);
+          // this.closePopup("addProductModal");
+          this.employeeform.reset();
+          this.getemployee();
+          this.closePopup();
+
+          Popupdisplay('Employee Upated Successfully');
+
+        });
+      console.log("updated",emp.Adhar)
+    }
+    else {
+
+      console.log("Product is created");
+      const val = {
+        FullName: emp.FirstName + ' ' + emp.LastName,
+        Role: "User",
+        Email: emp.email,
+        Phone: emp.Phone
+      }
+      console.log("val", val);
+
+      this.UserService.insertuser(val).subscribe(
+        response => {
+          console.log("response", response);
+          this.closePopup();
+          this.employeeform.reset();
+          this.getemployee();
+          Popupdisplay('Employee Added Successfully');
+
+        });
+    }
+}
 }

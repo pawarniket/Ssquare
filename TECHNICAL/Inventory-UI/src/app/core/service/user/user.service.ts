@@ -44,7 +44,9 @@ export class UserService {
     return CryptoJS.AES.encrypt(data, secretKey.crypto).toString();
   }
 
-
+ insertAdharPhoto(val:any){
+    return this.masterService.post(environment.api+APIConstant.Users.insertadharphoto,val)
+  }
   LoginUser(val:any){
     return this.masterService.post(environment.api+APIConstant.Users.userlogin,val)
 

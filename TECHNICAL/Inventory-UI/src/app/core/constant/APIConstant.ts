@@ -6,7 +6,9 @@ export const APIConstant = {
         getuser:'Users/Get',
         inseruser:'Users/insert',
         updateuser:'users/update',
-        deleteuser:'users/delete'
+        deleteuser:'users/delete',
+        insertadharphoto:'users/adhar'
+
       },
 
       Products:{

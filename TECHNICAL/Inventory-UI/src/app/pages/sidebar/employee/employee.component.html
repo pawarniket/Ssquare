@@ -194,13 +194,12 @@
                         </div>
                       </div>
                     </div>
-                     <!-- Row 4 -->
+                    <!-- Row 4 -->
                     <div class="row">
                       <div class="col-sm-6 col-12 mb-3">
                         <label class="form-label fw-semibold text-muted">Upload Adhar<span
                             class="text-danger">*</span></label>
-                        <input type="file" class="form-control" formControlName="Adhar"
-                          placeholder="Enter Phone Number">
+                        <input type="file" class="form-control" (change)="onFileSelected($event)" required />
                         <!-- <div *ngIf="employeeform.get('Adhar')?.invalid && employeeform.get('Adhar')?.touched"
                           class="text-danger text-sm mt-1">
                           Adhar Card is required.
