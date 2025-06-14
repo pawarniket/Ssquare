@@ -45,62 +45,62 @@ employee(){
     return
   }
   const formvalue = this.employeeform.value;
-  const file = this.employeeform.get('Adhar')?.value;
+  // const file = this.employeeform.get('Adhar')?.value;
 
-  if (file instanceof File) {
-    const formData = new FormData();
-    formData.append('file', file); // "file" matches what backend expects
+  // if (file instanceof File) {
+  //   const formData = new FormData();
+  //   formData.append('file', file); // "file" matches what backend expects
 
-    this.UserService.insertAdharPhoto(formData).subscribe((data) => {
+  //   this.UserService.insertAdharPhoto(formData).subscribe((data) => {
       
-      this.addUpdateEmployee(formvalue,data)
-    });
-  } else {
-    console.error('No file selected!');
-  }
-    // if (formvalue.UserID) {
-    //   const val = {
-    //     UserID: formvalue.UserID,
-    //     FullName: formvalue.FirstName + ' ' + formvalue.LastName,
-    //     Role: "User",
-    //     email: formvalue.email,
-    //     Phone: formvalue.Phone
+  //     this.addUpdateEmployee(formvalue,data)
+  //   });
+  // } else {
+  //   console.error('No file selected!');
+  // }
+    if (formvalue.UserID) {
+      const val = {
+        UserID: formvalue.UserID,
+        FullName: formvalue.FirstName + ' ' + formvalue.LastName,
+        Role: "User",
+        email: formvalue.email,
+        Phone: formvalue.Phone
 
-    //   }
-    //   // this.UserService.updateuser(val).subscribe(
-    //   //   response => {
-    //   //     
-    //   //     // this.closePopup("addProductModal");
-    //   //     this.employeeform.reset();
-    //   //     this.getemployee();
-    //   //     this.closePopup();
+      }
+      this.UserService.updateuser(val).subscribe(
+        response => {
+          
+          // this.closePopup("addProductModal");
+          this.employeeform.reset();
+          this.getemployee();
+          this.closePopup();
 
-    //   //     Popupdisplay('Employee Upated Successfully');
+          Popupdisplay('Employee Upated Successfully');
 
-    //   //   });
-    //   
-    // }
-    // else {
+        });
+      
+    }
+    else {
 
-    //   
-    //   const val = {
-    //     FullName: formvalue.FirstName + ' ' + formvalue.LastName,
-    //     Role: "User",
-    //     Email: formvalue.email,
-    //     Phone: formvalue.Phone
-    //   }
-    //   
+      
+      const val = {
+        FullName: formvalue.FirstName + ' ' + formvalue.LastName,
+        Role: "User",
+        Email: formvalue.email,
+        Phone: formvalue.Phone
+      }
+      
 
-    //   this.UserService.insertuser(val).subscribe(
-    //     response => {
-    //       
-    //       this.closePopup();
-    //       this.employeeform.reset();
-    //       this.getemployee();
-    //       Popupdisplay('Employee Added Successfully');
+      this.UserService.insertuser(val).subscribe(
+        response => {
+          
+          this.closePopup();
+          this.employeeform.reset();
+          this.getemployee();
+          Popupdisplay('Employee Added Successfully');
 
-    //     });
-    // }
+        });
+    }
 }
 
 editemployee(emp: any) {
