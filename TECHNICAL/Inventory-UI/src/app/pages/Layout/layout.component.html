@@ -190,7 +190,7 @@
 
                 <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="outOfStock">
                   <div class="card shadow-none m-0">
-                    <div class="card-body p-0">
+                    <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
                       <a
                         *ngFor="let tool of stocktools; let i = index"
                         [routerLink]="['/StockManagement/LowStock']"

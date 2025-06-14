@@ -338,7 +338,7 @@
                 (click)="printSaleInvoice(Clientlist)">
                 <i class="fas fa-file-invoice"></i> Invoice
               </button>
-                <button *ngIf="Clientlist.Status !== 'Completed'" class="btn btn-primary btn-sm" 
+                <button *ngIf="Clientlist.PaymentStatus !== 'Completed'" class="btn btn-primary btn-sm" 
                   (click)="selectJob(Clientlist,true)">
                   <i class="fas fa-edit"></i> Edit
                 </button>
