@@ -117,7 +117,7 @@ export class JobcardComponent {
         this.productList = JSON.parse(data["message"]);
         console.log("this.productList", this.productList);
 
-        this.productList = this.productList.filter((item: any) => item.StockQuantity != 0);
+       // this.productList = this.productList.filter((item: any) => item.StockQuantity != 0);
 
       }
     })

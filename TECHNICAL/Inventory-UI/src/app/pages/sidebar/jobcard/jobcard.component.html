@@ -70,7 +70,7 @@
             <label for="SelectProduct">Select Product:</label>
             <select formControlName="ProductID" class="form-control" (change)="onProductSelect(i)" >
               <option [ngValue]="0">-- Select Product --</option>
-              <option *ngFor="let product of productList" [value]="product.ProductID" [disabled]="product.isDisabled">{{ product.ProductName }}</option>
+              <option *ngFor="let product of productList" [value]="product.ProductID" [disabled]="product.StockQuantity === 0" [ngStyle]="{ color: product.StockQuantity === 0 ? 'red' : 'black' }">{{ product.ProductName }}</option>
             </select>
           </div>
           <div class="col-md-4">
@@ -81,6 +81,7 @@
               <!-- Show error if quantity exceeds stock -->
               <span class="text-danger" *ngIf="products.at(i).get('Quantity')?.errors?.['max']">
                 (Max {{(StockQuantity[i] + databaseStockqty[i]) || 0}} You can use)
+                {{StockQuantity[i]}} {{databaseStockqty[i]}}
               </span>
           
               <!-- Otherwise show normal stock left -->
@@ -337,7 +338,7 @@
                 (click)="printSaleInvoice(Clientlist)">
                 <i class="fas fa-file-invoice"></i> Invoice
               </button>
-                <button *ngIf="Clientlist.PaymentStatus !== 'Completed'" class="btn btn-primary btn-sm" 
+                <button *ngIf="Clientlist.Status !== 'Completed'" class="btn btn-primary btn-sm" 
                   (click)="selectJob(Clientlist,true)">
                   <i class="fas fa-edit"></i> Edit
                 </button>
