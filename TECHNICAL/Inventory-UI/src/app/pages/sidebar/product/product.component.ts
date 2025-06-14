@@ -51,7 +51,7 @@ export class ProductComponent {
     const formvalue = this.productform.value;
 
     if (formvalue.ProductID) {
-      console.log("If ai gaya");
+      
       const val = {
         ProductID: formvalue.ProductID,
         ProductName: formvalue.ProductName,
@@ -66,7 +66,7 @@ export class ProductComponent {
       }
       this.products.UpdateProduct(val).subscribe(
         response => {
-          console.log("response", response);
+          
           this.closePopup();
           this.productform.reset();
           this.getProduct();
@@ -78,7 +78,7 @@ export class ProductComponent {
     }
     else {
 
-      console.log("Product is created");
+      
       const val = {
         ProductName: formvalue.ProductName,
         Description: formvalue.ProductDescription,
@@ -90,11 +90,11 @@ export class ProductComponent {
         ISActive: formvalue.ISActive
 
       }
-      console.log("val", val);
+      
 
       this.products.AddProduct(val).subscribe(
         response => {
-          console.log("response", response);
+          
           this.closePopup();
           this.productform.reset();
           this.getProduct();
@@ -109,9 +109,9 @@ export class ProductComponent {
     }
     this.products.getProduct(val).subscribe(
       response => {
-        console.log("response", response);
+        
         this.StockList = JSON.parse(response['message']);
-console.log("this.StockList",this.StockList.StockQuantity>5);
+
 
         this.filterBookingData =this.StockList;
         if (this.filterBookingData[0]?.Message === 'Data not found') {
@@ -178,9 +178,9 @@ console.log("this.StockList",this.StockList.StockQuantity>5);
     }
     this.ProductcategoryService.getProductcategory(val).subscribe(
       response => {
-        console.log("response", response);
+        
         this.ProductCategoryList = JSON.parse(response['message']);
-        console.log("hii", this.Productlist);
+        
         if (this.ProductCategoryList[0]?.Message === 'Data not found') {
           this.ProductCategoryList = [];
         }
@@ -201,7 +201,7 @@ console.log("this.StockList",this.StockList.StockQuantity>5);
     });
 
 
-    console.log("Editing product:", product);
+    
   }
 
 
@@ -219,7 +219,7 @@ console.log("this.StockList",this.StockList.StockQuantity>5);
   deleteproduct(product:any){
 
     if (confirm('Are you sure you want to delete this Product?')) {
-console.log(product.ProductID,"product");
+
 const val  ={
   ProductID:product.ProductID
 }

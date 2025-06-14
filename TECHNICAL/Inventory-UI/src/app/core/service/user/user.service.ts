@@ -24,7 +24,7 @@ export class UserService {
       if (this.currentUser) {
         this.currentUser = JSON.parse(this.decryptData(this.currentUser));
         this.currentUserID = this.currentUser.UserID;
-        console.log("this.currentUserID",this.currentUserID);
+        
 
         this.token = this.currentUser.Token;
         this.isAuthenticated = true;

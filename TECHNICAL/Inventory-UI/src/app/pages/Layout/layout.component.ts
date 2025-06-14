@@ -117,7 +117,7 @@ constructor(private  user :UserService,private router :Router,    private saniti
 
   changeSubMenus( MenuHeaderCaption: any) {
     this.ActivatedTab= MenuHeaderCaption;
-    console.log(this.ActivatedTab);
+    
   }
   getSanitizedSvgPath(iconPath: string) {
     return this.sanitizer.bypassSecurityTrustHtml(iconPath);
@@ -132,13 +132,13 @@ constructor(private  user :UserService,private router :Router,    private saniti
     }
    this.USerRole= this.currentUser.Role
     
-    console.log("this.currentUser",this.currentUser.Role);
+    
     
     // Subscribe to the tools observable manually
     this.toolsSubscription = this.ToolService.remainingTools$.subscribe({
       next: (tools) => {
         this.stocktools= JSON.parse(tools['message'])
-        console.log("this.stocktools",this.stocktools);
+        
         this.stocktools=this.stocktools.filter((item: any) => item.StockQuantity === 0);
          this.lowStockQuantity = this.stocktools.length;
       },

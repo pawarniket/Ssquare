@@ -61,12 +61,12 @@ export class SignINComponent {
   }
   this.user.LoginUser(val).subscribe(
     response => {
-console.log("response",response);
+
 this.response = response;
 
 if(response.status_code == 100){
   this.UserList = JSON.parse(this.response['message'])[0];
-console.log("this.UserList.Role ",this.UserList.Role );
+
 
   localStorage.setItem(
     'currentUser',

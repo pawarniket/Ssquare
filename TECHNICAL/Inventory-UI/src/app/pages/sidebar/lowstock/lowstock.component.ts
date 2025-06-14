@@ -42,9 +42,9 @@ this.getProductcategory();
   // //   }
   // //   this.ProductcategoryService.getProductcategory(val).subscribe(
   // //     response => {
-  // //       console.log("response", response);
+  // //       
   // //       this.StockList = JSON.parse(response['message']);
-  // //       console.log("hii", this.StockList);
+  // //       
   // //       this.filterBookingData = this.StockList;
   // //       if (this.filterBookingData[0]?.Message === 'Data not found') {
   // //         this.filterBookingData = [];
@@ -61,7 +61,7 @@ this.getProductcategory();
     const formvalue = this.productform.value;
 
     if (formvalue.ProductID) {
-      console.log("If ai gaya");
+      
       const val = {
         ProductID: formvalue.ProductID,
         ProductName: formvalue.ProductName,
@@ -75,7 +75,7 @@ this.getProductcategory();
       }
       this.products.UpdateProduct(val).subscribe(
         response => {
-          console.log("response", response);
+          
           this.closePopup();
           this.productform.reset();
           this.getProduct();
@@ -97,11 +97,11 @@ this.getProductcategory();
     }
     this.products.getProduct(val).subscribe(
       response => {
-        console.log("response", response);
+        
         this.StockList = JSON.parse(response['message']);
-        console.log("this.StockList",this.StockList.StockQuantity>5);
+        
         const StockQuantity = this.StockList.filter((item: any) => item.StockQuantity <=5 && item.StockQuantity !== 0);
-        console.log("StockQuantity",StockQuantity);
+        
 
         this.filterBookingData = StockQuantity;
         if (this.filterBookingData[0]?.Message === 'Data not found') {
@@ -115,9 +115,9 @@ this.getProductcategory();
     }
     this.ProductcategoryService.getProductcategory(val).subscribe(
       response => {
-        console.log("response", response);
+        
         this.ProductCategoryList = JSON.parse(response['message']);
-        console.log("hii", this.Productlist);
+        
         if (this.ProductCategoryList[0]?.Message === 'Data not found') {
           this.ProductCategoryList = [];
         }
@@ -129,11 +129,11 @@ this.getProductcategory();
     }
     this.products.getProduct(val).subscribe(
       response => {
-        console.log("response", response);
+        
         this.StockList = JSON.parse(response['message']);
-console.log("this.StockList",this.StockList.StockQuantity>5);
+
 const StockQuantity = this.StockList.filter((item: any) => item.StockQuantity == 0);
-console.log("StockQuantity",StockQuantity);
+
 
         this.filterBookingData = StockQuantity;
         if (this.filterBookingData[0]?.Message === 'Data not found') {
@@ -203,11 +203,11 @@ console.log("StockQuantity",StockQuantity);
     });
 
 
-    console.log("Editing product:", product);
+    
   }
 
   deleteproduct(product:any){
-    console.log(product.ProductID,"product");
+    
     const val  ={
       ProductID:product.ProductID
     }

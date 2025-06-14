@@ -42,7 +42,7 @@ export class AddcategoryComponent {
     const formvalue = this.Productcategory.value;
 
     if (formvalue.CategoryID) {
-      console.log("If ai gaya");
+      
       const val = {
         CategoryID: formvalue.CategoryID,
         CategoryName: formvalue.ProductName,
@@ -52,7 +52,7 @@ export class AddcategoryComponent {
       }
       this.ProductcategoryService.UpdateProductcategory(val).subscribe(
         response => {
-          console.log("response", response);
+          
           // this.closePopup("addProductModal");
           this.Productcategory.reset();
           Popupdisplay('Category Upated Successfully');
@@ -62,18 +62,18 @@ export class AddcategoryComponent {
     }
     else {
 
-      console.log("Product is created");
+      
       const val = {
         CategoryName: formvalue.CategoryName,
         Description: formvalue.Description,
      
 
       }
-      console.log("val", val);
+      
 
       this.ProductcategoryService.AddProductcategory(val).subscribe(
         response => {
-          console.log("response", response);
+          
           // this.closePopup("addProductModal");
           this.Productcategory.reset();
           Popupdisplay('Category Added Successfully');
@@ -90,9 +90,9 @@ export class AddcategoryComponent {
     }
     this.ProductcategoryService.getProductcategory(val).subscribe(
       response => {
-        console.log("response", response);
+        
         this.ProductCategoryList = JSON.parse(response['message']);
-        console.log("hii", this.ProductCategoryList);
+        
         this.filterBookingData = this.ProductCategoryList;
         if (this.filterBookingData[0]?.Message === 'Data not found') {
           this.filterBookingData = [];
@@ -195,7 +195,7 @@ export class AddcategoryComponent {
     });
 
 
-    console.log("Editing product:", productCategory);
+    
   }
 
 
@@ -248,7 +248,7 @@ export class AddcategoryComponent {
   deletecategory(product:any){
 
     if (confirm('Are you sure you want to delete this Product?')) {
-console.log(product.CategoryID,"product");
+
 const val  ={
   CategoryID:product.CategoryID
 }

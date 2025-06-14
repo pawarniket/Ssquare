@@ -38,7 +38,7 @@ export class SaleDashboardComponent {
       const decrypted = this.user.decryptData(encrypted);
       this.currentUser = JSON.parse(decrypted);
     }
-    console.log("this.currentUser", this.currentUser);
+    
 
     this.setGreeting();
     this.getProduct();
@@ -66,7 +66,7 @@ export class SaleDashboardComponent {
     }
     this.products.getProduct(val).subscribe(
       response => {
-        console.log("response", response);
+        
         this.StockList = JSON.parse(response['message']);
         const StockQuantity = this.StockList.filter((item: any) => item.StockQuantity <= 5 && item.StockQuantity !== 0);
 
@@ -81,7 +81,7 @@ export class SaleDashboardComponent {
     const val = {};
     this.saledetails.getDashboard(val).subscribe(
       response => {
-        console.log("response", response);
+        
         const Dashboard = response; // Assuming response is the object you're working with.
 
         this.DashboardData = Dashboard;
@@ -239,10 +239,10 @@ export class SaleDashboardComponent {
   }
 
   updateIncomeAndExpenses(): void {
-    console.log("this.Dashboard", this.DashboardData);
+    
 
     const data = this.DashboardData?.Table5?.[0];
-    console.log("data", data);
+    
 
     // Example logic to fetch and calculate income and expenses based on the selected period
     // Replace this with actual API calls or logic to fetch data
@@ -271,7 +271,7 @@ export class SaleDashboardComponent {
 
   sortTable(column: string): void {
 
-console.log("column",column);
+
 
     // Toggle sort direction if the same column is clicked
     if (this.sortColumn === column) {
@@ -322,7 +322,7 @@ console.log("column",column);
   itemsPerPage = 10;
 
   getSortIcon(column: string): string {
-    console.log("column",column);
+    
     
     if (this.sortColumn === column) {
       return this.sortDirection === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';

@@ -115,7 +115,7 @@ export class JobcardComponent {
     this.ProductService.getProduct(val).subscribe((data) => {
       if (data.status_code === 100) {
         this.productList = JSON.parse(data["message"]);
-        console.log("this.productList", this.productList);
+        
 
        // this.productList = this.productList.filter((item: any) => item.StockQuantity != 0);
 
@@ -142,7 +142,7 @@ export class JobcardComponent {
       if (data.status_code === 100) {
         this.jobcardDetails = JSON.parse(data["message"]);
         this.allJobcardDetails = [...this.jobcardDetails];
-        console.log("allJobcardDetails", this.allJobcardDetails)
+        
 
       }
 
@@ -247,10 +247,10 @@ export class JobcardComponent {
         Quantity: productToDelete.Quantity ? productToDelete.Quantity : 0
       }
       this.JobCardService.JobcardProductDelete(val).subscribe((data: any) => {
-        console.log("JobcardProductDelete", data)
+        
       })
     }
-    console.log("Deleting product at index:", index, "=>", productToDelete);
+    
     this.databaseStockqty = [];
     this.StockQuantity[index] = [];
     if (index === 0) {
@@ -266,7 +266,7 @@ export class JobcardComponent {
   generateShortageXml() {
     const vehicleProducts = JSON.parse(this.vehicleDetails.ProductList); // JSON string to array
     const selectedProducts = this.jobCardForm.value.products;
-    console.log("selectedProducts", selectedProducts)
+    
     let xmlString = '<Products>';
     let hasShortage = false;
     vehicleProducts.forEach((vehicleProduct: any, index: any) => {
@@ -279,7 +279,7 @@ export class JobcardComponent {
         if (vehicleQty > selectedQty) {
           hasShortage = true;
           const Extra = vehicleQty - selectedQty; // Positive value if there's a shortage
-          console.log(`Product ID ${vehicleProduct.ProductID} is short by ${Extra}`);
+          
           xmlString += `<Product>
             <ProductID>${vehicleProduct.ProductID}</ProductID>
             <StockQuantity>${Extra}</StockQuantity>
@@ -292,7 +292,7 @@ export class JobcardComponent {
           } else {
             productGroup.get('IsEqual')?.setValue(1);
           }
-          console.log("this.jobCardForm.value.products", this.jobCardForm.value.products)
+          
         } else if (vehicleQty < selectedQty) {
           const shortage = selectedQty - vehicleQty;
           const productsFormArray = this.jobCardForm.get('products') as FormArray;
@@ -302,8 +302,8 @@ export class JobcardComponent {
           } else {
             productGroup.get('Minus')?.setValue(shortage);
           }
-          console.log(`Product ID ${vehicleProduct.ProductID} is short by ${shortage}`);
-          console.log("this.jobCardForm.value.products", this.jobCardForm.value.products)
+          
+          
         }
       }
     });
@@ -315,12 +315,12 @@ export class JobcardComponent {
         ProductXML: xmlString
       }
       this.ProductService.Productstockupdate(val).subscribe((data) => {
-        console.log("Productstockupdate", data)
+        
       })
-      console.log(xmlString);
+      
     }
 
-    console.log("  const selectedProducts = this.jobCardForm.value.products;", this.jobCardForm.value.products);
+    
 
   }
 
@@ -329,7 +329,7 @@ export class JobcardComponent {
     if (this.jobCardForm.valid) {
       if (this.jobCardForm.value.products && this.vehicleDetails.ProductList) {
         this.generateShortageXml();
-        console.log("generateShortageXml() got called")
+        
       }
 
       if (!this.vehicleDetails.JobCardID) {
@@ -337,13 +337,13 @@ export class JobcardComponent {
         Productlist.forEach((product: any) => {
           product.Minus = product.Quantity;
         })
-        console.log("!this.vehicleDetails.JobCardID", Productlist);
+        
 
       }
       const JobCardServiceXML = this.generateJobserviceXML(this.jobCardForm.value.JobCardServices);
 
       const ProductXML = this.generateXML(this.jobCardForm.value.products)// Send this.jobCardForm.value to backend
-      console.log("ProductXML", ProductXML)
+      
 
       const val = {
         JobCardID: this.vehicleDetails.JobCardID ? this.vehicleDetails.JobCardID : 0,
@@ -376,8 +376,8 @@ export class JobcardComponent {
           this.isProduct = false;
         }
       })
-      console.log("val2", val)
-      console.log("this.jobCardForm.value.BalancePayment", this.jobCardForm.value.BalancePayment)
+      
+      
 
     } else {
 
@@ -522,7 +522,7 @@ export class JobcardComponent {
 
   onSearch(event: any) {
     this.salesearchtext = event.target.value;
-    console.log("salesearchtext", this.salesearchtext);
+    
 
     this.applySearch();
   }
@@ -865,7 +865,7 @@ export class JobcardComponent {
   ProductList: any = [];
   ServiceList: any = [];
 //   printSaleInvoice(sale: any): void {
-//     console.log("Clientlist", sale);
+//     
 //     this.ProductList = JSON.parse(sale.ProductList);
 //     this.ServiceList = JSON.parse(sale.ServiceList);
 
@@ -1084,7 +1084,7 @@ export class JobcardComponent {
 //     }, 500);
 //   }
 printSaleInvoice(sale: any): void {
-    console.log("Clientlist", sale);
+    
     this.ProductList = JSON.parse(sale.ProductList);
     this.ServiceList = JSON.parse(sale.ServiceList);
 

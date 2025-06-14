@@ -119,9 +119,9 @@ salesearchtext:any;
     }
     this.Clientservice.GetClient(val).subscribe(
       response => {
-        console.log("response", response);
+        
         this.ClientList = JSON.parse(response['message']);
-        console.log("hii", this.ClientList);
+        
         this.ClientList.sort((a: { ClientName: string; }, b: { ClientName: string; }) =>
           a.ClientName.toLowerCase().localeCompare(b.ClientName.toLowerCase())
         );
@@ -139,7 +139,7 @@ salesearchtext:any;
     }
     this.products.getProduct(val).subscribe(
       response => {
-        console.log("response", response);
+        
         let allProducts = JSON.parse(response['message']);
         this.StockList = allProducts.filter((p: any) => p.StockQuantity >= 1);
         this.StockList.sort((a: { ProductName: string; }, b: { ProductName: string; }) =>
@@ -156,7 +156,7 @@ salesearchtext:any;
     }
     this.salesService.getsales(val).subscribe(
       response => {
-        console.log("response", response);
+        
         this.salelistdata = JSON.parse(response['message']);
         this.salelist = this.salelistdata;
 
@@ -172,10 +172,10 @@ salesearchtext:any;
     }
     this.salesService.getsalesInvoice(val).subscribe(
       response => {
-        console.log("response", response);
+        
         let Invoice = JSON.parse(response['message']);
         this.saleInvoicelist = Invoice;
-        console.log("this.saleInvoicelist", this.saleInvoicelist);
+        
 
         if (this.saleInvoicelist[0]?.Message === 'Data not found') {
           this.saleInvoicelist = [];
@@ -229,18 +229,18 @@ salesearchtext:any;
     }
     if (this.balancePayment == 0) {
       this.paymentStatus = "Completed"
-      console.log("hii");
+      
 
 
     } else {
-      console.log("else hii");
+      
 
       this.paymentStatus = "Pending"
     }
-    console.log("this.paymentmethod", this.paymentmethod);
+    
 
     if (this.SaleID) {
-      console.log("hii");
+      
       const val = {
         SaleID: this.SaleID,
         ClientID: this.selectedClient,
@@ -280,8 +280,8 @@ salesearchtext:any;
         if (data.status_code === 100) {
           const insertdata = JSON.parse(data.message);
           const salesid = insertdata[0].SaleID;
-          console.log("saleID", salesid);
-          console.log("bill etm", this.billItems);
+          
+          
 
           this.billItems.forEach(item => {
             const product = {
@@ -290,12 +290,12 @@ salesearchtext:any;
               Quantity: item.Qty,
               Price: item.Total
             };
-            console.log("brijesh", product)
+            
             this.salesService.Addsalesdetails(product).subscribe((data) => {
-              console.log("sucess");
+              
               if (data.status_code === 100) {
-                console.log("this.Quntity", this.Quntity - item.Qty);
-                console.log(item.Qty, "item.Qty ");
+                
+                
                 // this.printInvoice();
 
                 const productFromStock = this.StockList.find((p: { ProductID: any; }) => p.ProductID === item.ProductID);
@@ -310,7 +310,7 @@ salesearchtext:any;
 
 
                   this.products.UpdateProduct(updatedProduct).subscribe((res) => {
-                    console.log(`Updated stock for ProductID ${item.ProductID}: ${updatedStock}`);
+                    
                     this.BillForm = true;
                     this.salehistory = false;
                     this.getSales();
@@ -572,7 +572,7 @@ salesearchtext:any;
     }
     const formvalue = this.Clientform.value;
 
-    console.log("Product is created");
+    
     const val = {
       ClientName: formvalue.ClientName,
       Email: formvalue.Email,
@@ -580,11 +580,11 @@ salesearchtext:any;
       Phone: formvalue.Phone
 
     }
-    console.log("val", val);
+    
 
     this.Clientservice.AddClient(val).subscribe(
       response => {
-        console.log("response", response);
+        
         this.closePopup();
         this.Clientform.reset();
         ;
@@ -597,12 +597,12 @@ salesearchtext:any;
 
   get selectedClientName() {
 
-    console.log("niket", this.selectedClient);
+    
 
     const client = this.ClientList.find((client: { ClientID: any; }) => client.ClientID === parseInt(this.selectedClient, 10));
-    console.log("niket 2", client.ClientID);
+    
 
-    console.log("hii", client);  // Debugging output}
+    
     return client;
   }
 
@@ -611,7 +611,7 @@ salesearchtext:any;
 
   sortTable(column: string): void {
 
-console.log("column",column);
+
 
     // Toggle sort direction if the same column is clicked
     if (this.sortColumn === column) {
@@ -662,7 +662,7 @@ console.log("column",column);
     return name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : '';
   }
   getSortIcon(column: string): string {
-    console.log("column",column);
+    
     
     if (this.sortColumn === column) {
       return this.sortDirection === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
@@ -676,7 +676,7 @@ console.log("column",column);
     return this.salelist.slice(startIndex, startIndex + this.itemsPerPage);
   }
   saleProduct() {
-    console.log("hii");
+    
 
     this.BillForm = false;
     this.salehistory = true;
@@ -720,7 +720,7 @@ console.log("column",column);
           <td class="text-end">₹${item.Price}</td>
         </tr>`;
       }).join('');
-console.log("hii",billRows);
+
 
       const grandTotal = this.saleInvoicelist.reduce((sum: number, item: any) => sum + (item.Price || 0), 0);
 
@@ -866,12 +866,12 @@ console.log("hii",billRows);
   // editProduct(sale:any){ 
   //   this.BillForm =false;
   //   this.salehistory =true;
-  //   console.log(sale,"sale");
+  //   
   //   this.getSalesInvoice(sale.SaleID);
-  //   console.log("niket");
+  //   
 
   //   if(this.saleInvoicelist[0].Status_Code)
-  // console.log("this.saleInvoicelist niket",this.saleInvoicelist.Status_Code);
+  // 
   // // this.selectedClient= this.saleInvoicelist[0].ClientID
   // this.selectedClient = this.saleInvoicelist[0]?.ClientID || 0;
 
@@ -879,28 +879,28 @@ console.log("hii",billRows);
   editProduct(sale: any) {
     // this.BillForm = false;
     //     this.salehistory = true;
-    console.log("Sale Niket", sale.SaleID);
+    
     this.SaleID = sale.SaleID
     const val = {
       SaleID: sale.SaleID
     };
 
     this.salesService.getsalesInvoice(val).subscribe((res: any) => {
-      console.log("res", res.status_code == '100');
-      console.log("res", res);
+      
+      
       this.saleInvoicelist = JSON.parse(res['message']);
-      console.log("saleInvoicelist", this.saleInvoicelist);
+      
 
       if (res.status_code == '100') {
         this.BillForm = false;
         this.salehistory = true;
 
         const invoice = this.saleInvoicelist[0];
-        console.log("invoice", invoice);
+        
 
         // Set selected client
         this.selectedClient = invoice.ClientID;
-        console.log("Client", invoice.ClientID);
+        
 
         // Load bill items into form
         this.billItems = this.saleInvoicelist.map((item: any) => ({
@@ -911,17 +911,17 @@ console.log("hii",billRows);
           Qty: item.Quantity,
           Total: item.Price
         }));
-        console.log("item", this.billItems);
+        
 
         // Calculate grand total
         this.grandTotal = this.billItems.reduce((sum, item) => sum + (item.Total || 0), 0);
-        console.log("in", invoice);
+        
 
         this.amountPaid = invoice.PaidAmount || 0;
         this.balancePayment = this.grandTotal - this.amountPaid;
         this.paymentStatus = invoice.PaymentStatus;
 
-        console.log("Invoice list (niket):", this.saleInvoicelist);
+        
       } else {
         console.warn("Invoice fetch failed or no data found.");
       }

@@ -28,7 +28,7 @@ export class TokenInterceptor implements HttpInterceptor {
     // }
     // if (this.currentUser) {
     //   this.currentUser = JSON.parse(this.decryptData(this.currentUser));
-    //   console.log("Niket",this.currentUser);
+    //   
       
     //   this.token = this.currentUser.Token;
     // }

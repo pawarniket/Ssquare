@@ -52,7 +52,7 @@ employee(){
     formData.append('file', file); // "file" matches what backend expects
 
     this.UserService.insertAdharPhoto(formData).subscribe((data) => {
-      console.log("worked", data);
+      
       this.addUpdateEmployee(formvalue,data)
     });
   } else {
@@ -69,7 +69,7 @@ employee(){
     //   }
     //   // this.UserService.updateuser(val).subscribe(
     //   //   response => {
-    //   //     console.log("response", response);
+    //   //     
     //   //     // this.closePopup("addProductModal");
     //   //     this.employeeform.reset();
     //   //     this.getemployee();
@@ -78,22 +78,22 @@ employee(){
     //   //     Popupdisplay('Employee Upated Successfully');
 
     //   //   });
-    //   console.log("updated",formvalue.Adhar)
+    //   
     // }
     // else {
 
-    //   console.log("Product is created");
+    //   
     //   const val = {
     //     FullName: formvalue.FirstName + ' ' + formvalue.LastName,
     //     Role: "User",
     //     Email: formvalue.email,
     //     Phone: formvalue.Phone
     //   }
-    //   console.log("val", val);
+    //   
 
     //   this.UserService.insertuser(val).subscribe(
     //     response => {
-    //       console.log("response", response);
+    //       
     //       this.closePopup();
     //       this.employeeform.reset();
     //       this.getemployee();
@@ -104,7 +104,7 @@ employee(){
 }
 
 editemployee(emp: any) {
-  console.log("emp",emp)
+  
   this.employeeform.patchValue({
     UserID:emp.UserID,
     FirstName: emp.FullName.split(' ')[0],
@@ -120,7 +120,7 @@ editemployee(emp: any) {
 deleteemployee(emp:any){
 
   if (confirm('Are you sure you want to delete this Employee?')) {
-console.log(emp.UserID,"product");
+
 const val  ={
   UserID:emp.UserID
 }
@@ -149,7 +149,7 @@ closePopup() {
 
     this.UserService.getuser(val).subscribe(
       response => {
-        console.log("response", response);
+        
         this.Employeelist = JSON.parse(response['message']);
         this.filterEmployeeData = this.Employeelist;
         if (this.filterEmployeeData[0]?.Message === 'Data not found') {
@@ -303,7 +303,7 @@ addUpdateEmployee(emp:any,photourl:string){
       }
       this.UserService.updateuser(val).subscribe(
         response => {
-          console.log("response", response);
+          
           // this.closePopup("addProductModal");
           this.employeeform.reset();
           this.getemployee();
@@ -312,22 +312,22 @@ addUpdateEmployee(emp:any,photourl:string){
           Popupdisplay('Employee Upated Successfully');
 
         });
-      console.log("updated",emp.Adhar)
+      
     }
     else {
 
-      console.log("Product is created");
+      
       const val = {
         FullName: emp.FirstName + ' ' + emp.LastName,
         Role: "User",
         Email: emp.email,
         Phone: emp.Phone
       }
-      console.log("val", val);
+      
 
       this.UserService.insertuser(val).subscribe(
         response => {
-          console.log("response", response);
+          
           this.closePopup();
           this.employeeform.reset();
           this.getemployee();

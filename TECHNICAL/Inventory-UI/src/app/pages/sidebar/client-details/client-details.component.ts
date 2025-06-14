@@ -77,8 +77,8 @@ this.vehicleClientName=""
     const formvalue = this.Clientform.value;
 
     if (formvalue.ClientID) {
-      console.log("If ai gaya");
-      console.log("formvalue.Phone",formvalue.Phone);
+      
+      
       
       const val = {
         ClientID: formvalue.ClientID,
@@ -90,7 +90,7 @@ this.vehicleClientName=""
       }
       this.Clientservice.UpdateClient(val).subscribe(
         response => {
-          console.log("response", response);
+          
           this.closePopup();
           this.Clientform.reset();
 
@@ -102,7 +102,7 @@ this.getclient();
     }
     else {
 
-      console.log("Product is created");
+      
       const val = {
         ClientName: formvalue.ClientName,
         Email: formvalue.Email,
@@ -110,11 +110,11 @@ this.getclient();
         Phone:formvalue.Phone
 
       }
-      console.log("val", val);
+      
 
       this.Clientservice.AddClient(val).subscribe(
         response => {
-          console.log("response", response);
+          
           this.closePopup();
           this.Clientform.reset();
         ;
@@ -134,8 +134,8 @@ this.getclient();
     const formvalue = this.Vehicleform.value;
 
     if (formvalue.VehicleID) {
-      console.log("If ai gaya");
-      console.log("formvalue.Phone",formvalue);
+      
+      
       
       const val = {
         VehicleID: formvalue.VehicleID,
@@ -149,7 +149,7 @@ this.getclient();
       }
       this.VehicleService.Updatevehicle(val).subscribe(
         response => {
-          console.log("response", response);
+          
           this.closePopupvehicle();
           this.Resetform();
 
@@ -161,7 +161,7 @@ this.getvehicle();
     }
     else {
 
-      console.log("Product is created");
+      
       const val = {
         ClientID: parseInt(formvalue.vehicleClientName),
 
@@ -173,11 +173,11 @@ this.getvehicle();
         Brand:formvalue.Brand,
         IsActive: true
       }
-      console.log("val", val);
+      
 
       this.VehicleService.Insertvehicle(val).subscribe(
         response => {
-          console.log("response", response);
+          
           this.Resetform();
           this.closePopupvehicle();
 
@@ -337,9 +337,9 @@ this.getvehicle();
     }
     this.Clientservice.GetClient(val).subscribe(
       response => {
-        console.log("response", response);
+        
         this.ClientList = JSON.parse(response['message']);
-        console.log("hii", this.ClientList);
+        
         this.filterBookingData = this.ClientList;
         if (this.filterBookingData[0]?.Message === 'Data not found') {
           this.filterBookingData = [];
@@ -353,9 +353,9 @@ this.getvehicle();
     }
     this.VehicleService.Getvehicle(val).subscribe(
       response => {
-        console.log("response", response);
+        
         this.VehicleList = JSON.parse(response['message']);
-        // console.log("hii", this.ClientList);
+        // 
         this.filterVehicleData = this.VehicleList;
         if (this.filterVehicleData[0]?.Message === 'Data not found') {
           this.filterVehicleData = [];
@@ -379,13 +379,13 @@ this.getvehicle();
   //   }
   //   this.VehicleService.Getvehicle(val).subscribe(
   //     response => {
-  //       //console.log("response", response);
+  //       //
   //       this.clientVehicleList = JSON.parse(response['message']);
-  //        //console.log("brijesh2",  this.clientVehicleList);
+  //        //
   //      if( this.clientVehicleList.length >1){
   //       this.openClientVehicleModal('clientVehical');
   //       this.cilentName=this.clientVehicleList[0]?.ClientName 
-  //       console.log("brijesh2",  this.clientVehicleList);
+  //       
   //      }else if( this.clientVehicleList.length===1){
   //       if(this.clientVehicleList["Message"]=="Data not found"){
   //         alert("add vehical")
@@ -505,7 +505,7 @@ openClientVehicleModal(ModalName:any) {
     }
     });
     this.closeClientVehicleModal();
-    console.log("selectVehical",selectVehical)
+    
   }
   sortTable(column: string): void {
 
@@ -599,15 +599,15 @@ openClientVehicleModal(ModalName:any) {
   }
 //   applySearch() {
 //     if (!this.searchText) {
-// console.log("this.searchText",this.searchText);
+// 
 
 //       if(this.ClientList){
-//         console.log("if Mai gaya");
+//         
 
 //       this.filterBookingData = [...this.ClientList]; // Correctly copying data
 //       }
 //       else{
-//         console.log("else Mai Gaya");
+//         
         
 //         this.filterVehicleData = [...this.VehicleList]; // Correctly copying data
 
