@@ -204,11 +204,293 @@ body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: 
   background-color: #444;
 }
 </style>
+<style>
+ header {
+      background-color: #111;
+      color: #fff;
+      position: relative;
+      z-index: 1000;
+    }
 
+    .header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      flex-wrap: wrap;
+    }
+
+    .mobile-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-img {
+      max-height: 50px;
+    }
+
+    .jkit-hamburger-menu {
+      background: none;
+      border: none;
+      font-size: 5px;
+      color: white;
+      cursor: pointer;
+      display: none;
+    }
+
+    .jkit-menu-wrapper {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .jkit-menu {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      padding: 0;
+      margin: 0;
+    }
+.jkit-menu li a:hover {
+  color: brown;        /* text color on hover */
+  background-color: transparent; /* keep background unchanged if needed */
+}
+    .jkit-menu li a {
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 0;
+    }
+    @media screen and (min-width: 768px) {  
+      .logo-img {
+          max-height: 50px;
+      }
+}
+    @media screen and (max-width: 376px) {
+      .jkit-hamburger-menu {
+        display: block;
+      }
+      .logo-img {
+          max-height: 42px !important;
+      }
+      .jkit-menu-wrapper {
+        display: none;
+        flex-direction: column;
+        background-color: #111;
+        width: 100%;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        padding: 20px 0;
+      }
+
+      .jkit-menu-wrapper.active {
+        display: flex;
+      }
+
+      .jkit-menu {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .jkit-menu li {
+        border-top: 1px solid #222;
+        text-align: center;
+      }
+    }
+    @media screen and (max-width: 426px) {
+      .jkit-hamburger-menu {
+        display: block;
+      }
+      .logo-img {
+          max-height: 52px;
+      }
+      .jkit-menu-wrapper {
+        display: none;
+        flex-direction: column;
+        background-color: #111;
+        width: 100%;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        padding: 20px 0;
+      }
+
+      .jkit-menu-wrapper.active {
+        display: flex;
+      }
+
+      .jkit-menu {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .jkit-menu li {
+        border-top: 1px solid #222;
+        text-align: center;
+      }
+    }
+    /* Mobile styles */
+    @media screen and (max-width: 371px) {
+      .jkit-hamburger-menu {
+        display: block;
+      }
+      .logo-img {
+          max-height: 32px !important;
+      }
+      .jkit-menu-wrapper {
+        display: none;
+        flex-direction: column;
+        background-color: #111;
+        width: 100%;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        padding: 20px 0;
+      }
+
+      .jkit-menu-wrapper.active {
+        display: flex;
+      }
+
+      .jkit-menu {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .jkit-menu li {
+        border-top: 1px solid #222;
+        text-align: center;
+      }
+    }
+  </style>
+<style>/* Splash Fullscreen */
+#splash {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1000;
+  transition: opacity 1s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Background Video */
+.bg-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* Overlay on video for readability */
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1;
+}
+
+/* Content center */
+.splash-content {
+  position: relative;
+  text-align: center;
+  z-index: 2;
+}
+
+/* Logo animation */
+.logo {
+  width: 500px;
+  opacity: 0;
+  animation: zoomInOut 10s ease forwards;
+}
+
+@keyframes zoomInOut {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1.1); opacity: 0; }
+}
+
+/* Welcome text appears after logo hides */
+.brand-name {
+  font-size: 28px;
+  color: #F5E8C7;
+  margin-top: 20px;
+  opacity: 0;
+  animation: fadeInUp 2s ease forwards;
+  animation-delay: 2.1s;
+}
+
+/* Tagline after welcome */
+.tagline {
+  font-size: 16px;
+  margin-top: 10px;
+  color: #bbb;
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards;
+  animation-delay: 3.5s;
+}
+
+/* Fade animation */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Main content hidden initially */
+.hidden {
+  display: none;
+}
+</style>
+<style>
+  .custom-bg {
+  background-image: url('/wp-content/images/garagebg.avif') !important;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+</style>
 </head>
 
 <body class="home page-template page-template-elementor_header_footer page page-id-51 ehf-header ehf-footer ehf-template-hello-elementor ehf-stylesheet-hello-elementor jkit-color-scheme elementor-default elementor-template-full-width elementor-kit-3 elementor-page elementor-page-51">
-<div id="page" class="hfeed site">
+<script>
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const splash = document.getElementById('splash');
+      splash.style.opacity = 0;
+
+      setTimeout(() => {
+        splash.style.display = 'none';
+        document.getElementById('main-content').classList.remove('hidden');
+      }, 1000); // Matches CSS fade duration
+    }, 5000); // Total duration of splash
+  });
+</script>
+
+<div id="splash">
+  <!-- Background Video -->
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="/wp-content/images/bike.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="overlay"></div>
+
+  <div class="splash-content">
+    <img src="/wp-content/images/namelogo.png" alt="Ssquare Logo" class="logo" />
+    <h1 class="brand-name">Welcome to Ssquare by Salvi Services</h1>
+    <p class="tagline">"Two wheels move the soul"</p>
+  </div>
+</div>
+
+
+
+  <div id="page" class="hfeed site">
 <a href="#" class="scroll-to-top" id="scrollToTopBtn" title="Go to top">
   ↑
 </a>
@@ -230,61 +512,49 @@ body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: 
   });
 </script>
 
+<script>
+  function toggleMenu() {
+    document.getElementById("mobileMenu").classList.toggle("active");
+  }
 
-	<header id="masthead" itemscope itemtype="https://schema.org/WPHeader">
-  <p class="main-title bhf-hidden" itemprop="headline">
-    <a href="/" title="SSQUAREBYSALVI'S SERVICES" rel="home">SSQUAREBYSALVI'S SERVICES</a>
-  </p>
+  document.addEventListener("DOMContentLoaded", () => {
+    const menuLinks = document.querySelectorAll("#mobileMenu a");
+    menuLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        document.getElementById("mobileMenu").classList.remove("active");
+      });
+    });
+  });
+</script>
+<header id="masthead" itemscope itemtype="https://schema.org/WPHeader">
+  <div class="header-flex">
 
-  <div data-elementor-type="wp-post" data-elementor-id="5" class="elementor elementor-5">
-    <section class="elementor-section elementor-top-section elementor-section-boxed elementor-section-height-default">
-      <div class="elementor-container elementor-column-gap-default" style="display: flex; align-items: center; justify-content: space-between;">
+    <!-- Logo + Hamburger -->
+    <div class="mobile-header-left">
+      <img src="/wp-content/images/namelogo.png" alt="SSQUARE LOGO" class="logo-img" />
+      <button class="jkit-hamburger-menu" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
 
-        <!-- Logo Left -->
-        <div class="elementor-column elementor-col-33 elementor-top-column">
-          <div class="elementor-widget-wrap elementor-element-populated">
-            <div class="elementor-widget-container" style="display: flex; align-items: center;">
-              <img width="180" height="auto" src="/wp-content/images/namelogo.png" alt="SSQUAREBYSALVI'S LOGO" decoding="async" />
-            </div>
-          </div>
-        </div>
+    <!-- Navigation -->
+    <div class="jkit-menu-wrapper" id="mobileMenu">
+      <ul class="jkit-menu">
+        <li><a href="#home">HOME</a></li>
+        <li><a href="#about-us">ABOUT US</a></li>
+        <li><a href="#services">SERVICES</a></li>
+        <li><a href="#team">TEAM</a></li>
+        <li><a href="#contact">CONTACT</a></li>
+      </ul>
+    </div>
 
-        <!-- Navigation Center/Right -->
-        <div class="elementor-column elementor-col-66 elementor-top-column">
-          <div class="elementor-widget-wrap elementor-element-populated" style="display: flex; justify-content: flex-end;">
-            <div class="elementor-widget-container">
-              <div class="jeg-elementor-kit jkit-nav-menu break-point-tablet submenu-click-title">
-                <button class="jkit-hamburger-menu"><i class="fas fa-bars"></i></button>
-                <div class="jkit-menu-wrapper">
-                  <div class="jkit-menu-container">
-                    <ul class="jkit-menu jkit-menu-direction-flex jkit-submenu-position-top">
-                      <li><a href="#home">HOME</a></li>
-                      <li><a href="#about-us">ABOUT US</a></li>
-                      <li><a href="#services">SERVICES</a></li>
-                      <li><a href="#team">TEAM</a></li>
-                      <li><a href="#contact">CONTACT</a></li>
-                    </ul>
-                  </div>
-                  <div class="jkit-nav-identity-panel">
-                    <div class="jkit-nav-site-title"><a href="/" class="jkit-nav-logo">SSQUARE</a></div>
-                    <button class="jkit-close-menu"><i class="fas fa-times"></i></button>
-                  </div>
-                </div>
-                <div class="jkit-overlay"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-      </div>
-    </section>
   </div>
 </header>
 
 
 			<div data-elementor-type="wp-page" data-elementor-id="51" class="elementor elementor-51">
-	<section class="elementor-section elementor-top-section elementor-element elementor-element-87313cf elementor-section-boxed elementor-section-height-default elementor-section-height-default" data-id="87313cf" data-element_type="section" data-settings='{"background_background":"classic"}'>
+<section class="elementor-section elementor-top-section custom-bg elementor-element elementor-element-87313cf elementor-section-boxed elementor-section-height-default elementor-section-height-default"
+  data-id="87313cf" data-element_type="section" data-settings='{"background_background":"classic"}'>
   <div class="elementor-container elementor-column-gap-default">
     <div class="elementor-column elementor-col-50 elementor-top-column elementor-element elementor-element-9181f1e" data-id="9181f1e" data-element_type="column">
       <div class="elementor-widget-wrap elementor-element-populated">
