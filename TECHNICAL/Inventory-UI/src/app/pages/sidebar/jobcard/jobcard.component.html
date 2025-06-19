@@ -81,7 +81,6 @@
               <!-- Show error if quantity exceeds stock -->
               <span class="text-danger" *ngIf="products.at(i).get('Quantity')?.errors?.['max']">
                 (Max {{(StockQuantity[i] + databaseStockqty[i]) || 0}} You can use)
-                {{StockQuantity[i]}} {{databaseStockqty[i]}}
               </span>
           
               <!-- Otherwise show normal stock left -->
