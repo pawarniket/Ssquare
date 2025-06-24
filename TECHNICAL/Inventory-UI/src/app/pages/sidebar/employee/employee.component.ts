@@ -1,6 +1,7 @@
 import { UserService } from './../../../core/service/user/user.service';
-import { Component } from '@angular/core';
+import { Component, EnvironmentInjector } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
 declare function Popupdisplay(message: any): any;
 
 @Component({
@@ -15,11 +16,11 @@ export class EmployeeComponent {
   Employeelist: any = [];
   searchText: any;
   employeeform!: FormGroup;
-
+  previewUrl: string = '';
   sortDirection: 'asc' | 'desc' | 'none' = 'none';
   sortColumn: string = ''; // Column being sorted
   constructor(private UserService: UserService,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,private env :EnvironmentInjector) {
 
   }
 
@@ -38,69 +39,136 @@ export class EmployeeComponent {
     this.getemployee();
   }
 
-employee(){
+// employee(){
+//   if (!this.employeeform.valid) {
+//     this.employeeform.markAllAsTouched();
+
+//     return
+//   }
+//   const formvalue = this.employeeform.value;
+
+//   //adharcard insertion code 
+//   const file = this.employeeform.get('Adhar')?.value;
+
+//   if (file instanceof File) {
+//     const formData = new FormData();
+//     formData.append('file', file); // "file" matches what backend expects
+
+//     this.UserService.insertAdharPhoto(formData).subscribe((data) => {
+      
+//       this.addUpdateEmployee(formvalue,data)
+//     });
+//   } else {
+//     console.error('No file selected!');
+//   }
+// ///adharcard insertion code  end
+
+//     if (formvalue.UserID) {
+//       const val = {
+//         UserID: formvalue.UserID,
+//         FullName: formvalue.FirstName + ' ' + formvalue.LastName,
+//         Role: "User",
+//         email: formvalue.email,
+//         Phone: formvalue.Phone
+
+//       }
+//       this.UserService.updateuser(val).subscribe(
+//         response => {
+          
+//           // this.closePopup("addProductModal");
+//           this.employeeform.reset();
+//           this.getemployee();
+//           this.closePopup();
+
+//           Popupdisplay('Employee Upated Successfully');
+
+//         });
+      
+//     }
+//     else {
+
+      
+//       const val = {
+//         FullName: formvalue.FirstName + ' ' + formvalue.LastName,
+//         Role: "User",
+//         Email: formvalue.email,
+//         Phone: formvalue.Phone
+//       }
+      
+
+//       this.UserService.insertuser(val).subscribe(
+//         response => {
+          
+//           this.closePopup();
+//           this.employeeform.reset();
+//           this.getemployee();
+//           Popupdisplay('Employee Added Successfully');
+
+//         });
+//     }
+// }
+
+employee() {
   if (!this.employeeform.valid) {
     this.employeeform.markAllAsTouched();
-
-    return
+    return;
   }
+
   const formvalue = this.employeeform.value;
-  // const file = this.employeeform.get('Adhar')?.value;
+  const file = this.employeeform.get('Adhar')?.value;
 
-  // if (file instanceof File) {
-  //   const formData = new FormData();
-  //   formData.append('file', file); // "file" matches what backend expects
-
-  //   this.UserService.insertAdharPhoto(formData).subscribe((data) => {
-      
-  //     this.addUpdateEmployee(formvalue,data)
-  //   });
-  // } else {
-  //   console.error('No file selected!');
-  // }
+  const proceedWithEmployee = (adharData?: any) => {
     if (formvalue.UserID) {
       const val = {
         UserID: formvalue.UserID,
         FullName: formvalue.FirstName + ' ' + formvalue.LastName,
         Role: "User",
         email: formvalue.email,
-        Phone: formvalue.Phone
+        Phone: formvalue.Phone,
+        AdharPhotoUrl: adharData|| '' // Example: pass Adhar file path if returned
+      };
+      this.UserService.updateuser(val).subscribe(() => {
+        this.employeeform.reset();
+        this.getemployee();
+        this.closePopup();
+        Popupdisplay('Employee Updated Successfully');
+      });
 
-      }
-      this.UserService.updateuser(val).subscribe(
-        response => {
-          
-          // this.closePopup("addProductModal");
-          this.employeeform.reset();
-          this.getemployee();
-          this.closePopup();
-
-          Popupdisplay('Employee Upated Successfully');
-
-        });
-      
-    }
-    else {
-
-      
+    } else {
       const val = {
         FullName: formvalue.FirstName + ' ' + formvalue.LastName,
         Role: "User",
         Email: formvalue.email,
-        Phone: formvalue.Phone
-      }
-      
+        Phone: formvalue.Phone,
+        AdharPhotoUrl: adharData || ''
+      };
 
-      this.UserService.insertuser(val).subscribe(
-        response => {
-          
-          this.closePopup();
-          this.employeeform.reset();
-          this.getemployee();
-          Popupdisplay('Employee Added Successfully');
-
-        });
+      this.UserService.insertuser(val).subscribe(() => {
+        this.employeeform.reset();
+        this.getemployee();
+        this.closePopup();
+        Popupdisplay('Employee Added Successfully');
+      });
     }
+  };
+
+  // Adhar upload section
+  if (file instanceof File) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    this.UserService.insertAdharPhoto(formData).subscribe((data) => {
+      console.log("data",data)
+      proceedWithEmployee(data); // continue after upload completes
+
+    }, err => {
+      console.error('Failed to upload Adhar card:', err);
+      Popupdisplay('Adhar card upload failed.');
+    });
+
+  } else {
+    proceedWithEmployee(); // proceed even if Adhar is not uploaded
+  }
 }
 
 editemployee(emp: any) {
@@ -111,10 +179,10 @@ editemployee(emp: any) {
     LastName: emp.FullName.trim().split(' ').slice(-1)[0],
     EmployeeRole:"User",
     email: emp.Email,
-    Phone: emp.Phone,
-    Adhar:emp.AdharPhotoUrl
+    Phone: emp.Phone
+    
   });
-
+this.previewUrl = environment.api+ 'Images/Adhar/' + emp.AdharPhotoUrl; // full image URL
 
 }
 deleteemployee(emp:any){
@@ -138,7 +206,7 @@ closePopup() {
 
   Resetform() {
     this.employeeform.reset();
-
+    this.previewUrl='';
   }
   getemployee() {
     const val =
@@ -152,6 +220,7 @@ closePopup() {
         
         this.Employeelist = JSON.parse(response['message']);
         this.filterEmployeeData = this.Employeelist;
+        console.log("data",this.filterEmployeeData)
         if (this.filterEmployeeData[0]?.Message === 'Data not found') {
           this.filterEmployeeData = [];
         }
@@ -288,7 +357,14 @@ closePopup() {
   if (input.files && input.files.length > 0) {
     const file = input.files[0];
     this.employeeform.patchValue({ Adhar: file });
+    // Optional: create a preview URL
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.previewUrl = reader.result as string;
+    };
+    reader.readAsDataURL(file);
   }
+  
 }
 
 addUpdateEmployee(emp:any,photourl:string){
@@ -308,7 +384,7 @@ addUpdateEmployee(emp:any,photourl:string){
           this.employeeform.reset();
           this.getemployee();
           this.closePopup();
-
+          this.previewUrl='';
           Popupdisplay('Employee Upated Successfully');
 
         });
@@ -332,7 +408,7 @@ addUpdateEmployee(emp:any,photourl:string){
           this.employeeform.reset();
           this.getemployee();
           Popupdisplay('Employee Added Successfully');
-
+          this.previewUrl='';
         });
     }
 }

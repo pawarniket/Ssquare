@@ -149,6 +149,10 @@ namespace MS.SSquare.API.Controllers
                 {
                     oDBUtility.AddParameters("@Email", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, user.Email);
                 }
+                if (user.AdharPhotoUrl != null)
+                {
+                    oDBUtility.AddParameters("@AdharPhotoUrl", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, user.AdharPhotoUrl);
+                }
 
                 DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_INSERT_USERS");
                 oServiceRequestProcessor = new ServiceRequestProcessor();
@@ -197,7 +201,10 @@ namespace MS.SSquare.API.Controllers
                     oDBUtility.AddParameters("@Email", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, user.Email);
                 }
 
-
+                if (user.AdharPhotoUrl != null)
+                {
+                    oDBUtility.AddParameters("@AdharPhotoUrl", DBUtilDBType.Nvarchar, DBUtilDirection.In, 100, user.AdharPhotoUrl);
+                }
                 DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_UPDATE_USERS");
                 oServiceRequestProcessor = new ServiceRequestProcessor();
                 return Ok(oServiceRequestProcessor.ProcessRequest(ds));

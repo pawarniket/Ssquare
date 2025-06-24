@@ -13,6 +13,8 @@
         public string Password { get; set; }
         public string NewPassword { get; set; }    // The new password the user wants to set
         public string ConfirmPassword { get; set; }
+        public string AdharPhotoUrl { get; set; }
+
         public int RoleID { get; set; }
         public int ClientID { get; set; }
 
