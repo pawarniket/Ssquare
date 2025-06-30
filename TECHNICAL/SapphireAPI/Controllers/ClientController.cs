@@ -134,5 +134,37 @@ namespace MS.SSquare.API.Controllers
             }
         }
 
+
+        [Route("Client/Delete")]
+        [HttpPost]
+        public IActionResult Delete(Client client)
+        {
+            try
+            {
+
+                DBUtility oDBUtility = new DBUtility(_configurationIG);
+                {
+                    if (client.ClientID != 0 && client.ClientID != null)
+                    {
+                        oDBUtility.AddParameters("@ClientID", DBUtilDBType.Integer, DBUtilDirection.In, 10, client.ClientID);
+                    }
+
+
+
+                    DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_DELETE_Client");
+
+                    oServiceRequestProcessor = new ServiceRequestProcessor();
+                    return Ok(oServiceRequestProcessor.ProcessRequest(ds));
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                oServiceRequestProcessor = new ServiceRequestProcessor();
+                return BadRequest(oServiceRequestProcessor.onError(ex.Message));
+            }
+        }
+
     }
 }

@@ -185,6 +185,10 @@ editemployee(emp: any) {
 this.previewUrl = environment.api+ 'Images/Adhar/' + emp.AdharPhotoUrl; // full image URL
 
 }
+previewDocument(emp: any) {
+  const url = environment.api + 'Images/Adhar/' + emp.AdharPhotoUrl;
+  window.open(url, '_blank');
+}
 deleteemployee(emp:any){
 
   if (confirm('Are you sure you want to delete this Employee?')) {

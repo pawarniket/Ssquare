@@ -144,6 +144,7 @@ this.getclient();
         VehicleNumber: formvalue.VehicleNumber,
         VehicleType: formvalue.VehicleType,
         Model: formvalue.Model,
+        Brand:formvalue.Brand,
         Color:formvalue.Color
 
       }
@@ -373,6 +374,30 @@ this.getvehicle();
 
 
   }
+//   deleteproduct(Client:any){
+//         if (confirm('Are you sure you want to delete this Product?')) {
+
+//     console.log("Client",Client);
+//         const val = {
+//                 ClientID: Client.ClientID,
+
+//     }
+
+//     this.VehicleService.Deletevehicle(val).subscribe(
+//       response => {
+//         console.log("response",response);
+//         if(response.status_code ==  100 || response.status_code == 200){
+//             this.Clientservice.DeleteClient(val).subscribe(
+//       response => {
+//           Popupdisplay('Product Deleted Successfully');
+//           this.getclient();
+// this.getvehicle();
+//       });
+//         }
+        
+//   });
+// }
+// }
   // JobCard(Client: any){
   //   const val={
   //     ClientID:Client.ClientID

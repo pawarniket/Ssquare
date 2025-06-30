@@ -66,14 +66,41 @@
     <div formArrayName="products" id="product-list" class="product-list">
       <div *ngFor="let product of products.controls; let i = index" [formGroupName]="i" class="product-item mb-3 p-3 border rounded">
         <div class="col-md-12 form-row align-items-center">
-          <div class="col-md-4">
+<div class="col-md-4">
+  <label for="SelectProduct"><strong>Select Product:</strong></label>
+  <ng-select 
+    [items]="productList"
+    bindLabel="ProductName"
+    bindValue="ProductID"
+    formControlName="ProductID"
+
+    class="form-control p-2 mt-4"
+    [searchable]="true"
+    [clearable]="false">
+      <!-- Custom template for each option -->
+  <ng-template ng-option-tmp let-item="item">
+    <span [style.color]="item.StockQuantity === 0 ? 'red' : 'black'">
+      {{ item.ProductName }}
+      <span *ngIf="item.StockQuantity === 0" > (Out of stock)</span>
+    </span>
+  </ng-template>
+
+  <!-- Disable condition -->
+  <ng-template ng-label-tmp let-item="item">
+    {{ item.ProductName }}
+  </ng-template>
+  </ng-select>
+</div>
+
+
+          <!-- <div class="col-md-4">
             <label for="SelectProduct">Select Product:</label>
             <select formControlName="ProductID" class="form-control" (change)="onProductSelect(i)" >
               <option [ngValue]="0">-- Select Product --</option>
               <option *ngFor="let product of productList" [value]="product.ProductID" [disabled]="product.StockQuantity === 0" [ngStyle]="{ color: product.StockQuantity === 0 ? 'red' : 'black' }">{{ product.ProductName }}</option>
             </select>
-          </div>
-          <div class="col-md-4">
+          </div> -->
+          <div class="col-md-4 ">
             <!-- <label for="Quantity">Quantity: <span class="text-danger">{{(StockQuantity[i] || 0) + " left"}}</span> </label> -->
             <label for="Quantity">
               Quantity:
@@ -91,12 +118,12 @@
             <input type="number"  [max]="(StockQuantity[i] + (databaseStockqty[i]||0)) || 0" min="1" formControlName="Quantity" class="form-control" placeholder="Quantity" (input)="onQuantityChange(i)"  [ngClass]="{ 'is-invalid': isProductInvalid(i, 'Quantity') }">
           </div>
           
-          <div class="col-md-2">
+          <div class="col-md-2 mt-4">
             <label for="Price">Price:</label>
             <input type="number" formControlName="Price" class="form-control" placeholder="Price" [readonly]="true">
           </div>
           <div class="col-md-2">
-            <button type="button" class="btn btn-primary btn-sm w-100" style="margin-top: 7%;" (click)="deleteProduct(i)">
+            <button type="button" class="btn btn-primary btn-sm w-100  mt-4" style="margin-top: 30%;" (click)="deleteProduct(i)">
               <i class="fa-solid fa-trash"></i> Delete
             </button>
           </div>

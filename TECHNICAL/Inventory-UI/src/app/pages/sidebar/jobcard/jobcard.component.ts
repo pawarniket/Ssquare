@@ -108,15 +108,19 @@ export class JobcardComponent {
 
     });
 
-    this.getproduct();
+    this.getproduct();   
   }
   getproduct() {
     const val = {}
     this.ProductService.getProduct(val).subscribe((data) => {
       if (data.status_code === 100) {
         this.productList = JSON.parse(data["message"]);
-        
-
+    // Add default select
+    this.productList.unshift({
+      ProductID: 0,
+      ProductName: '-- Select Product --',
+      StockQuantity: 1
+    });
        // this.productList = this.productList.filter((item: any) => item.StockQuantity != 0);
 
       }

@@ -22,4 +22,8 @@ export class ClientService {
         return this.masterService.post(environment.api+APIConstant.Client.getClient,val)
   
       }
+        DeleteClient(val:any){
+        return this.masterService.post(environment.api+APIConstant.Client.DeleteClient,val)
+  
+      }
 }

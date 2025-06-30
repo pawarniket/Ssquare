@@ -21,6 +21,7 @@ import { ClientDetailsComponent } from './pages/sidebar/client-details/client-de
 import { JobcardComponent } from './pages/sidebar/jobcard/jobcard.component';
 import { SaleDashboardComponent } from './pages/sidebar/sale-dashboard/sale-dashboard.component';
 import { EmployeeComponent } from './pages/sidebar/employee/employee.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,9 @@ import { EmployeeComponent } from './pages/sidebar/employee/employee.component';
     FormsModule,
     HttpClientModule,
 ReactiveFormsModule,
-NgChartsModule
+NgChartsModule,
+ NgSelectModule 
+
 ],
   providers: [
     

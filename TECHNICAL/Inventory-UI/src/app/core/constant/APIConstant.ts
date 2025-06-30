@@ -44,13 +44,15 @@ export const APIConstant = {
         insertclient:'Client/add',
         Updateclient:'Client/update',
         getClient:'Client/get',
+        DeleteClient:"Client/Delete"
 
 
       },
       Vehicle:{
         getvehicle:"Vehicle/get",
         insertvehicle:"vehicle/insert",
-        Updatevehicle:"vehicle/update"
+        Updatevehicle:"vehicle/update",
+        Deletevehicle:"Vehicle/Delete"
       },
       JobCard:{
         getJobCard:"jobcard/get",

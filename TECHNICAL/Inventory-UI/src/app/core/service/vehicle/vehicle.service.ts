@@ -15,6 +15,10 @@ export class VehicleService {
     return this.masterService.post(environment.api + APIConstant.Vehicle.getvehicle, val)
 
   }
+    Deletevehicle(val: any) {
+    return this.masterService.post(environment.api + APIConstant.Vehicle.Deletevehicle, val)
+
+  }
   Insertvehicle(val: any) {
     return this.masterService.post(environment.api + APIConstant.Vehicle.insertvehicle, val)
 

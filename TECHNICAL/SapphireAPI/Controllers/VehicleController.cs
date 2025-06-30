@@ -148,5 +148,40 @@ namespace MS.SSquare.API.Controllers
             }
         }
 
+
+        [Route("Vehicle/Delete")]
+        [HttpPost]
+        public IActionResult Delete(Vehicle vehicle)
+        {
+            try
+            {
+
+                DBUtility oDBUtility = new DBUtility(_configurationIG);
+                {
+                    if (vehicle.VehicleID > 0)
+                    {
+                        oDBUtility.AddParameters("@VehicleID", DBUtilDBType.Integer, DBUtilDirection.In, 10, vehicle.VehicleID);
+                    }
+                    if (vehicle.ClientID > 0)
+                    {
+                        oDBUtility.AddParameters("@ClientID", DBUtilDBType.Integer, DBUtilDirection.In, 10, vehicle.ClientID);
+                    }
+
+
+                    DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_DELETE_VEHICLE");
+
+                    oServiceRequestProcessor = new ServiceRequestProcessor();
+                    return Ok(oServiceRequestProcessor.ProcessRequest(ds));
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                oServiceRequestProcessor = new ServiceRequestProcessor();
+                return BadRequest(oServiceRequestProcessor.onError(ex.Message));
+            }
+        }
+
     }
 }
