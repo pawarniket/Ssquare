@@ -78,16 +78,24 @@
       </form>
     </div>
 
-    <!-- Print Button -->
-    <div class="col-md-3 text-end">
-      <button (click)="printTable()" class="btn btn-black">
-        <img
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/2c4cd31f4573b466716d0076623b4003b678b69f9e6f4b56e543f3956469a44c"
-          alt="Print" style="width: 16px;" />
-        Print
-      </button>
-    </div>
+<div class="row">
+  <div class="col-md-12 d-flex justify-content-end align-items-center">
+    <button (click)="printTable()" class="btn btn-black me-2">
+      <img
+        src="https://cdn.builder.io/api/v1/image/assets/TEMP/2c4cd31f4573b466716d0076623b4003b678b69f9e6f4b56e543f3956469a44c"
+        alt="Print" style="width: 16px; margin-right: 5px;" />
+      Print
+    </button>
+
+    <button class="btn btn-black" (click)="downloadExcel()">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/732/732220.png"
+        alt="Excel" style="width: 16px; margin-right: 5px;" />
+      Download 
+    </button>
   </div>
+</div>
+
 
   <!-- Table Section -->
   <div *ngIf="!Vehicle" class="table-responsive">
@@ -107,6 +115,9 @@
           <th (click)="sortTable('Address')" style="cursor:pointer">
             Address <i [ngClass]="getSortIcon('Address')" class="ms-1"></i>
           </th>
+              <th (click)="sortTable('CreatedAt')" style="cursor:pointer">
+            Date <i [ngClass]="getSortIcon('CreatedAt')" class="ms-1"></i>
+          </th>
           <th class="text-center">Action
           </th>
         </tr>
@@ -118,7 +129,7 @@
           <td>{{ Clientlist.Phone }}</td>
 
           <td>{{ Clientlist.Address }}</td>
-
+          <td>{{ Clientlist.CreatedAt | date: 'dd/MM/yyyy' }}</td>
           <td>
             <div class="d-flex justify-content-center gap-2">
               <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addclientModal"

@@ -275,14 +275,30 @@
         </button>
       </div>
       <!-- Print Button -->
-      <div class="col-md-2 mb-3 text-end">
+      <!-- <div class="col-md-2 mb-3 text-end">
         <button (click)="printTable()" class="btn custom-print-btn">
           <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/2c4cd31f4573b466716d0076623b4003b678b69f9e6f4b56e543f3956469a44c"
             alt="Print" style="width: 16px;" />
           Print
         </button>
-      </div>
-      
+      </div> -->
+      <div class="row">
+  <div class="col-md-12 d-flex justify-content-end align-items-center">
+    <button (click)="printTable()" class="btn custom-print-btn">
+      <img
+        src="https://cdn.builder.io/api/v1/image/assets/TEMP/2c4cd31f4573b466716d0076623b4003b678b69f9e6f4b56e543f3956469a44c"
+        alt="Print" style="width: 16px; margin-right: 5px;" />
+      Print
+    </button>
+
+    <button class="btn custom-print-btn" (click)="downloadExcel()">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/732/732220.png"
+        alt="Excel" style="width: 16px; margin-right: 5px;" />
+      Download 
+    </button>
+  </div>
+</div>
     </div>
   
     <!-- Table Section -->
