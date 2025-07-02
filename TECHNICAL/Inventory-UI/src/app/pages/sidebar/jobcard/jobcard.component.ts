@@ -4,6 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { JobcardService } from '../../../core/service/jobcard/jobcard.service';
 import { ProductService } from '../../../core/service/product/product.service';
 import { UserService } from './../../../core/service/user/user.service';
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
+
 @Component({
   selector: 'app-jobcard',
   templateUrl: './jobcard.component.html',
@@ -1795,7 +1798,48 @@ printSaleInvoice(sale: any): void {
     document.body.removeChild(printContent);
     document.head.removeChild(printStyles);
   }
-  
+  downloadExcel(): void {
+  const excelData = this.allJobcardDetails.map((item: any) => ({
+    JobCardID: item.JobCardID || '-',
+    ClientName: item.ClientName || '-',
+    Phone: item.Phone || '-',
+    MechanicName: item.MechanicName || '-',
+    PaidAmount: item.PaidAmount || 0,
+    BalanceAmount: item.BalanceAmount || 0,
+    TotalAmount: item.TotalAmount || 0,
+    SaleDate: item.JobCardDate ? this.formatDate(item.JobCardDate) : '-',
+    PaymentMode: item.PaymentMode || '-',
+    PaymentStatus: item.PaymentStatus || '-'
+  }));
+
+  const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
+  const workbook: XLSX.WorkBook = {
+    Sheets: { 'Jobcard Details': worksheet },
+    SheetNames: ['Jobcard Details']
+  };
+
+  const excelBuffer: any = XLSX.write(workbook, {
+    bookType: 'xlsx',
+    type: 'array'
+  });
+
+  const data: Blob = new Blob([excelBuffer], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  });
+
+  FileSaver.saveAs(data, 'JobcardDetails.xlsx');
+}
+
+formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = date.toLocaleString('en-US', { month: 'short' });
+  const year = date.getFullYear();
+  const hours = date.getHours() % 12 || 12;
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+  return `${day} ${month} ${year}, ${hours}:${minutes} ${ampm}`;
+}
 // onProductChange(selectedProduct: any, index: number) {
 //   if (selectedProduct?.StockQuantity === 0) {
 //     alert('This product is out of stock');

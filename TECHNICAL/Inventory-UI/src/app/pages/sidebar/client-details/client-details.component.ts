@@ -5,7 +5,8 @@ import { ClientService } from '../../../core/service/client/client.service';
 import { Modal } from 'bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 declare function Popupdisplay(message: any): any;
-
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 @Component({
   selector: 'app-client-details',
   templateUrl: './client-details.component.html',
@@ -321,6 +322,42 @@ this.getvehicle();
     document.body.removeChild(printContent);
     document.head.removeChild(printStyles);
   }
+
+  downloadExcel(): void {
+  const worksheetData = this.ClientList.map((item: any) => ({
+    ClientID: item.ClientID || '-',
+    ClientName: item.ClientName || '-',
+    Email: item.Email || '-',
+    Address: item.Address || '-',
+    CreatedAt: item.CreatedAt ? this.formatDate(item.CreatedAt) : '-'
+  }));
+
+  const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(worksheetData);
+  const workbook: XLSX.WorkBook = {
+    Sheets: { 'Client Data': worksheet },
+    SheetNames: ['Client Data']
+  };
+
+  const excelBuffer: any = XLSX.write(workbook, {
+    bookType: 'xlsx',
+    type: 'array'
+  });
+
+  const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+  FileSaver.saveAs(data, 'ClientData.xlsx');
+}
+
+// Optional: Date formatting function
+formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = date.toLocaleString('en-US', { month: 'short' });
+  const year = date.getFullYear();
+  const hours = date.getHours() % 12 || 12;
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+  return `${day} ${month} ${year}, ${hours}:${minutes} ${ampm}`;
+}
   
   editproduct(){}
   getPaginatedData() {
@@ -342,6 +379,8 @@ this.getvehicle();
         this.ClientList = JSON.parse(response['message']);
         
         this.filterBookingData = this.ClientList;
+        console.log("this.filterBookingData",this.filterBookingData);
+        
         if (this.filterBookingData[0]?.Message === 'Data not found') {
           this.filterBookingData = [];
         }
