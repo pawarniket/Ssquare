@@ -16,12 +16,13 @@ import { LowstockComponent } from './pages/sidebar/lowstock/lowstock.component';
 import { SaleDetailsComponent } from './pages/sidebar/sale-details/sale-details.component';
 import { loaderInterceptor } from './core/interceptors/loader.interceptor';
 import { LoaderComponent } from './pages/loader/loader.component';
-import { LayoutComponent } from './pages/layout/layout.component';
+import { LayoutComponent } from './pages/Layout/layout.component';
 import { ClientDetailsComponent } from './pages/sidebar/client-details/client-details.component';
 import { JobcardComponent } from './pages/sidebar/jobcard/jobcard.component';
 import { SaleDashboardComponent } from './pages/sidebar/sale-dashboard/sale-dashboard.component';
 import { EmployeeComponent } from './pages/sidebar/employee/employee.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     HttpClientModule,
 ReactiveFormsModule,
 NgChartsModule,
- NgSelectModule 
+ NgSelectModule,
+ CommonModule 
 
 ],
   providers: [

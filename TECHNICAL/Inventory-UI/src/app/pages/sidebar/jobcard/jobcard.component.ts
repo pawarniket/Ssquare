@@ -115,17 +115,23 @@ export class JobcardComponent {
     this.ProductService.getProduct(val).subscribe((data) => {
       if (data.status_code === 100) {
         this.productList = JSON.parse(data["message"]);
+        
     // Add default select
     this.productList.unshift({
       ProductID: 0,
       ProductName: '-- Select Product --',
-      StockQuantity: 1
+      StockQuantity: 0
     });
        // this.productList = this.productList.filter((item: any) => item.StockQuantity != 0);
 
       }
     })
   }
+
+  getTotalStock(i: number): number {
+    
+  return (this.StockQuantity[i] ?? 0) + (this.databaseStockqty[i] ?? 0);
+}
   deleteService(index: number) {
 
     if (index === 0) {
@@ -145,9 +151,8 @@ export class JobcardComponent {
     this.JobCardService.GetJobCard(val).subscribe((data) => {
       if (data.status_code === 100) {
         this.jobcardDetails = JSON.parse(data["message"]);
+        console.log("brijesh",this.jobcardDetails)
         this.allJobcardDetails = [...this.jobcardDetails];
-        
-
       }
 
     })
@@ -251,11 +256,11 @@ export class JobcardComponent {
         Quantity: productToDelete.Quantity ? productToDelete.Quantity : 0
       }
       this.JobCardService.JobcardProductDelete(val).subscribe((data: any) => {
-        
+        this.getproduct();
       })
     }
     
-    this.databaseStockqty = [];
+    this.databaseStockqty[index] = [];
     this.StockQuantity[index] = [];
     if (index === 0) {
       this.products.at(0).reset({
@@ -1790,6 +1795,86 @@ printSaleInvoice(sale: any): void {
     document.body.removeChild(printContent);
     document.head.removeChild(printStyles);
   }
+  
+// onProductChange(selectedProduct: any, index: number) {
+//   if (selectedProduct?.StockQuantity === 0) {
+//     alert('This product is out of stock');
+//     const productList=JSON.parse(this.vehicleDetails['ProductList']);
+//     const productId=productList[index]['ProductID'];
+//     console.log("b2",productList[index]['ProductID']);
+//      const productsFormArray = this.jobCardForm.get('products') as FormArray;
+//      productsFormArray.at(index).get('ProductID')?.setValue(productId); // reset to "-- Select Product --"
+//   }
+// }
+// onProductChange(selectedProduct: any, index: number) {
+//   const productsFormArray = this.jobCardForm.get('products') as FormArray;
+//   const productList = JSON.parse(this.vehicleDetails['ProductList']);
+
+//   // 1. Handle "Out of stock" case
+//   if (selectedProduct?.StockQuantity === 0) {
+//     alert('This product is out of stock');
+
+//     const previousProduct = productList[index]; // Get old product details
+//     console.log("brijes",previousProduct)
+//     const previousProductId = previousProduct?.ProductID || null;
+//     const previousUsedQty = previousProduct?.Quantity || 0; // or whatever field you store used qty in
+
+//     // Restore the previous ProductID
+//     productsFormArray.at(index).get('ProductID')?.setValue(previousProductId);
+
+//     // Restore the quantity user had entered earlier
+//     productsFormArray.at(index).get('Quantity')?.setValue(previousUsedQty);
+
+//     // Restore stock usage tracking
+//     this.databaseStockqty[index] = previousUsedQty;
+
+//     return;
+//   }
+
+//   // 2. Valid product selected — update stock and reset values
+//   this.StockQuantity[index] = selectedProduct.StockQuantity || 0;
+//   this.databaseStockqty[index] = 0;
+//   productsFormArray.at(index).get('Quantity')?.setValue(0);
+//   productsFormArray.at(index).get('Quantity')?.setErrors(null);
+// }
+onProductChange(selectedProduct: any, index: number) {
+  const productsFormArray = this.jobCardForm.get('products') as FormArray;
+  const productList = JSON.parse(this.vehicleDetails['ProductList']);
+  if (selectedProduct?.StockQuantity === 0) {
+    alert('This product is out of stock');
+
+    const previousProduct = productList[index]; 
+    if (previousProduct && previousProduct.ProductID) {
+   
+      productsFormArray.at(index).get('ProductID')?.setValue(previousProduct.ProductID);
+
+      
+      const usedQty = previousProduct.Quantity || 0;
+      productsFormArray.at(index).get('Quantity')?.setValue(usedQty);
+      this.databaseStockqty[index] = usedQty;
+    } else {
+  
+      const defaultOption = this.productList.find((p:any) => p.ProductName === '-- Select Product --');
+      if (defaultOption) {
+        productsFormArray.at(index).get('ProductID')?.setValue(defaultOption.ProductID);
+      } else {
+        productsFormArray.at(index).get('ProductID')?.setValue(null); 
+      }
+
+     
+      productsFormArray.at(index).get('Quantity')?.setValue(0);
+      this.databaseStockqty[index] = 0;
+       this.StockQuantity[index]=0;
+    }
+
+    return;
+  }
+
+  this.StockQuantity[index] = selectedProduct.StockQuantity || 0;
+  this.databaseStockqty[index] = 0;
+  productsFormArray.at(index).get('Quantity')?.setValue(0);
+  productsFormArray.at(index).get('Quantity')?.setErrors(null);
+}
 
 
 }

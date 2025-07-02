@@ -226,7 +226,7 @@ namespace MS.SSquare.API.Controllers
 
                 DataSet ds = oDBUtility.Execute_StoreProc_DataSet("USP_Delete_JobCardProduct");
                 oServiceRequestProcessor = new ServiceRequestProcessor();
-                return Ok(oServiceRequestProcessor.ProcessRequest(ds));
+                return Ok(ds);
 
             }
             catch (Exception ex)

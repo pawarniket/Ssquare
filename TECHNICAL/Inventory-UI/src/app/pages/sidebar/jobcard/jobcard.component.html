@@ -73,22 +73,22 @@
     bindLabel="ProductName"
     bindValue="ProductID"
     formControlName="ProductID"
-
+    (change)="onProductChange($event, i)"
     class="form-control p-2 mt-4"
     [searchable]="true"
     [clearable]="false">
       <!-- Custom template for each option -->
   <ng-template ng-option-tmp let-item="item">
-    <span [style.color]="item.StockQuantity === 0 ? 'red' : 'black'">
+    <span [style.color]="item.StockQuantity === 0 && item.ProductName!=='-- Select Product --' ? 'red' : 'black'">
       {{ item.ProductName }}
-      <span *ngIf="item.StockQuantity === 0" > (Out of stock)</span>
+      <span *ngIf="item.StockQuantity === 0 && item.ProductName!=='-- Select Product --'" > (Out of stock)</span>
     </span>
   </ng-template>
 
   <!-- Disable condition -->
-  <ng-template ng-label-tmp let-item="item">
+  <!-- <ng-template ng-label-tmp let-item="item">
     {{ item.ProductName }}
-  </ng-template>
+  </ng-template> -->
   </ng-select>
 </div>
 
@@ -106,10 +106,14 @@
               Quantity:
           
               <!-- Show error if quantity exceeds stock -->
-              <span class="text-danger" *ngIf="products.at(i).get('Quantity')?.errors?.['max']">
+              <!-- <span class="text-danger" *ngIf="products.at(i).get('Quantity')?.errors?.['max']">
                 (Max {{(StockQuantity[i] + databaseStockqty[i]) || 0}} You can use)
+              </span> -->
+               <span
+                class="text-danger"
+                *ngIf="products.at(i).get('Quantity')?.errors?.['max']">
+                (Max {{ getTotalStock(i) }} You can use)
               </span>
-          
               <!-- Otherwise show normal stock left -->
               <ng-container *ngIf="!products.at(i).get('Quantity')?.errors?.['max']">
                 <span class="text-muted">  ({{databaseStockqty[i]||0}} You have already used) + ({{ StockQuantity[i] || 0 }} left)=(Max {{(StockQuantity[i] + (databaseStockqty[i]||0)) || 0}} You can use)</span>
@@ -249,7 +253,7 @@
   
         <form class="input-group w-100" role="search">
           <input type="search" class="form-control" placeholder="Search here" aria-label="Search bookings"
-          [(ngModel)]="salesearchtext"  (input)="onSearch($event)" autocomplete="off" />
+          [(ngModel)]="salesearchtext" name="salesearchtext" (input)="onSearch($event)" autocomplete="off" />
          
           <span class="input-group-text">
             <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/a2d24a7ceb684c1f468bdd9e1e90fbb04e0da74d9655bc2729b38bcacb6192d0"
@@ -260,10 +264,10 @@
       </div>
       <div class="col-md-3 mb-2">
         <input type="date" id="date" class="form-control" placeholder="YYYY-MM-DD" [(ngModel)]="selecteddate"
-          (change)="applySearch()" [max]="today" />
+          (change)="applySearch()" name="selecteddate" [max]="today" />
       </div>
       <div class="col-md-2 mb-2">
-        <select class="form-control" [(ngModel)]="selectedPaymentStatus" (change)="applySearch()">
+        <select class="form-control" [(ngModel)]="selectedPaymentStatus" name="selectedPaymentStatus"(change)="applySearch()">
           <option value="">All Status</option>
           <option value="Pending">Pending</option>
           <option value="Completed">Completed</option>
@@ -324,6 +328,9 @@
             <th (click)="sortTable('JobCardDate')" style="cursor:pointer" class="text-nowrap">
               Date<i [ngClass]="getSortIcon('JobCardDate')" class="ms-1"></i>
             </th>
+            <th (click)="sortTable('KmReading')" style="cursor:pointer" class="text-nowrap">
+              KM<i [ngClass]="getSortIcon('KmReading')" class="ms-1"></i>
+            </th>
             <th class="text-center" class="text-nowrap">Action
             </th>
           </tr>
@@ -358,6 +365,7 @@
             </td>
             
             <td class="text-nowrap">{{ Clientlist.JobCardDate| date:'dd-MMM-yyyy'  }}</td>
+            <td class="text-nowrap">{{ Clientlist.KmReading}} Km</td>
             <td>
               <div class="d-flex justify-content-center gap-2">
                 <button class="btn btn-primary btn-sm" 
@@ -370,6 +378,7 @@
                 </button>
               </div>
             </td>
+            
           </tr>
         </tbody>
       </table>
